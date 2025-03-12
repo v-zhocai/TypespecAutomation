@@ -1,0 +1,21 @@
+{
+  "publisher": "v-zhangtianc",
+  "name": "TypespecUIAutomation",
+  "displayName": "TypespecUIAutomation",
+  "version": "0.0.1",
+  "description": "Typespec UI automation project based on playwright",
+  "license": "MIT",
+  "scripts": {
+    "test": "vitest --root src"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "@types/node": "^20.12.8",
+    "@types/vscode": "^1.77.0",
+    "@vitest/runner": "^2.1.2",
+    "@vitest/utils": "^2.1.2",
+    "@vscode/test-electron": "^2.3.9",
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.2"
+  }
+}
