@@ -10,3 +10,5 @@ test-results
 .pnp.*
 samples/**/coverage
 tests-logs-*
+CreateTypespecProject
+extension
