@@ -1,10 +1,11 @@
 import { beforeEach } from "vitest"
-import { preCheckExtension, retry, test } from "./common/utils"
+import { preCheckExtension, test } from "./common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
   closeVscode,
   contrastResult,
+  notEmptyFolderContinue,
   preContrastResult,
   selectFolder,
   start,
@@ -48,18 +49,7 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
     command: "Import TypeSpec from Openapi3",
   })
   await selectFolder()
-
-  const yesBtn = page.locator("a").filter({ hasText: "Yes" }).first()
-  await retry(
-    5,
-    async () => {
-      return (await yesBtn.count()) > 0
-    },
-    "Failed to find yes button",
-    1
-  )
-  await yesBtn.click()
-
+  await notEmptyFolderContinue(page)
   await selectFolder("openapi.3.0.yaml")
   await preContrastResult(
     page,

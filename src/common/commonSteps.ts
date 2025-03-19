@@ -60,8 +60,6 @@ async function selectFolder(file: string = "") {
   if (file) {
     await keyboard.pressKey(Key.CapsLock)
     await keyboard.type(file)
-    await keyboard.pressKey(Key.CapsLock)
-    await sleep(1)
   }
   await keyboard.pressKey(Key.Enter)
 }
@@ -70,4 +68,24 @@ async function closeVscode(page: Page) {
   await page.keyboard.press("Alt+F4")
 }
 
-export { start, contrastResult, selectFolder, preContrastResult, closeVscode }
+async function notEmptyFolderContinue(page: Page) {
+  const yesBtn = page.locator("a").filter({ hasText: "Yes" }).first()
+  await retry(
+    5,
+    async () => {
+      return (await yesBtn.count()) > 0
+    },
+    "Failed to find yes button",
+    1
+  )
+  await yesBtn.click()
+}
+
+export {
+  start,
+  contrastResult,
+  selectFolder,
+  preContrastResult,
+  closeVscode,
+  notEmptyFolderContinue,
+}
