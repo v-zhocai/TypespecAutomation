@@ -11,5 +11,5 @@ test-results
 samples/**/coverage
 tests-logs-*
 ImportTypespecProjectOpenApi3/*.tsp
-CreateTypespecProject
-!CreateTypespecProject/placeholder
+CreateTypespecProject/*
+!CreateTypespecProject/placeholder.txt
