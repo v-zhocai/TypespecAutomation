@@ -41,10 +41,7 @@ async function start(
     .getByRole("textbox", { name: "input" })
     .first()
     .fill(`>Typespec: ${command}`)
-  let listForCreate: Locator = page
-    .locator("a")
-    .filter({ hasText: `TypeSpec: ${command}` })
-    .first()
+  let listForCreate: Locator
   await retry(
     5,
     async () => {
@@ -57,7 +54,7 @@ async function start(
     "Failed to find the specified option"
   )
 
-  await listForCreate.click()
+  await listForCreate!.click()
 }
 
 async function selectFolder(file: string = "") {
@@ -72,7 +69,7 @@ async function selectFolder(file: string = "") {
 }
 
 async function notEmptyFolderContinue(page: Page) {
-  let yesBtn = page.locator("a").filter({ hasText: "Yes" }).first()
+  let yesBtn: Locator
   await retry(
     5,
     async () => {
@@ -82,7 +79,7 @@ async function notEmptyFolderContinue(page: Page) {
     "Failed to find yes button",
     1
   )
-  await yesBtn.click()
+  await yesBtn!.click()
 }
 
 async function installExtension(page: Page) {
@@ -103,6 +100,51 @@ async function installExtension(page: Page) {
     .click()
 }
 
+async function installExtensionForFile(page: Page, fullFilePath: string) {
+  await page
+    .getByRole("tab", { name: /Extensions/ })
+    .locator("a")
+    .click()
+  let moreItem: Locator
+  await retry(
+    10,
+    async () => {
+      moreItem = page.getByLabel(/Views and More Actions/).first()
+      return (await moreItem.count()) > 0
+    },
+    "Failed to find more item",
+    1
+  )
+  await moreItem!.click()
+  let fromInstall: Locator
+  await retry(
+    10,
+    async () => {
+      fromInstall = page.getByLabel(/Install from VSIX/).first()
+      return (await fromInstall.count()) > 0
+    },
+    "Failed to find install from VSIX item",
+    1
+  )
+  await fromInstall!.click()
+  await selectFolder(fullFilePath)
+  await sleep(3)
+  await page.keyboard.press("Enter")
+  await retry(
+    10,
+    async () => {
+      const installed = await page.getByText(/Completed installing/).first()
+      return (await installed.count()) > 0
+    },
+    "Failed to find installed status",
+    3
+  )
+  await page
+    .getByRole("tab", { name: /Explorer/ })
+    .locator("a")
+    .click()
+}
+
 export {
   start,
   contrastResult,
@@ -110,4 +152,5 @@ export {
   preContrastResult,
   notEmptyFolderContinue,
   installExtension,
+  installExtensionForFile,
 }

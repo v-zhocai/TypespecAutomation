@@ -1,6 +1,7 @@
 import {
   contrastResult,
   installExtension,
+  installExtensionForFile,
   preContrastResult,
   start,
 } from "../common/commonSteps"
@@ -17,7 +18,10 @@ test("EmitTypespec-OpenAPI Document", async ({ launch }) => {
   const { page } = await launch({
     workspacePath,
   })
-  await installExtension(page)
+  await installExtensionForFile(
+    page,
+    path.resolve(__dirname, "../../extension.vsix")
+  )
   await start(page, {
     folderName: "EmitTypespecProject",
     command: "Emit from Typespec",

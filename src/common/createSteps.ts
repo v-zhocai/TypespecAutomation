@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test"
+import { Locator, Page } from "@playwright/test"
 import { retry } from "./utils"
 
 async function selectEmitters(page: Page, emitters: string[]) {
@@ -6,7 +6,7 @@ async function selectEmitters(page: Page, emitters: string[]) {
 }
 
 async function selectTemplate(page: Page, templateName: string) {
-  let templateList = page.locator("a").filter({ hasText: templateName })
+  let templateList
   await retry(
     3,
     async () => {
@@ -15,15 +15,14 @@ async function selectTemplate(page: Page, templateName: string) {
     },
     `Failed to find ${templateName} template`
   )
-  await templateList.first().click()
+  await templateList!.first().click()
 }
 
 async function inputProjectName(page: Page) {
-  let titleInfo = page.getByText(/Please .*name/).first()
   await retry(
     3,
     async () => {
-      titleInfo = page.getByText(/Please .*name/).first()
+      const titleInfo = page.getByText(/Please .*name/).first()
       return (await titleInfo.count()) > 0
     },
     "Failed to find the project name input box"
