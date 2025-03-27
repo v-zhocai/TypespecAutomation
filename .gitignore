@@ -11,5 +11,7 @@ test-results
 samples/**/coverage
 tests-logs-*
 ImportTypespecProjectOpenApi3/*.tsp
-CreateTypespecProject/*
-!CreateTypespecProject/placeholder.txt
+CreateTypespecProject
+EmitTypespecProject/Azure.AI.TextTranslation/tsp-output
+EmitTypespecProject/Azure.AI.DocumentTranslation/tsp-output
+*.png
