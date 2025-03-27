@@ -5,6 +5,7 @@ import path from "node:path"
 import {
   contrastResult,
   installExtension,
+  installExtensionForFile,
   notEmptyFolderContinue,
   preContrastResult,
   selectFolder,
@@ -42,7 +43,10 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
   const { page } = await launch({
     workspacePath,
   })
-  await installExtension(page)
+  await installExtensionForFile(
+    page,
+    path.resolve(__dirname, "../../extension.vsix")
+  )
 
   await start(page, {
     folderName: "importTypespecProjectOpenApi3",

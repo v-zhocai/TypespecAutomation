@@ -5,6 +5,7 @@ import {
   selectFolder,
   preContrastResult,
   installExtension,
+  installExtensionForFile,
 } from "../common/commonSteps"
 import { test } from "../common/utils"
 import fs from "node:fs"
@@ -32,7 +33,11 @@ test("CreateTypespec-Generic REST API", async ({ launch }) => {
   const { page } = await launch({
     workspacePath,
   })
-  await installExtension(page)
+  await installExtensionForFile(
+    page,
+    path.resolve(__dirname, "../../extension.vsix")
+  )
+
   await start(page, {
     folderName: "CreateTypespecProject",
     command: "Create Typespec Project",
