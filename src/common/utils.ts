@@ -1,9 +1,9 @@
-import { Page, Project } from "@playwright/test"
+import { Page, _electron } from "@playwright/test"
 import fs from "node:fs"
 import os from "node:os"
 import path, { resolve } from "node:path"
-import { _electron } from "@playwright/test"
 import { test as baseTest, inject } from "vitest"
+import screenshot from "screenshot-desktop"
 
 interface Context {
   page: Page
@@ -48,7 +48,7 @@ const test = baseTest.extend<{
           "--skip-welcome",
           "--skip-release-notes",
           "--disable-workspace-trust",
-          `--extensions-dir=${path.resolve(__dirname, "../../extension")}`,
+          `--extensions-dir=${path.resolve(tempDir, "extensions")}`,
           `--user-data-dir=${path.resolve(tempDir, "user-data")}`,
           `--folder-uri=file:${path.resolve(workspacePath)}`,
         ].filter((v): v is string => !!v),
@@ -62,26 +62,10 @@ const test = baseTest.extend<{
   },
 })
 
-async function preCheckExtension() {
-  const extensionsDir = path.resolve(__dirname, "../../extension")
-  if (fs.existsSync(extensionsDir)) {
-    let hasExtension = false
-    for (const file of fs.readdirSync(extensionsDir)) {
-      if (file.includes("typespec")) {
-        hasExtension = true
-        break
-      }
-    }
-    if (!hasExtension) {
-      throw new Error("Failed to find extension file")
-    }
-  } else {
-    throw new Error("Failed to find extension directory")
-  }
-}
-
 async function sleep(s: number) {
-  return new Promise((resolve) => setTimeout(resolve, s * 1000))
+  return new Promise((resolve) =>
+    setTimeout(resolve, (process.env.CI ? s + 5 : s) * 1000)
+  )
 }
 
 async function retry(
@@ -100,4 +84,16 @@ async function retry(
   throw new Error(errMessage)
 }
 
-export { sleep, test, retry, preCheckExtension }
+async function screenshotSelf(fileName: string, isLocal = false) {
+  if (process.env.CI || isLocal) {
+    await sleep(3)
+    let img = await screenshot()
+    let buffer = Buffer.from(img)
+    fs.writeFileSync(
+      `${process.env.BUILD_ARTIFACT_STAGING_DIRECTORY || "."}/${fileName}.png`,
+      buffer
+    )
+  }
+}
+
+export { sleep, test, retry, screenshotSelf }

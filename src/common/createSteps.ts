@@ -6,10 +6,11 @@ async function selectEmitters(page: Page, emitters: string[]) {
 }
 
 async function selectTemplate(page: Page, templateName: string) {
-  const templateList = page.locator("a").filter({ hasText: templateName })
+  let templateList = page.locator("a").filter({ hasText: templateName })
   await retry(
     3,
     async () => {
+      templateList = page.locator("a").filter({ hasText: templateName })
       return (await templateList.count()) > 0
     },
     `Failed to find ${templateName} template`
@@ -22,6 +23,7 @@ async function inputProjectName(page: Page) {
   await retry(
     3,
     async () => {
+      titleInfo = page.getByText(/Please .*name/).first()
       return (await titleInfo.count()) > 0
     },
     "Failed to find the project name input box"
