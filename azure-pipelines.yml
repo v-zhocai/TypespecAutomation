@@ -1,6 +1,6 @@
 trigger:
   - test/pipeline-windows
-
+  - master
 jobs:
   - template: test-job-template.yml
     parameters:
