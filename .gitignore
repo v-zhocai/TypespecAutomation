@@ -14,3 +14,4 @@ CreateTypespecProject
 EmitTypespecProject/Azure.AI.TextTranslation/tsp-output
 EmitTypespecProject/Azure.AI.DocumentTranslation/tsp-output
 *.png
+images

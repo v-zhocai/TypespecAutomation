@@ -22,11 +22,13 @@ jobs:
           echo "Running ${{ parameters.jobName }} tests"
           npm run ${{ parameters.testScript }}
         displayName: "Run ${{ parameters.jobName }} tests"
-
+        env:
+          BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
+          CI: true
       - task: PublishBuildArtifacts@1
         inputs:
           path: "$(Build.ArtifactStagingDirectory)"
           artifact: "screenshots"
           publishLocation: "Container"
-          includePatterns: "**/*.png"
+          includePatterns: "images/**/*.png"
         displayName: "Publish screenshots to Artifacts"

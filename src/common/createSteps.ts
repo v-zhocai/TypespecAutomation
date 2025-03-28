@@ -1,10 +1,20 @@
-import { Locator, Page } from "@playwright/test"
+import { Page } from "@playwright/test"
 import { retry } from "./utils"
 
+/**
+ * When creating, select emitters
+ * @param page vscode project
+ * @param emitters The emitters that need to be selected. If you need to select all, just do not transmit them.
+ */
 async function selectEmitters(page: Page, emitters: string[]) {
   await page.keyboard.press("Enter")
 }
 
+/**
+ * When creating, select template
+ * @param page vscode project
+ * @param templateName The name of the template that needs to be selected.
+ */
 async function selectTemplate(page: Page, templateName: string) {
   let templateList
   await retry(
@@ -18,6 +28,10 @@ async function selectTemplate(page: Page, templateName: string) {
   await templateList!.first().click()
 }
 
+/**
+ * When creating, input project name
+ * @param page vscode project
+ */
 async function inputProjectName(page: Page) {
   await retry(
     3,
