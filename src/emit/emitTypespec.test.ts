@@ -1,6 +1,6 @@
+import { beforeEach } from "vitest"
 import {
   contrastResult,
-  installExtension,
   installExtensionForFile,
   preContrastResult,
   start,
@@ -10,14 +10,40 @@ import {
   emitSelectProject,
   emitSelectType,
 } from "../common/emiSteps"
-import { sleep, test } from "../common/utils"
+import { screenshotSelf, test } from "../common/utils"
 import path from "node:path"
+import fs from "node:fs"
+
+beforeEach(() => {
+  const dir = path.resolve(
+    __dirname,
+    "../../EmitTypespecProject/Azure.AI.TextTranslation/tsp-output"
+  )
+  if (fs.existsSync(dir)) {
+    for (const file of fs.readdirSync(dir)) {
+      const filePath = path.resolve(dir, file)
+      fs.rmSync(filePath, { recursive: true, force: true })
+    }
+  }
+
+  const dirs = path.resolve(
+    __dirname,
+    "../../EmitTypespecProject/Azure.AI.DocumentTranslation/tsp-output"
+  )
+  if (fs.existsSync(dirs)) {
+    for (const file of fs.readdirSync(dirs)) {
+      const filePath = path.resolve(dirs, file)
+      fs.rmSync(filePath, { recursive: true, force: true })
+    }
+  }
+})
 
 test("EmitTypespec-OpenAPI Document", async ({ launch }) => {
   const workspacePath = path.resolve(__dirname, "../../EmitTypespecProject")
   const { page } = await launch({
     workspacePath,
   })
+
   await installExtensionForFile(
     page,
     path.resolve(__dirname, "../../extension.vsix")

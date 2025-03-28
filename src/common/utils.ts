@@ -15,6 +15,10 @@ type LaunchFixture = (options: {
   trace?: "on" | "off"
 }) => Promise<Context>
 
+/**
+ * The core method of the test, this method is encapsulated.
+ * With the help of the `_electron` object, you can open a vscode and get the page object
+ */
 const test = baseTest.extend<{
   launch: LaunchFixture
   taskName: string
@@ -68,6 +72,13 @@ async function sleep(s: number) {
   )
 }
 
+/**
+ * @param count Number of retries
+ * @param fn Main process retry function, when this function returns true, retry ends
+ * @param errMessage If the number of retries reaches 0, an error is thrown
+ * @param gap
+ * @returns Retry Interval
+ */
 async function retry(
   count: number,
   fn: () => Promise<boolean>,
@@ -84,15 +95,30 @@ async function retry(
   throw new Error(errMessage)
 }
 
-async function screenshotSelf(fileName: string, isLocal = false) {
+/**
+ * Screenshot function
+ * @param fileName The file name when the screenshot is saved
+ * @param createType The type of screenshot, create, emit or import, corresponding to three folders respectively
+ * @param isLocal If true, it will trigger a save when running locally, otherwise it will only be saved in CI
+ */
+async function screenshotSelf(
+  fileName: string,
+  createType: "create" | "emit" | "import",
+  isLocal = false
+) {
   if (process.env.CI || isLocal) {
+    fileName = "/images/" + createType + "/" + fileName
     await sleep(3)
     let img = await screenshot()
     let buffer = Buffer.from(img)
-    fs.writeFileSync(
-      `${process.env.BUILD_ARTIFACT_STAGING_DIRECTORY || "."}/${fileName}.png`,
-      buffer
-    )
+    const outputDir =
+      process.env.BUILD_ARTIFACT_STAGING_DIRECTORY ||
+      path.resolve(__dirname, "../..")
+    const filePath = path.join(outputDir, fileName)
+
+    fs.mkdirSync(path.dirname(filePath), { recursive: true })
+    console.log(filePath);
+    fs.writeFileSync(filePath, buffer)
   }
 }
 

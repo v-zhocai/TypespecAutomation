@@ -3,6 +3,13 @@ import { retry, sleep } from "./utils"
 import { keyboard, Key } from "@nut-tree/nut-js"
 import fs from "node:fs"
 
+/**
+ * Before comparing the results, you need to check whether the conditions for result comparison are met.
+ * @param page vscode object
+ * @param text The text in which the element appears
+ * @param errorMessage Error message when element does not appear
+ * @param [count, sleep] count: Retry times, sleep: Sleep time between retries
+ */
 async function preContrastResult(
   page: Page,
   text: string,
@@ -20,6 +27,11 @@ async function preContrastResult(
   )
 }
 
+/**
+ * Results comparison
+ * @param res List of expected files
+ * @param dir The directory to be compared needs to be converted into an absolute path using path.resolve
+ */
 async function contrastResult(res: string[], dir: string) {
   let resLength = 0
   if (fs.existsSync(dir)) {
@@ -31,6 +43,13 @@ async function contrastResult(res: string[], dir: string) {
   }
 }
 
+/**
+ * All cases need to execute the steps. Click the top input box and enter the command
+ * @param page vscode object
+ * @param {folderName, command}
+ * folderName: The text in the top input box is usually the current open root directory,
+ * command: After the top input box pops up, the command to be executed
+ */
 async function start(
   page: Page,
   { folderName, command }: { folderName: string; command: string }
@@ -57,6 +76,10 @@ async function start(
   await listForCreate!.click()
 }
 
+/**
+ * In vscode, when you need to select a folder or a file, call this method
+ * @param file When selecting a file, just pass it in. If you need to select a folder, you do not need to pass this parameter in.
+ */
 async function selectFolder(file: string = "") {
   await sleep(10)
   if (file) {
@@ -68,6 +91,12 @@ async function selectFolder(file: string = "") {
   await keyboard.pressKey(Key.Enter)
 }
 
+/**
+ * If the current folder is not empty, sometimes a pop-up will appear
+ * asking "Do you want to continue selecting the current folder as the root directory?".
+ * In this method, select "yes" because selecting "no" does not make sense.
+ * @param page vscode object
+ */
 async function notEmptyFolderContinue(page: Page) {
   let yesBtn: Locator
   await retry(
@@ -82,6 +111,10 @@ async function notEmptyFolderContinue(page: Page) {
   await yesBtn!.click()
 }
 
+/**
+ * Install plugins directly from vscode
+ * @param page vscode object
+ */
 async function installExtension(page: Page) {
   await page
     .getByRole("tab", { name: /Extensions/ })
@@ -100,6 +133,11 @@ async function installExtension(page: Page) {
     .click()
 }
 
+/**
+ * Install plugins directly from a local file
+ * @param page vscode object
+ * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
+ */
 async function installExtensionForFile(page: Page, fullFilePath: string) {
   await page
     .getByRole("tab", { name: /Extensions/ })

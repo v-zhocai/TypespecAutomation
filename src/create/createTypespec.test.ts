@@ -4,10 +4,9 @@ import {
   start,
   selectFolder,
   preContrastResult,
-  installExtension,
   installExtensionForFile,
 } from "../common/commonSteps"
-import { test } from "../common/utils"
+import { screenshotSelf, test } from "../common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {

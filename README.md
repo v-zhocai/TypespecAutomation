@@ -48,9 +48,19 @@ The core directory is `src`, which contains all the `test files`. They correspon
    yarn
    ```
 
+   Alternatively, you can also install dependencies using npm directly.
+
+   ```
+   npm i
+   ```
+
 3. Run the test cases.
    ```
    yarn test
+   ```
+   Alternatively, you can also run the tests using `npm`.
+   ```
+   npm run test
    ```
 
 ## Contributing
