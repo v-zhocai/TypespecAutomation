@@ -1,10 +1,11 @@
-import { beforeEach } from "vitest"
+import { afterEach, beforeEach } from "vitest"
 import {
   contrastResult,
   start,
   selectFolder,
   preContrastResult,
   installExtensionForFile,
+  closeVscode,
 } from "../common/commonSteps"
 import { screenshotSelf, test } from "../common/utils"
 import fs from "node:fs"
@@ -51,6 +52,7 @@ test("CreateTypespec-Generic REST API", async ({ launch }) => {
     "Failed to create project Successful",
     [10, 10]
   )
+  await closeVscode(page)
   await contrastResult(
     [
       ".gitignore",
