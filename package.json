@@ -11,19 +11,14 @@
     "test:emit": "vitest --root src/emit"
   },
   "dependencies": {
-    "@azure/avocado": "^0.9.1",
-    "@nut-tree/nut-js": "^3.1.2",
+    "@nut-tree-fork/nut-js": "^4.2.6",
     "@playwright/test": "^1.42.1",
     "@types/node": "^20.12.8",
     "@types/screenshot-desktop": "^1.12.3",
-    "@typespec/openapi3": "^0.67.1",
-    "@typespec/rest": "0.67.1",
-    "@typespec/versioning": "0.67.1",
     "@vscode/test-electron": "^2.3.9",
-    "electron": "^35.0.1",
-    "oav": "^3.5.1",
     "screenshot-desktop": "^1.15.1",
     "typescript": "^5.6.2",
-    "vitest": "^2.1.2"
+    "vitest": "^2.1.2",
+    "@typespec/openapi3": "latest"
   }
 }
