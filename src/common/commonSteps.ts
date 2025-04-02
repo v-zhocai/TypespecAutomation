@@ -183,6 +183,10 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
     .click()
 }
 
+async function closeVscode(page:Page) {
+  await page.keyboard.press("Alt+F4")
+}
+
 export {
   start,
   contrastResult,
@@ -191,4 +195,5 @@ export {
   notEmptyFolderContinue,
   installExtension,
   installExtensionForFile,
+  closeVscode
 }
