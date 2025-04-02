@@ -52,7 +52,7 @@ test("EmitTypespec-OpenAPI Document", async ({ launch }) => {
     folderName: "EmitTypespecProject",
     command: "Emit from Typespec",
   })
-  await emitSelectProject(page, "TextTranslation")
+  // await emitSelectProject(page, "TextTranslation")
 
   await page
     .getByRole("option", { name: "Choose another emitter" })
@@ -71,9 +71,6 @@ test("EmitTypespec-OpenAPI Document", async ({ launch }) => {
   )
   await contrastResult(
     ["openapi.3.0.yaml"],
-    path.resolve(
-      workspacePath,
-      "./Azure.AI.TextTranslation/tsp-output/@typespec/openapi3"
-    )
+    path.resolve(workspacePath, "./tsp-output/@typespec/openapi3")
   )
 })
