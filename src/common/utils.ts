@@ -67,9 +67,7 @@ const test = baseTest.extend<{
 })
 
 async function sleep(s: number) {
-  return new Promise((resolve) =>
-    setTimeout(resolve, (process.env.CI ? s + 5 : s) * 1000)
-  )
+  return new Promise((resolve) => setTimeout(resolve, s * 1000))
 }
 
 /**
@@ -117,7 +115,7 @@ async function screenshotSelf(
     const filePath = path.join(outputDir, fileName)
 
     fs.mkdirSync(path.dirname(filePath), { recursive: true })
-    console.log(filePath);
+    console.log(filePath)
     fs.writeFileSync(filePath, buffer)
   }
 }
