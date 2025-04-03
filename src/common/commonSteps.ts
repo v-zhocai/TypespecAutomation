@@ -166,16 +166,14 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
   )
   await fromInstall!.click()
   await selectFolder(fullFilePath)
-  await sleep(3)
-  await page.keyboard.press("Enter")
   await retry(
-    10,
+    30,
     async () => {
-      const installed = await page.getByText(/Completed installing/).first()
+      const installed = page.getByText(/Completed installing/).first()
       return (await installed.count()) > 0
     },
     "Failed to find installed status",
-    3
+    1
   )
   await page
     .getByRole("tab", { name: /Explorer/ })
@@ -183,7 +181,7 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
     .click()
 }
 
-async function closeVscode(page:Page) {
+async function closeVscode(page: Page) {
   await page.keyboard.press("Alt+F4")
 }
 
@@ -195,5 +193,5 @@ export {
   notEmptyFolderContinue,
   installExtension,
   installExtensionForFile,
-  closeVscode
+  closeVscode,
 }
