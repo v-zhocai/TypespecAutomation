@@ -16,3 +16,8 @@ jobs:
     parameters:
       jobName: "TestEmit"
       testScript: "test:emit"
+
+  - template: test-job-template.yml
+    parameters:
+      jobName: "AllTest"
+      testScript: "test"
