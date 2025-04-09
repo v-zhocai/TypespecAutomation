@@ -1,23 +1,30 @@
 trigger:
-  - test/pipeline-windows
   - master
 jobs:
-  - template: test-job-template.yml
-    parameters:
-      jobName: "TestCreate"
-      testScript: "test:create"
+  - job: RunWindowsTests
+    pool:
+      vmImage: "windows-latest"
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "20.18.3"
+        displayName: "Install Node.js"
 
-  - template: test-job-template.yml
-    parameters:
-      jobName: "TestImport"
-      testScript: "test:import"
+      - script: |
+          npm install
+        displayName: "Install dependencies"
 
-  - template: test-job-template.yml
-    parameters:
-      jobName: "TestEmit"
-      testScript: "test:emit"
-
-  - template: test-job-template.yml
-    parameters:
-      jobName: "AllTest"
-      testScript: "test"
+      - script: |
+          echo "Running UI Tests"
+          npm run test
+        displayName: "Run UI Tests"
+        env:
+          BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
+          CI: true
+      - task: PublishBuildArtifacts@1
+        inputs:
+          path: "$(Build.ArtifactStagingDirectory)"
+          artifact: "screenshots"
+          publishLocation: "Container"
+          includePatterns: "images/**/*.png"
+        displayName: "Publish screenshots to Artifacts"
