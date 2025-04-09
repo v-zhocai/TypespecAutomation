@@ -175,14 +175,16 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
     "Failed to find installed status",
     1
   )
+  await sleep(5)
   await page
     .getByRole("tab", { name: /Explorer/ })
     .locator("a")
     .click()
 }
 
-async function closeVscode(page: Page) {
-  await page.keyboard.press("Alt+F4")
+async function closeVscode() {
+  await keyboard.pressKey(Key.LeftAlt, Key.F4)
+  await keyboard.releaseKey(Key.LeftAlt, Key.F4)
 }
 
 export {

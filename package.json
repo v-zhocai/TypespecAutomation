@@ -5,10 +5,7 @@
   "description": "Typespec UI automation project based on playwright",
   "license": "MIT",
   "scripts": {
-    "test": "vitest --root src",
-    "test:create": "vitest --root src/create",
-    "test:import": "vitest --root src/import",
-    "test:emit": "vitest --root src/emit"
+    "test": "vitest --root src"
   },
   "dependencies": {
     "@nut-tree-fork/nut-js": "^4.2.6",
