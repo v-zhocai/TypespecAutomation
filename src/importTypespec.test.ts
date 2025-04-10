@@ -1,5 +1,5 @@
-import { beforeEach } from "vitest"
-import { test } from "./common/utils"
+import { beforeAll, beforeEach } from "vitest"
+import { screenShot, test } from "./common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
@@ -11,6 +11,10 @@ import {
   selectFolder,
   start,
 } from "./common/commonSteps"
+
+beforeAll(() => {
+  screenShot.setCreateType("import")
+})
 
 beforeEach(() => {
   const importTypespec = path.resolve(
@@ -36,6 +40,7 @@ beforeEach(() => {
 })
 
 test("ImportTypespecFromOpenApi3", async ({ launch }) => {
+  screenShot.setDir("ImportTypespecFromOpenApi3")
   const workspacePath = path.resolve(
     __dirname,
     "../importTypespecProjectOpenApi3"
@@ -66,6 +71,7 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
 })
 
 test("ImportTypespecFromOpenApi3 2", async ({ launch }) => {
+  screenShot.setDir("ImportTypespecFromOpenApi3")
   const workspacePath = path.resolve(
     __dirname,
     "../importTypespecProjectOpenApi3"

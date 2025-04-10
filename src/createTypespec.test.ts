@@ -1,4 +1,4 @@
-import { beforeEach } from "vitest"
+import { beforeAll, beforeEach } from "vitest"
 import {
   contrastResult,
   start,
@@ -7,7 +7,7 @@ import {
   installExtensionForFile,
   closeVscode,
 } from "./common/commonSteps"
-import { test } from "./common/utils"
+import { screenShot, test } from "./common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
@@ -15,6 +15,10 @@ import {
   selectEmitters,
   selectTemplate,
 } from "./common/createSteps"
+
+beforeAll(() => {
+  screenShot.setCreateType("create")
+})
 
 beforeEach(() => {
   const dir = path.resolve(__dirname, "../CreateTypespecProject")
@@ -29,6 +33,7 @@ beforeEach(() => {
 })
 
 test("CreateTypespec-Generic REST API", async ({ launch }) => {
+  screenShot.setDir("CreateTypespec-Generic REST API1")
   const workspacePath = path.resolve(__dirname, "../CreateTypespecProject")
   const { page } = await launch({
     workspacePath,
@@ -67,6 +72,7 @@ test("CreateTypespec-Generic REST API", async ({ launch }) => {
 })
 
 test("CreateTypespec-Generic REST API 2", async ({ launch }) => {
+  screenShot.setDir("CreateTypespec-Generic REST API1")
   const workspacePath = path.resolve(__dirname, "../CreateTypespecProject")
   const { page } = await launch({
     workspacePath,

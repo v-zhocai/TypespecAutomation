@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test"
-import { retry, sleep } from "./utils"
+import { retry, screenShot, sleep } from "./utils"
 import { keyboard, Key } from "@nut-tree-fork/nut-js"
 import fs from "node:fs"
 
@@ -39,6 +39,8 @@ async function contrastResult(res: string[], dir: string) {
     resLength = fs.readdirSync(dir).length
   }
   if (resLength !== res.length) {
+    await screenShot.screenShot("error.png")
+    screenShot.save()
     throw new Error("Failed to matches all files")
   }
 }
@@ -55,7 +57,7 @@ async function start(
   { folderName, command }: { folderName: string; command: string }
 ) {
   await page.locator("li").filter({ hasText: folderName }).first().click()
-
+  await screenShot.screenShot("open_top_panel.png")
   await page
     .getByRole("textbox", { name: "input" })
     .first()
@@ -72,7 +74,7 @@ async function start(
     },
     "Failed to find the specified option"
   )
-
+  await screenShot.screenShot("input_command.png")
   await listForCreate!.click()
 }
 
@@ -88,6 +90,7 @@ async function selectFolder(file: string = "") {
     }
     await keyboard.type(file)
   }
+  await screenShot.screenShot("select_folder.png")
   await keyboard.pressKey(Key.Enter)
 }
 
@@ -108,6 +111,7 @@ async function notEmptyFolderContinue(page: Page) {
     "Failed to find yes button",
     1
   )
+  await screenShot.screenShot("not_empty_folder_continue.png")
   await yesBtn!.click()
 }
 
@@ -139,10 +143,12 @@ async function installExtension(page: Page) {
  * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
  */
 async function installExtensionForFile(page: Page, fullFilePath: string) {
+  await screenShot.screenShot("open_vscode.png")
   await page
     .getByRole("tab", { name: /Extensions/ })
     .locator("a")
     .click()
+  await screenShot.screenShot("change_extension.png")
   let moreItem: Locator
   await retry(
     10,
@@ -154,6 +160,7 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
     1
   )
   await moreItem!.click()
+  await screenShot.screenShot("more_item.png")
   let fromInstall: Locator
   await retry(
     10,
@@ -175,11 +182,13 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
     "Failed to find installed status",
     1
   )
+  await screenShot.screenShot("extension_installed.png")
   await sleep(5)
   await page
     .getByRole("tab", { name: /Explorer/ })
     .locator("a")
     .click()
+  await screenShot.screenShot("change_explorer.png")
 }
 
 async function closeVscode() {
