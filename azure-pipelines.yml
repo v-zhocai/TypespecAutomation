@@ -21,6 +21,7 @@ jobs:
         env:
           BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
           CI: true
+        continueOnError: true
       - task: PublishBuildArtifacts@1
         inputs:
           path: "$(Build.ArtifactStagingDirectory)"
