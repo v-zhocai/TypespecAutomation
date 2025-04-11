@@ -1,5 +1,6 @@
 trigger:
   - master
+  - test/pipeline
 jobs:
   - job: RunWindowsTests
     pool:
