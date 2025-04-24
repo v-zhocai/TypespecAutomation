@@ -8,6 +8,7 @@ import moment from "moment"
 
 interface Context {
   page: Page
+  extensionDir: string
 }
 
 type LaunchFixture = (options: {
@@ -33,21 +34,24 @@ const test = baseTest.extend<{
 
     await use(async (options) => {
       const executablePath = inject("executablePath")
+
       const workspacePath = options.workspacePath
 
       const tempDir = await fs.promises.mkdtemp(
         path.join(os.tmpdir(), "typespec-automation")
       )
-
       const app = await _electron.launch({
         executablePath,
         env: {
           ...process.env,
-          VITEST_VSCODE_E2E_LOG_FILE: logPath,
           VITEST_VSCODE_LOG: "verbose",
         },
         args: [
           "--no-sandbox",
+          "--disable-gpu",
+          "--disable-software-rasterizer",
+          "--disable-gpu-compositing",
+          "--disable-gl-drawing-for-tests",
           "--disable-gpu-sandbox",
           "--disable-updates",
           "--skip-welcome",
@@ -58,9 +62,10 @@ const test = baseTest.extend<{
           `--folder-uri=file:${path.resolve(workspacePath)}`,
         ].filter((v): v is string => !!v),
       })
+
       const page = await app.firstWindow()
 
-      return { page }
+      return { page, extensionDir: path.join(tempDir, "extensions") }
     })
 
     for (const teardown of teardowns) await teardown()
@@ -91,8 +96,8 @@ async function retry(
     }
     count--
   }
-  await screenShot.screenShot("error.png")
-  screenShot.save()
+  // await screenShot.screenShot("error.png")
+  // screenShot.save()
   throw new Error(errMessage)
 }
 
@@ -137,12 +142,14 @@ class Screenshot {
     if (this.fileList.length === 0 || !this.isLocalSave) {
       return
     }
+
     // date小的在前面,让文件有序
     this.fileList.sort((a, b) => a.date - b.date)
     for (let i = 0; i < this.fileList.length; i++) {
       const fullPathItem = this.fileList[i].fullPath.split("\\")
-      fullPathItem[fullPathItem.length - 1] =
-        `${i}_${fullPathItem[fullPathItem.length - 1]}`
+      fullPathItem[fullPathItem.length - 1] = `${i}_${
+        fullPathItem[fullPathItem.length - 1]
+      }`
       fs.mkdirSync(path.dirname(path.join(...fullPathItem)), {
         recursive: true,
       })
@@ -151,12 +158,15 @@ class Screenshot {
   }
 
   async screenShot(fileName: string) {
+    return
     await sleep(3)
     let img = await screenshot()
     let buffer = Buffer.from(img)
     let rootDir =
       process.env.BUILD_ARTIFACT_STAGING_DIRECTORY ||
       path.resolve(__dirname, "../..")
+    console.log(rootDir)
+
     let fullPath = path.join(
       rootDir,
       "/images",

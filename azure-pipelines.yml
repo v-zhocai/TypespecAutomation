@@ -1,9 +1,12 @@
 trigger:
   - master
+  - test/pipeline
+
 jobs:
-  - job: RunWindowsTests
+  - job: RunElectronUITestsOnLinux
     pool:
-      vmImage: "windows-latest"
+      vmImage: "ubuntu-latest"
+
     steps:
       - task: NodeTool@0
         inputs:
@@ -11,21 +14,49 @@ jobs:
         displayName: "Install Node.js"
 
       - script: |
-          npm install
-        displayName: "Install dependencies"
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgtk-3-0 libxss1 libasound2t64 libnss3 libx11-xcb1 \
+            libxcomposite1 libxrandr2 libxcb-dri3-0 libdrm2 libgbm1 \
+            libxdamage1 libatk-bridge2.0-0 libcups2 libxkbcommon0 \
+            xvfb x11-apps imagemagick
+        displayName: "Install Linux Dependencies"
 
       - script: |
-          echo "Running UI Tests"
+          export DISPLAY=:99
+          /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          echo ">>> Started xvfb"
+        displayName: "Start xvfb and Set DISPLAY"
+
+      - script: |
+          npm install
+
+          node -e "require('@vscode/test-electron').download().then(p => console.log('##vso[task.setvariable variable=VSCODE_E2E_DOWNLOAD_PATH]' + p))"
+        displayName: "Install deps and download VSCode"
+
+      - script: |
+          export DISPLAY=:99
+          export VSCODE_E2E_DOWNLOAD_PATH=$(VSCODE_E2E_DOWNLOAD_PATH)
+          chmod +x screen.sh
+          ./screen.sh &
+          echo ">>> end screen"
           npm run test
-        displayName: "Run UI Tests"
+        displayName: "Run Playwright Electron UI Tests"
         env:
-          BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
           CI: true
+          DISPLAY: ":99"
+          VSCODE_E2E_DOWNLOAD_PATH: $(VSCODE_E2E_DOWNLOAD_PATH)
+          ELECTRON_DISABLE_SANDBOX: "1"
+          BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
         continueOnError: true
+      - script: |
+          ls /home/vsts/work/1/a
+        displayName: "List artifacts"
+
       - task: PublishBuildArtifacts@1
         inputs:
           path: "$(Build.ArtifactStagingDirectory)"
           artifact: "screenshots"
           publishLocation: "Container"
-          includePatterns: "images/**/*.png"
-        displayName: "Publish screenshots to Artifacts"
+          includePatterns: "*.png"
+        displayName: "Publish Screenshots"

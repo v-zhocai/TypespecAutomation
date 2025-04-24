@@ -2,6 +2,8 @@ import { Locator, Page } from "playwright"
 import { retry, screenShot, sleep } from "./utils"
 import { keyboard, Key } from "@nut-tree-fork/nut-js"
 import fs from "node:fs"
+import { inject } from "vitest"
+import path from "node:path"
 
 /**
  * Before comparing the results, you need to check whether the conditions for result comparison are met.
@@ -56,12 +58,15 @@ async function start(
   page: Page,
   { folderName, command }: { folderName: string; command: string }
 ) {
-  await page.locator("li").filter({ hasText: folderName }).first().click()
-  await screenShot.screenShot("open_top_panel.png")
-  await page
-    .getByRole("textbox", { name: "input" })
-    .first()
-    .fill(`>Typespec: ${command}`)
+  // await page.locator("li").filter({ hasText: "Typespec" }).first().click()
+  // await screenShot.screenShot("open_top_panel.png")
+  // await page
+  //   .getByRole("textbox", { name: "input" })
+  //   .first()
+  //   .fill(`>Typespec: ${command}`)
+  await page.keyboard.press("Control+Shift+P")
+  await page.keyboard.type(`Typespec: ${command}`)
+
   let listForCreate: Locator
   await retry(
     5,
@@ -74,7 +79,7 @@ async function start(
     },
     "Failed to find the specified option"
   )
-  await screenShot.screenShot("input_command.png")
+  // await screenShot.screenShot("input_command.png")
   await listForCreate!.click()
 }
 
@@ -84,14 +89,9 @@ async function start(
  */
 async function selectFolder(file: string = "") {
   await sleep(10)
-  if (file) {
-    if (!process.env.CI) {
-      await keyboard.pressKey(Key.CapsLock)
-    }
-    await keyboard.type(file)
-  }
-  await screenShot.screenShot("select_folder.png")
+  // await screenShot.screenShot("select_folder.png")
   await keyboard.pressKey(Key.Enter)
+  await keyboard.releaseKey(Key.Enter)
 }
 
 /**
@@ -119,22 +119,70 @@ async function notEmptyFolderContinue(page: Page) {
  * Install plugins directly from vscode
  * @param page vscode object
  */
-async function installExtension(page: Page) {
-  await page
-    .getByRole("tab", { name: /Extensions/ })
-    .locator("a")
-    .click()
-  await page.keyboard.type("Typespec")
-  await page
-    .getByLabel(/TypeSpec/)
-    .getByRole("button", { name: "Install" })
-    .click()
-  await page.getByRole("button", { name: "Trust Publisher & Install" }).click()
+async function installExtension(page: Page, extensionDir: string) {
   await sleep(10)
   await page
     .getByRole("tab", { name: /Explorer/ })
     .locator("a")
     .click()
+  console.log("click extension")
+
+  const executablePath = inject("executablePath")
+  const vsixPath =
+    process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix")
+  await page.getByRole("menuitem", { name: "More" }).locator("div").click()
+  console.log("click menuitem1")
+  await page.getByRole("menuitem", { name: "Terminal", exact: true }).click()
+  console.log("click menuitem2")
+  await page
+    .getByRole("menuitem", { name: "New Terminal Ctrl+Shift+`" })
+    .click()
+  console.log("click menuitem3")
+
+  await retry(
+    10,
+    async () => {
+      const cmd = page.getByRole("textbox", { name: /Terminal/ }).first()
+      return (await cmd.count()) > 0
+    },
+    "Failed to find command palette",
+    3
+  )
+  console.log("open terminal")
+
+  const cmd = page.getByRole("textbox", { name: /Terminal/ }).first()
+  await cmd.click()
+  console.log("terminal click")
+  await sleep(5)
+  await cmd.fill(`cd ${path.dirname(executablePath)}`)
+  console.log("change path")
+
+  await sleep(2)
+  await page.keyboard.press("Enter")
+  console.log("enter")
+
+  await cmd.fill(`code --install-extension ${vsixPath}`)
+  console.log("install extension")
+
+  await page.keyboard.press("Enter")
+  await sleep(2)
+  // releases
+  // await page
+  //   .getByRole("tab", { name: /Extensions/ })
+  //   .locator("a")
+  //   .click()
+  // console.log("change extension")
+  // await page.keyboard.type("Typespec")
+  // console.log("input extension name")
+  // await page
+  //   .getByLabel(/TypeSpec/)
+  //   .getByRole("button", { name: "Install" })
+  //   .click()
+  // console.log("start install extension")
+  // await sleep(10)
+  // await page.getByRole("button", { name: "Trust Publisher & Install" }).click()
+  // console.log("installed")
+  // await sleep(20)
 }
 
 /**
@@ -143,12 +191,18 @@ async function installExtension(page: Page) {
  * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
  */
 async function installExtensionForFile(page: Page, fullFilePath: string) {
-  await screenShot.screenShot("open_vscode.png")
+  // await screenShot.screenShot("open_vscode.png")
+  console.log("进入1")
+
   await page
     .getByRole("tab", { name: /Extensions/ })
     .locator("a")
     .click()
-  await screenShot.screenShot("change_extension.png")
+  console.log(page.getByRole("tab", { name: /Extensions/ }).locator("a"))
+
+  console.log("111")
+
+  // await screenShot.screenShot("change_extension.png")
   let moreItem: Locator
   await retry(
     10,
@@ -160,7 +214,8 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
     1
   )
   await moreItem!.click()
-  await screenShot.screenShot("more_item.png")
+  console.log("2222")
+  // await screenShot.screenShot("more_item.png")
   let fromInstall: Locator
   await retry(
     10,
@@ -172,7 +227,8 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
     1
   )
   await fromInstall!.click()
-  await selectFolder(fullFilePath)
+  console.log(333)
+  // await selectFolder(fullFilePath)
   await retry(
     30,
     async () => {
@@ -182,13 +238,15 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
     "Failed to find installed status",
     1
   )
-  await screenShot.screenShot("extension_installed.png")
+  // await screenShot.screenShot("extension_installed.png")
   await sleep(5)
   await page
     .getByRole("tab", { name: /Explorer/ })
     .locator("a")
     .click()
-  await screenShot.screenShot("change_explorer.png")
+  console.log(333)
+
+  // await screenShot.screenShot("change_explorer.png")
 }
 
 async function closeVscode() {

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 out
 dist
 node_modules
@@ -14,3 +15,22 @@ CreateTypespecProject
 EmitTypespecProject/tsp-output
 *.png
 images
+=======
+out
+dist
+node_modules
+.vscode-test/
+.DS_Store
+.eslintcache
+test-results
+.yarn
+.pnp.*
+samples/**/coverage
+tests-logs-*
+ImportTypespecProjectOpenApi3/*.tsp
+CreateTypespecProject
+EmitTypespecProject/tsp-output
+*.png
+images
+>>>>>>> 90c56bd2a (:tada: init linux)
+testUserData
