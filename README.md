@@ -38,7 +38,7 @@ The core directory is `src`, which contains all the `test files`. They correspon
 1. Clone this repo.
 
    ```git
-   git clone https://github.com/Yionse/TypespecAutomation.git
+   git clone https://github.com/v-xuto/TypespecAutomation.git
    ```
 
 2. Install dependencies using `yarn`.

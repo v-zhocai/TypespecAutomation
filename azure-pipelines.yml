@@ -1,6 +1,15 @@
 trigger:
-  - master
-  - test/pipeline
+  branches:
+    include:
+      - master
+      - master-linux
+
+pr:
+  branches:
+    include:
+      - master
+      - master-linux
+
 jobs:
   - job: RunWindowsTests
     pool:
