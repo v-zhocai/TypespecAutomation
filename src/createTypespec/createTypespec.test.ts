@@ -4,24 +4,24 @@ import {
   start,
   selectFolder,
   preContrastResult,
-  installExtensionForFile,
   closeVscode,
-} from "./common/commonSteps"
-import { screenShot, test } from "./common/utils"
+  installExtensionForCommand,
+} from "../common/commonSteps"
+import { screenShot, test } from "../common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
   inputProjectName,
   selectEmitters,
   selectTemplate,
-} from "./common/createSteps"
+} from "../common/createSteps"
 
 beforeAll(() => {
   screenShot.setCreateType("create")
 })
 
 beforeEach(() => {
-  const dir = path.resolve(__dirname, "../CreateTypespecProject")
+  const dir = path.resolve(__dirname, "../../CreateTypespecProject")
   if (fs.existsSync(dir)) {
     for (const file of fs.readdirSync(dir)) {
       const filePath = path.resolve(dir, file)
@@ -34,14 +34,11 @@ beforeEach(() => {
 
 test("CreateTypespec-Generic REST API", async ({ launch }) => {
   screenShot.setDir("CreateTypespec-Generic REST API1")
-  const workspacePath = path.resolve(__dirname, "../CreateTypespecProject")
-  const { page } = await launch({
+  const workspacePath = path.resolve(__dirname, "../../CreateTypespecProject")
+  const { page, extensionDir } = await launch({
     workspacePath,
   })
-  await installExtensionForFile(
-    page,
-    path.resolve(__dirname, "../extension.vsix")
-  )
+  await installExtensionForCommand(page, extensionDir)
 
   await start(page, {
     folderName: "CreateTypespecProject",
@@ -73,14 +70,11 @@ test("CreateTypespec-Generic REST API", async ({ launch }) => {
 
 test("CreateTypespec-Generic REST API 2", async ({ launch }) => {
   screenShot.setDir("CreateTypespec-Generic REST API1")
-  const workspacePath = path.resolve(__dirname, "../CreateTypespecProject")
-  const { page } = await launch({
+  const workspacePath = path.resolve(__dirname, "../../CreateTypespecProject")
+  const { page, extensionDir } = await launch({
     workspacePath,
   })
-  await installExtensionForFile(
-    page,
-    path.resolve(__dirname, "../extension.vsix")
-  )
+  await installExtensionForCommand(page, extensionDir)
 
   await start(page, {
     folderName: "CreateTypespecProject",
@@ -109,17 +103,3 @@ test("CreateTypespec-Generic REST API 2", async ({ launch }) => {
     workspacePath
   )
 })
-
-// test("CreateTypespec-Special scenarios-button", async ({ launch }) => {
-//   const { page } = await launch({ workspacePath: "./test" })
-//   await installExtension(page)
-
-//   await page
-//     .getByLabel(/Explorer/)
-//     .first()
-//     .click()
-//   await page.getByRole("button", { name: "Create TypeSpec Project" }).click()
-//   await selectFolder()
-//   await notEmptyFolderContinue(page)
-//   await closeVscode(page)
-// })
