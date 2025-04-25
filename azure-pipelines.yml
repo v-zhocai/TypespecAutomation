@@ -1,6 +1,15 @@
 trigger:
-  - master
-  - test/pipeline
+  branches:
+    include:
+      - master
+      - master-linux
+
+pr:
+  branches:
+    include:
+      - master
+      - master-linux
+
 jobs:
   - job: RunWindowsTests
     pool:
@@ -10,6 +19,19 @@ jobs:
         inputs:
           versionSpec: "20.18.3"
         displayName: "Install Node.js"
+
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          version: '8.0.204'
+        displayName: "Install .NET SDK"
+
+      - script: |
+          wget https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+          tar -xzf apache-maven-3.9.6-bin.tar.gz -C /usr/local/
+          echo 'export PATH="/usr/local/apache-maven-3.9.6/bin:$PATH"' >> ~/.bashrc
+          mvn -v
+        displayName: 'Install Maven'
 
       - script: |
           npm install
@@ -24,6 +46,8 @@ jobs:
           CI: true
         continueOnError: true
       - script: |
+          set JAVA_HOME=%JAVA_HOME_21_X64%
+          set PATH=%JAVA_HOME%\bin;%PATH%
           echo "Running Emit Test Cases"
           npm run test:emit
         displayName: "Run Emit Test Cases"
