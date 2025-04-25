@@ -16,9 +16,25 @@ jobs:
         displayName: "Install dependencies"
 
       - script: |
-          echo "Running UI Tests"
-          npm run test
-        displayName: "Run UI Tests"
+          echo "Running Create Test Cases"
+          npm run test:create
+        displayName: "Run Create Test Cases"
+        env:
+          BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
+          CI: true
+        continueOnError: true
+      - script: |
+          echo "Running Emit Test Cases"
+          npm run test:emit
+        displayName: "Run Emit Test Cases"
+        env:
+          BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
+          CI: true
+        continueOnError: true
+      - script: |
+          echo "Running Import Test Cases"
+          npm run test:import
+        displayName: "Run Import Test Cases"
         env:
           BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
           CI: true

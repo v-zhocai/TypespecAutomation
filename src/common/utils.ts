@@ -8,6 +8,7 @@ import moment from "moment"
 
 interface Context {
   page: Page
+  extensionDir: string
 }
 
 type LaunchFixture = (options: {
@@ -34,7 +35,11 @@ const test = baseTest.extend<{
     await use(async (options) => {
       const executablePath = inject("executablePath")
       const workspacePath = options.workspacePath
-
+      let envOverrides = {}
+      const codePath = path.join(executablePath, "../bin")
+      envOverrides = {
+        PATH: `${codePath}${path.delimiter}${process.env.PATH}`,
+      }
       const tempDir = await fs.promises.mkdtemp(
         path.join(os.tmpdir(), "typespec-automation")
       )
@@ -43,6 +48,7 @@ const test = baseTest.extend<{
         executablePath,
         env: {
           ...process.env,
+          ...envOverrides,
           VITEST_VSCODE_E2E_LOG_FILE: logPath,
           VITEST_VSCODE_LOG: "verbose",
         },
@@ -59,8 +65,13 @@ const test = baseTest.extend<{
         ].filter((v): v is string => !!v),
       })
       const page = await app.firstWindow()
-
-      return { page }
+      // spawn("code", [
+      //   "--install-extension",
+      //   path.resolve(__dirname, "../../extension.vsix"),
+      //   "--extensions-dir",
+      //   path.resolve(tempDir, "extensions"),
+      // ])
+      return { page, extensionDir: path.join(tempDir, "extensions") }
     })
 
     for (const teardown of teardowns) await teardown()

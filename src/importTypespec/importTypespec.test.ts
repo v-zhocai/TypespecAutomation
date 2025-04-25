@@ -1,16 +1,16 @@
 import { beforeAll, beforeEach } from "vitest"
-import { screenShot, test } from "./common/utils"
+import { screenShot, test } from "../common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
   closeVscode,
   contrastResult,
-  installExtensionForFile,
+  installExtensionForCommand,
   notEmptyFolderContinue,
   preContrastResult,
   selectFolder,
   start,
-} from "./common/commonSteps"
+} from "../common/commonSteps"
 
 beforeAll(() => {
   screenShot.setCreateType("import")
@@ -19,7 +19,7 @@ beforeAll(() => {
 beforeEach(() => {
   const importTypespec = path.resolve(
     __dirname,
-    "../ImportTypespecProjectOpenApi3"
+    "../../ImportTypespecProjectOpenApi3"
   )
   if (fs.existsSync(importTypespec)) {
     let hasOpenapi3File = false
@@ -43,19 +43,16 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
   screenShot.setDir("ImportTypespecFromOpenApi3")
   const workspacePath = path.resolve(
     __dirname,
-    "../importTypespecProjectOpenApi3"
+    "../../importTypespecProjectOpenApi3"
   )
-  const { page } = await launch({
+  const { page, extensionDir } = await launch({
     workspacePath,
   })
-  await installExtensionForFile(
-    page,
-    path.resolve(__dirname, "../extension.vsix")
-  )
+  await installExtensionForCommand(page, extensionDir)
 
   await start(page, {
     folderName: "importTypespecProjectOpenApi3",
-    command: "Import TypeSpec from Openapi3",
+    command: "Import TypeSpec from Openapi 3",
   })
   await selectFolder()
   await notEmptyFolderContinue(page)
@@ -74,19 +71,16 @@ test("ImportTypespecFromOpenApi3 2", async ({ launch }) => {
   screenShot.setDir("ImportTypespecFromOpenApi3")
   const workspacePath = path.resolve(
     __dirname,
-    "../importTypespecProjectOpenApi3"
+    "../../importTypespecProjectOpenApi3"
   )
-  const { page } = await launch({
+  const { page, extensionDir } = await launch({
     workspacePath,
   })
-  await installExtensionForFile(
-    page,
-    path.resolve(__dirname, "../extension.vsix")
-  )
+  await installExtensionForCommand(page, extensionDir)
 
   await start(page, {
     folderName: "importTypespecProjectOpenApi3",
-    command: "Import TypeSpec from Openapi3",
+    command: "Import TypeSpec from Openapi 3",
   })
   await selectFolder()
   await notEmptyFolderContinue(page)
