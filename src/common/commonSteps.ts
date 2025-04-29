@@ -3,7 +3,6 @@ import { retry, screenShot, sleep } from "./utils"
 import { keyboard, Key } from "@nut-tree-fork/nut-js"
 import fs from "node:fs"
 import path from "node:path"
-import { inject } from "vitest"
 
 /**
  * Before comparing the results, you need to check whether the conditions for result comparison are met.
@@ -54,7 +53,7 @@ async function contrastResult(res: string[], dir: string) {
  * folderName: The text in the top input box is usually the current open root directory,
  * command: After the top input box pops up, the command to be executed
  */
-async function start(
+async function startWithCommandPalette(
   page: Page,
   { folderName, command }: { folderName: string; command: string }
 ) {
@@ -91,6 +90,10 @@ async function selectFolder(file: string = "") {
       await keyboard.pressKey(Key.CapsLock)
     }
     await keyboard.type(file)
+    if (file.includes("CreateTypespecProject")) {
+      await sleep(2)
+      await keyboard.pressKey(Key.Enter)
+    }
   }
   await screenShot.screenShot("select_folder.png")
   await keyboard.pressKey(Key.Enter)
@@ -197,14 +200,15 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
  * Install plugins using the command
  */
 async function installExtensionForCommand(page: Page, extensionDir: string) {
-  const executablePath = inject("executablePath")
   const vsixPath =
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix")
-  await page.getByRole("menuitem", { name: "More" }).locator("div").click()
-  await screenShot.screenShot("click_more.png")
-  await page.getByRole("menuitem", { name: "Terminal", exact: true }).click()
-  await screenShot.screenShot("click_terminal.png")
-  await page.getByRole("menuitem", { name: /New Terminal/ }).click()
+  // await page.getByRole("menuitem", { name: "More" }).locator("div").click()
+  // await screenShot.screenShot("click_more.png")
+  // await page.getByRole("menuitem", { name: "Terminal", exact: true }).click()
+  // await screenShot.screenShot("click_terminal.png")
+  // await page.getByRole("menuitem", { name: /New Terminal/ }).click()
+  await sleep(5)
+  await page.keyboard.press("Control+Backquote")
   await screenShot.screenShot("open_terminal.png")
   await retry(
     10,
@@ -231,8 +235,27 @@ async function closeVscode() {
   await keyboard.releaseKey(Key.LeftAlt, Key.F4)
 }
 
+/**
+ * If the current scenario is: the folder is not empty, you need to call this method
+ * @param page vscode project
+ * @param folderName The name of the folder that needs to be selected.
+ */
+function createTestFile(folderName: string) {
+  const filePath = path.join(folderName, "test.txt")
+  fs.writeFileSync(filePath, "test")
+}
+
+/**
+ * Placeholder file, need to be deleted
+ * @param folderName The name of the folder that needs to be selected.
+ */
+function deleteTestFile(folderName: string) {
+  const filePath = path.join(folderName, "test.txt")
+  fs.rmSync(filePath)
+}
+
 export {
-  start,
+  startWithCommandPalette,
   contrastResult,
   selectFolder,
   preContrastResult,
@@ -241,4 +264,6 @@ export {
   installExtensionForFile,
   installExtensionForCommand,
   closeVscode,
+  createTestFile,
+  deleteTestFile,
 }

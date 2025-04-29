@@ -6,7 +6,8 @@ import { retry, screenShot } from "./utils"
  * @param page vscode project
  * @param emitters The emitters that need to be selected. If you need to select all, just do not transmit them.
  */
-async function selectEmitters(page: Page, emitters: string[]) {
+async function selectEmitters(page: Page, emitters?: string[]) {
+  await page.getByRole("checkbox", { name: "Toggle all checkboxes" }).check()
   await screenShot.screenShot("select_emitter.png")
   await page.keyboard.press("Enter")
 }
@@ -46,4 +47,14 @@ async function inputProjectName(page: Page) {
   await page.keyboard.press("Enter")
 }
 
-export { selectEmitters, selectTemplate, inputProjectName }
+/**
+ *
+ */
+
+async function startWithClick(page: Page) {
+  await screenShot.screenShot("start_with_click.png")
+  await page.getByLabel("Explorer (Ctrl+Shift+E) - 1").nth(2).click()
+  await screenShot.screenShot("open_tabs.png")
+  await page.getByRole("button", { name: "Create TypeSpec Project" }).click()
+}
+export { selectEmitters, selectTemplate, inputProjectName, startWithClick }

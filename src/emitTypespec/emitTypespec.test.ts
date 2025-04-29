@@ -4,7 +4,7 @@ import {
   contrastResult,
   installExtensionForCommand,
   preContrastResult,
-  start,
+  startWithCommandPalette,
 } from "../common/commonSteps"
 import {
   emitSelectLanguageForOpenapi,
@@ -36,7 +36,7 @@ test("EmitTypespec-OpenAPI Document", async ({ launch }) => {
   })
 
   await installExtensionForCommand(page, extensionDir)
-  await start(page, {
+  await startWithCommandPalette(page, {
     folderName: "EmitTypespecProject",
     command: "Emit from Typespec",
   })
@@ -73,7 +73,7 @@ test("EmitTypespec-OpenAPI Document 2", async ({ launch }) => {
   })
 
   await installExtensionForCommand(page, extensionDir)
-  await start(page, {
+  await startWithCommandPalette(page, {
     folderName: "EmitTypespecProject",
     command: "Emit from Typespec",
   })
