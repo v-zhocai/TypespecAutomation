@@ -78,6 +78,8 @@ describe.each(EmitCasesConfigList) ("EmitTypespecProject", async (item) => {
       "Failed to emit project Successful",
       [10, 3]
     )
+
+    await screenShot.screenShot("close_vscode.png")
     await closeVscode()
 
     const resultFilePath = path.resolve(workspacePath, "./tsp-output/@typespec")
