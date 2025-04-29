@@ -1,11 +1,14 @@
-import { beforeAll, beforeEach } from "vitest"
+import { beforeAll, beforeEach, describe } from "vitest"
 import {
   contrastResult,
-  start,
+  startWithCommandPalette,
   selectFolder,
   preContrastResult,
   closeVscode,
   installExtensionForCommand,
+  createTestFile,
+  deleteTestFile,
+  notEmptyFolderContinue,
 } from "../common/commonSteps"
 import { screenShot, test } from "../common/utils"
 import fs from "node:fs"
@@ -14,7 +17,13 @@ import {
   inputProjectName,
   selectEmitters,
   selectTemplate,
+  startWithClick,
 } from "../common/createSteps"
+import {
+  CreateCasesConfigList,
+  CreateProjectTriggerType,
+  ProviderNameTemplates,
+} from "./config"
 
 beforeAll(() => {
   screenShot.setCreateType("create")
@@ -32,74 +41,67 @@ beforeEach(() => {
   }
 })
 
-test("CreateTypespec-Generic REST API", async ({ launch }) => {
-  screenShot.setDir("CreateTypespec-Generic REST API1")
-  const workspacePath = path.resolve(__dirname, "../../CreateTypespecProject")
-  const { page, extensionDir } = await launch({
-    workspacePath,
-  })
-  await installExtensionForCommand(page, extensionDir)
+describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
+  const {
+    caseName,
+    triggerType,
+    templateName,
+    isEmptyFolder,
+    expectedResults,
+  } = item
 
-  await start(page, {
-    folderName: "CreateTypespecProject",
-    command: "Create Typespec Project",
-  })
-  await selectFolder()
-  await selectTemplate(page, "Generic REST API")
-  await inputProjectName(page)
-  await selectEmitters(page, ["OpenAPI"])
-  await preContrastResult(
-    page,
-    "Project created!",
-    "Failed to create project Successful",
-    [10, 10]
-  )
-  await closeVscode()
-  await contrastResult(
-    [
-      ".gitignore",
-      "main.tsp",
-      "node_modules",
-      "package-lock.json",
-      "package.json",
-      "tspconfig.yaml",
-    ],
-    workspacePath
-  )
-})
+  test(caseName, async ({ launch }) => {
+    screenShot.setDir(caseName)
+    const workspacePath = path.resolve(__dirname, "../../CreateTypespecProject")
 
-test("CreateTypespec-Generic REST API 2", async ({ launch }) => {
-  screenShot.setDir("CreateTypespec-Generic REST API1")
-  const workspacePath = path.resolve(__dirname, "../../CreateTypespecProject")
-  const { page, extensionDir } = await launch({
-    workspacePath,
-  })
-  await installExtensionForCommand(page, extensionDir)
+    const { page, extensionDir } = await launch({
+      workspacePath:
+        triggerType === CreateProjectTriggerType.Command
+          ? workspacePath
+          : "test",
+    })
 
-  await start(page, {
-    folderName: "CreateTypespecProject",
-    command: "Create Typespec Project",
+    if (!isEmptyFolder) {
+      createTestFile(workspacePath)
+    }
+
+    await installExtensionForCommand(page, extensionDir)
+
+    if (triggerType === CreateProjectTriggerType.Command) {
+      await startWithCommandPalette(page, {
+        folderName: "CreateTypespecProject",
+        command: "Create Typespec Project",
+      })
+    } else {
+      await startWithClick(page)
+    }
+
+    await selectFolder(
+      triggerType === CreateProjectTriggerType.Command ? "" : workspacePath
+    )
+
+    if (!isEmptyFolder) {
+      await notEmptyFolderContinue(page)
+      deleteTestFile(workspacePath)
+    }
+
+    await selectTemplate(page, templateName)
+
+    await inputProjectName(page)
+
+    if (templateName === "Generic Rest API") {
+      await selectEmitters(page)
+    } else if (ProviderNameTemplates.includes(templateName)) {
+      await page.keyboard.press("Enter")
+    }
+
+    await preContrastResult(
+      page,
+      "Project created",
+      "Failed to create project Successful",
+      [10, 15]
+    )
+    await closeVscode()
+    await contrastResult(expectedResults, workspacePath)
   })
-  await selectFolder()
-  await selectTemplate(page, "Generic REST API")
-  await inputProjectName(page)
-  await selectEmitters(page, ["OpenAPI"])
-  await preContrastResult(
-    page,
-    "Project created!",
-    "Failed to create project Successful",
-    [10, 10]
-  )
-  await closeVscode()
-  await contrastResult(
-    [
-      ".gitignore",
-      "main.tsp",
-      "node_modules",
-      "package-lock.json",
-      "package.json",
-      "tspconfig.yaml",
-    ],
-    workspacePath
-  )
 })
