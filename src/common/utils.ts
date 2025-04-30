@@ -5,6 +5,7 @@ import path, { resolve } from "node:path"
 import { test as baseTest, inject } from "vitest"
 import screenshot from "screenshot-desktop"
 import moment from "moment"
+import { closeVscode } from "./commonSteps"
 
 interface Context {
   page: Page
@@ -121,6 +122,7 @@ async function retry(
   }
   await screenShot.screenShot("error.png")
   screenShot.save()
+  await closeVscode()
   throw new Error(errMessage)
 }
 

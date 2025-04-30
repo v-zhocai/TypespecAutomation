@@ -14,3 +14,4 @@ CreateTypespecProject
 EmitTypespecProject/tsp-output
 *.png
 images
+EmitTypespecProject/tspconfig.yaml

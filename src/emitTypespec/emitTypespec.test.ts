@@ -1,18 +1,21 @@
-import { beforeAll, beforeEach } from "vitest"
+import { beforeAll, beforeEach, describe } from "vitest"
 import {
   closeVscode,
   contrastResult,
   installExtensionForCommand,
   preContrastResult,
+  startWithRightClick,
   startWithCommandPalette,
 } from "../common/commonSteps"
 import {
+  emitSelectLanguage,
   emitSelectLanguageForOpenapi,
   emitSelectType,
 } from "../common/emiSteps"
 import { screenShot, test } from "../common/utils"
 import path from "node:path"
 import fs from "node:fs"
+import { EmitCasesConfigList } from "./config"
 
 beforeAll(() => {
   screenShot.setCreateType("emit")
@@ -28,75 +31,59 @@ beforeEach(() => {
   }
 })
 
-test("EmitTypespec-OpenAPI Document", async ({ launch }) => {
-  screenShot.setDir("EmitTypespec-OpenAPI Document")
-  const workspacePath = path.resolve(__dirname, "../../EmitTypespecProject")
-  const { page, extensionDir } = await launch({
-    workspacePath,
+describe.each(EmitCasesConfigList) ("EmitTypespecProject", async (item) => {
+  const {
+    caseName,
+    selectType,
+    selectTypeLanguage,
+    triggerType,
+    expectedResults,
+  } = item
+  test(caseName, async ({ launch }) => {
+    screenShot.setDir(caseName)
+    const workspacePath = path.resolve(__dirname, "../../EmitTypespecProject")
+    const { page, extensionDir } = await launch({
+      workspacePath,
+    })
+
+
+    await installExtensionForCommand(page, extensionDir)
+    if (triggerType === "Command") {
+      await startWithCommandPalette(page, {
+        folderName: "EmitTypespecProject",
+        command: "Emit from Typespec",
+      })
+    } else if (triggerType === "Click") {
+      await startWithRightClick(page, "Emit from TypeSpec")
+    }
+
+    await screenShot.screenShot("emitter_list.png")
+
+    await page
+      .getByRole("option", { name: "Choose another emitter" })
+      .locator("a")
+      .click()
+
+    await emitSelectType(page, selectType)
+    if (selectTypeLanguage === "OpenAPI3") {
+      await emitSelectLanguageForOpenapi(page)
+    } else {
+      await emitSelectLanguage(page, selectTypeLanguage)
+    }
+    
+    const contrastMessage =  selectTypeLanguage + "...Succeeded"
+    await preContrastResult(
+      page,
+      contrastMessage,
+      "Failed to emit project Successful",
+      [10, 3]
+    )
+
+    await screenShot.screenShot("close_vscode.png")
+    await closeVscode()
+
+    const resultFilePath = path.resolve(workspacePath, "./tsp-output/@typespec")
+    await contrastResult(expectedResults,resultFilePath)
+
   })
-
-  await installExtensionForCommand(page, extensionDir)
-  await startWithCommandPalette(page, {
-    folderName: "EmitTypespecProject",
-    command: "Emit from Typespec",
-  })
-  // await emitSelectProject(page, "TextTranslation")
-  await screenShot.screenShot("emitter_list.png")
-
-  await page
-    .getByRole("option", { name: "Choose another emitter" })
-    .locator("a")
-    .click()
-  await emitSelectType(page, "OpenAPI Document")
-
-  await emitSelectLanguageForOpenapi(page)
-
-  await preContrastResult(
-    page,
-    "OpenAPI3...Succeeded",
-    "Failed to emit project Successful",
-    [10, 3]
-  )
-  await closeVscode()
-
-  await contrastResult(
-    ["openapi.3.0.yaml"],
-    path.resolve(workspacePath, "./tsp-output/@typespec/openapi3")
-  )
-})
-
-test("EmitTypespec-OpenAPI Document 2", async ({ launch }) => {
-  screenShot.setDir("EmitTypespec-OpenAPI Document")
-  const workspacePath = path.resolve(__dirname, "../../EmitTypespecProject")
-  const { page, extensionDir } = await launch({
-    workspacePath,
-  })
-
-  await installExtensionForCommand(page, extensionDir)
-  await startWithCommandPalette(page, {
-    folderName: "EmitTypespecProject",
-    command: "Emit from Typespec",
-  })
-  await screenShot.screenShot("emitter_list.png")
-
-  await page
-    .getByRole("option", { name: "Choose another emitter" })
-    .locator("a")
-    .click()
-  await emitSelectType(page, "OpenAPI Document")
-
-  await emitSelectLanguageForOpenapi(page)
-
-  await preContrastResult(
-    page,
-    "OpenAPI3...Succeeded",
-    "Failed to emit project Successful",
-    [10, 3]
-  )
-  await closeVscode()
-
-  await contrastResult(
-    ["openapi.3.0.yaml"],
-    path.resolve(workspacePath, "./tsp-output/@typespec/openapi3")
-  )
 })

@@ -80,6 +80,23 @@ async function startWithCommandPalette(
 }
 
 /**
+ * Start the Project with Right click on the file
+ * @param page vscode object
+ * @param command 
+ * command: specify which command to execute to the project
+ */
+async function startWithRightClick(
+  page: Page,
+  command: string
+){
+  const target = page.getByRole('treeitem', {name: 'main.tsp'}).locator('a')
+  await target.click({button: 'right'})
+  await screenShot.screenShot("click_main.png")
+  await page.getByRole('menuitem', {name: 'Emit from TypeSpec'}).click()
+  await screenShot.screenShot("emit_typespec.png")
+}
+
+/**
  * In vscode, when you need to select a folder or a file, call this method
  * @param file When selecting a file, just pass it in. If you need to select a folder, you do not need to pass this parameter in.
  */
@@ -255,6 +272,7 @@ function deleteTestFile(folderName: string) {
 }
 
 export {
+  startWithRightClick,
   startWithCommandPalette,
   contrastResult,
   selectFolder,
