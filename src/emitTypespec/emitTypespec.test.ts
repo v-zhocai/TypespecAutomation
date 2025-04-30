@@ -54,7 +54,7 @@ describe.each(EmitCasesConfigList) ("EmitTypespecProject", async (item) => {
         command: "Emit from Typespec",
       })
     } else if (triggerType === "Click") {
-      await startWithRightClick(page, "Emit from TypeSpec")
+      await startWithRightClick(page, "Emit from TypeSpec", "file")
     }
 
     await screenShot.screenShot("emitter_list.png")
