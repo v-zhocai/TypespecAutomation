@@ -11,7 +11,37 @@ pr:
       - master-linux
 
 jobs:
-  - job: RunWindowsTests
+  - job: RunWindowsTests_1_CreateTypespecProject
+    pool:
+      vmImage: "windows-latest"
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "20.18.3"
+        displayName: "Install Node.js"
+
+      - script: |
+          npm install
+        displayName: "Install dependencies"
+
+      - script: |
+          echo "Running Create Test Cases"
+          npm run test:create
+        displayName: "Run Create Test Cases"
+        env:
+          BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
+          CI: true
+        continueOnError: true
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          path: "$(Build.ArtifactStagingDirectory)"
+          artifact: "screenshots"
+          publishLocation: "Container"
+          includePatterns: "images/**/*.png"
+        displayName: "Publish screenshots to Artifacts"
+
+  - job: RunWindowsTests_2_EmitTypespecProject
     pool:
       vmImage: "windows-latest"
     steps:
@@ -43,6 +73,36 @@ jobs:
           echo "Running Emit Test Cases"
           npm run test:emit
         displayName: "Run Emit Test Cases"
+        env:
+          BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
+          CI: true
+        continueOnError: true
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          path: "$(Build.ArtifactStagingDirectory)"
+          artifact: "screenshots"
+          publishLocation: "Container"
+          includePatterns: "images/**/*.png"
+        displayName: "Publish screenshots to Artifacts"
+
+  - job: RunWindowsTests_3_ImportTypespecProject
+    pool:
+      vmImage: "windows-latest"
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "20.18.3"
+        displayName: "Install Node.js"
+
+      - script: |
+          npm install
+        displayName: "Install dependencies"
+
+      - script: |
+          echo "Running Import Test Cases"
+          npm run test:import
+        displayName: "Run Import Test Cases"
         env:
           BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
           CI: true
