@@ -6,6 +6,6 @@ export default defineConfig({
     testTimeout: process.env.CI ? 240_000 : Number.POSITIVE_INFINITY,
     fileParallelism: false,
     globalSetup: ["./common/downloadSetup.ts"],
-    retry: 1,
+    retry: 0,
   },
 })
