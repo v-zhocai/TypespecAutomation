@@ -4,8 +4,8 @@ import {
   contrastResult,
   installExtensionForCommand,
   preContrastResult,
-  start,
   startWithRightClick,
+  startWithCommandPalette,
 } from "../common/commonSteps"
 import {
   emitSelectLanguage,
@@ -46,10 +46,10 @@ describe.each(EmitCasesConfigList) ("EmitTypespecProject", async (item) => {
       workspacePath,
     })
 
-    await installExtensionForCommand(page, extensionDir)
 
+    await installExtensionForCommand(page, extensionDir)
     if (triggerType === "Command") {
-      await start(page, {
+      await startWithCommandPalette(page, {
         folderName: "EmitTypespecProject",
         command: "Emit from Typespec",
       })
@@ -84,5 +84,6 @@ describe.each(EmitCasesConfigList) ("EmitTypespecProject", async (item) => {
 
     const resultFilePath = path.resolve(workspacePath, "./tsp-output/@typespec")
     await contrastResult(expectedResults,resultFilePath)
+
   })
 })

@@ -9,7 +9,7 @@ import {
   notEmptyFolderContinue,
   preContrastResult,
   selectFolder,
-  start,
+  startWithCommandPalette,
 } from "../common/commonSteps"
 
 beforeAll(() => {
@@ -50,7 +50,7 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
   })
   await installExtensionForCommand(page, extensionDir)
 
-  await start(page, {
+  await startWithCommandPalette(page, {
     folderName: "importTypespecProjectOpenApi3",
     command: "Import TypeSpec from Openapi 3",
   })
@@ -78,7 +78,7 @@ test("ImportTypespecFromOpenApi3 2", async ({ launch }) => {
   })
   await installExtensionForCommand(page, extensionDir)
 
-  await start(page, {
+  await startWithCommandPalette(page, {
     folderName: "importTypespecProjectOpenApi3",
     command: "Import TypeSpec from Openapi 3",
   })
