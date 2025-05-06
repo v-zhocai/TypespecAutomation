@@ -87,14 +87,14 @@ describe.each(ImportCasesConfigList) ("ImportTypespecFromOpenApi3", async ( item
 
     await screenShot.screenShot("after_start_list.png")
 
-    if (selectFolderEmptyOrNonEmpty === "empty" && triggerType === "RightClickonFolder") {
-    } else if (selectFolderEmptyOrNonEmpty === "empty") {
+    if (selectFolderEmptyOrNonEmpty === "empty" && triggerType != "RightClickonFolder") {
       await selectFolder("ImportTypespecProjectEmptyFolder")
       await selectFolder()
     } else if (selectFolderEmptyOrNonEmpty === "non-empty") {
       await selectFolder()
       await notEmptyFolderContinue(page)  
     }
+    
     await selectFolder("openapi.3.0.yaml")
     await screenShot.screenShot("result_list.png")
 

@@ -83,7 +83,7 @@ async function startWithCommandPalette(
  * Start the Project with Right click on the file
  * @param page vscode object
  * @param command create, emit or import
- * @param type specify whether the click is on file or on folder
+ * @param type specify whether the click is on file, folder or empty folder
  * command: specify which command to execute to the project
  */
 async function startWithRightClick(
@@ -91,32 +91,23 @@ async function startWithRightClick(
   command: string,
   type: string,
 ){
-  if (command == "Emit from TypeSpec"){
+  if (command == "Emit from TypeSpec") {
     const target = page.getByRole('treeitem', {name: 'main.tsp'}).locator('a')
     await target.click({button: 'right'})
     await screenShot.screenShot("click_main.png")
     await page.getByRole('menuitem', {name: 'Emit from TypeSpec'}).click()
     await screenShot.screenShot("emit_typespec.png")
-  } else if (command == "Import TypeSpec from Openapi 3" && type == "file"){
-    const target = page.getByRole("treeitem", { name: 'openapi.3.0.yaml'}).locator('a')
-    await target.click({button: 'right'})
-    await screenShot.screenShot("openapi.3.0.png")
-    await page.getByRole('menuitem', {name: 'Import TypeSpec from OpenAPI'}).click()
-    await screenShot.screenShot("import_typespec.png")
-  } else if (command == "Import TypeSpec from Openapi 3" && type == "emptyfolder"){
-    const target = page.getByRole("treeitem", { name: 'ImportTypespecProjectEmptyFolder'}).locator('a')
-    await target.click({button: 'right'})
-    await screenShot.screenShot("openapi.3.0.png")
-    await page.getByRole('menuitem', {name: 'Import TypeSpec from OpenAPI'}).click()
-    await screenShot.screenShot("import_typespec.png")
-  } else if (command == "Import TypeSpec from Openapi 3" && type == "folder"){
-    const target = page.getByRole("treeitem", { name: 'openapi.3.0.yaml'}).locator('a')
-    await target.click({button: 'right'})
-    await screenShot.screenShot("openapi.3.0.png")
-    await page.getByRole('menuitem', {name: 'Import TypeSpec from OpenAPI'}).click()
-    await screenShot.screenShot("import_typespec.png")
-  } 
-}
+  } else if (command == "Import TypeSpec from Openapi 3") {
+    const targetName = type === "emptyfolder" 
+      ? 'ImportTypespecProjectEmptyFolder' 
+      : 'openapi.3.0.yaml';
+    const target = page.getByRole("treeitem", { name: targetName }).locator('a');
+    await target.click({ button: 'right' });
+    await screenShot.screenShot("openapi.3.0.png");
+    await page.getByRole('menuitem', { name: 'Import TypeSpec from OpenAPI' }).click();
+    await screenShot.screenShot("import_typespec.png");
+  }
+} 
 
 /**
  * In vscode, when you need to select a folder or a file, call this method
