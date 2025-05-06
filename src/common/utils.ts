@@ -137,11 +137,9 @@ async function retry(
  * @method setCreateType - Set the screenshot type. Different types correspond to different folders.
  * @method setDir - Set the directory where the screenshots are saved. Each case has its own directory.
  * @method screenShot - Screenshot method
- * @method save - Save Screenshot
- * @method setIsLocalSave: - If you need to save the screenshot locally, you need to call this method
  */
 class Screenshot {
-  private createType: "create" | "emit" | "import" = "create"
+  private createType: "create" | "emit" | "import" | "preview" = "create"
   private currentDir = ""
   private fileList: {
     fullPath: string
@@ -152,19 +150,15 @@ class Screenshot {
     create: "CreateTypeSpecProject",
     emit: "EmitFromTypeSpec",
     import: "ImportTypeSpecFromOpenAPI3",
-  }
-  private isLocalSave = process.env.CI || false
-
-  setIsLocalSave(isLocalSave: boolean) {
-    this.isLocalSave = isLocalSave
+    preview: "PreviewAPIDocument",
   }
 
-  setCreateType(createType: "create" | "emit" | "import") {
+  setCreateType(createType: "create" | "emit" | "import" | "preview") {
     this.createType = createType
   }
 
   save() {
-    if (this.fileList.length === 0 || !this.isLocalSave) {
+    if (this.fileList.length === 0) {
       return
     }
     // Smaller dates are placed first to keep the files in order

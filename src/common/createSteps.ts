@@ -48,7 +48,7 @@ async function inputProjectName(page: Page) {
 }
 
 /**
- *
+ * When creating, start with click
  */
 
 async function startWithClick(page: Page) {
