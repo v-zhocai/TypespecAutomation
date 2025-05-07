@@ -62,7 +62,7 @@ async function startWithCommandPalette(
   await page
     .getByRole("textbox", { name: "input" })
     .first()
-    .fill(`>Typespec: ${command}`)
+    .fill(`>TypeSpec: ${command}`)
   let listForCreate: Locator
   await retry(
     5,
@@ -86,28 +86,32 @@ async function startWithCommandPalette(
  * @param type specify whether the click is on file, folder or empty folder
  * command: specify which command to execute to the project
  */
-async function startWithRightClick(
-  page: Page,
-  command: string,
-  type: string,
-){
-  if (command == "Emit from TypeSpec") {
-    const target = page.getByRole('treeitem', {name: 'main.tsp'}).locator('a')
-    await target.click({button: 'right'})
+async function startWithRightClick(page: Page, command: string, type?: string) {
+  if (
+    command == "Emit from TypeSpec" ||
+    command == "Preview API Documentation"
+  ) {
+    const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a")
+    await target.click({ button: "right" })
     await screenShot.screenShot("click_main.png")
-    await page.getByRole('menuitem', {name: 'Emit from TypeSpec'}).click()
-    await screenShot.screenShot("emit_typespec.png")
+    await page.getByRole("menuitem", { name: command }).click()
+    await screenShot.screenShot(
+      `${command == "Emit from TypeSpec" ? "emit" : "preview"}_typespec.png`
+    )
   } else if (command == "Import TypeSpec from Openapi 3") {
-    const targetName = type === "emptyfolder" 
-      ? 'ImportTypespecProjectEmptyFolder' 
-      : 'openapi.3.0.yaml';
-    const target = page.getByRole("treeitem", { name: targetName }).locator('a');
-    await target.click({ button: 'right' });
-    await screenShot.screenShot("openapi.3.0.png");
-    await page.getByRole('menuitem', { name: 'Import TypeSpec from OpenAPI' }).click();
-    await screenShot.screenShot("import_typespec.png");
+    const targetName =
+      type === "emptyfolder"
+        ? "ImportTypespecProjectEmptyFolder"
+        : "openapi.3.0.yaml"
+    const target = page.getByRole("treeitem", { name: targetName }).locator("a")
+    await target.click({ button: "right" })
+    await screenShot.screenShot("openapi.3.0.png")
+    await page
+      .getByRole("menuitem", { name: "Import TypeSpec from OpenAPI" })
+      .click()
+    await screenShot.screenShot("import_typespec.png")
   }
-} 
+}
 
 /**
  * In vscode, when you need to select a folder or a file, call this method
