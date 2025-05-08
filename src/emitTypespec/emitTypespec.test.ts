@@ -12,7 +12,7 @@ import {
   emitSelectLanguageForOpenapi,
   emitSelectType,
 } from "../common/emiSteps"
-import { screenShot, test } from "../common/utils"
+import { screenShot, sleep, test } from "../common/utils"
 import path from "node:path"
 import fs from "node:fs"
 import { EmitCasesConfigList } from "./config"
@@ -22,7 +22,14 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  const dir = path.resolve(__dirname, "../../EmitTypespecProject/tsp-output")
+  let dir = path.resolve(__dirname, "../../EmitTypespecProject/tsp-output")
+  if (fs.existsSync(dir)) {
+    for (const file of fs.readdirSync(dir)) {
+      const filePath = path.resolve(dir, file)
+      fs.rmSync(filePath, { recursive: true, force: true })
+    }
+  }
+  dir = path.resolve(__dirname, "../../EmitTypespecProjectStubJs/tsp-output")
   if (fs.existsSync(dir)) {
     for (const file of fs.readdirSync(dir)) {
       const filePath = path.resolve(dir, file)
@@ -31,7 +38,7 @@ beforeEach(() => {
   }
 })
 
-describe.each(EmitCasesConfigList) ("EmitTypespecProject", async (item) => {
+describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
   const {
     caseName,
     selectType,
@@ -41,11 +48,16 @@ describe.each(EmitCasesConfigList) ("EmitTypespecProject", async (item) => {
   } = item
   test(caseName, async ({ launch }) => {
     screenShot.setDir(caseName)
-    const workspacePath = path.resolve(__dirname, "../../EmitTypespecProject")
+    const isServerStubJS =
+      selectType === "Server Stub" && selectTypeLanguage === "JavaScript"
+    const workspacePath = path.resolve(
+      __dirname,
+      `../../EmitTypespecProject${isServerStubJS ? "StubJs" : ""}`
+    )
+
     const { page, extensionDir } = await launch({
       workspacePath,
     })
-
 
     await installExtensionForCommand(page, extensionDir)
     if (triggerType === "Command") {
@@ -59,19 +71,23 @@ describe.each(EmitCasesConfigList) ("EmitTypespecProject", async (item) => {
 
     await screenShot.screenShot("emitter_list.png")
 
-    await page
+    await sleep(3)
+    const chooseEmitter = page
       .getByRole("option", { name: "Choose another emitter" })
       .locator("a")
-      .click()
+      .first()
 
+    if ((await chooseEmitter.count()) > 0) {
+      await chooseEmitter.click()
+    }
     await emitSelectType(page, selectType)
     if (selectTypeLanguage === "OpenAPI3") {
       await emitSelectLanguageForOpenapi(page)
     } else {
       await emitSelectLanguage(page, selectTypeLanguage)
     }
-    
-    const contrastMessage =  selectTypeLanguage + "...Succeeded"
+
+    const contrastMessage = selectTypeLanguage + "...Succeeded"
     await preContrastResult(
       page,
       contrastMessage,
@@ -83,7 +99,6 @@ describe.each(EmitCasesConfigList) ("EmitTypespecProject", async (item) => {
     await closeVscode()
 
     const resultFilePath = path.resolve(workspacePath, "./tsp-output/@typespec")
-    await contrastResult(expectedResults,resultFilePath)
-
+    await contrastResult(expectedResults, resultFilePath)
   })
 })
