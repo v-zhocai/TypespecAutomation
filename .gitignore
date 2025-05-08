@@ -12,6 +12,8 @@ tests-logs-*
 ImportTypespecProjectOpenApi3/*.tsp
 CreateTypespecProject
 EmitTypespecProject/tsp-output
+EmitTypespecProjectStubJs/tsp-output
 *.png
 images
 EmitTypespecProject/tspconfig.yaml
+EmitTypespecProjectStubJs/tspconfig.yaml
