@@ -1,5 +1,5 @@
 import { Page } from "playwright"
-import { retry, screenShot, sleep } from "./utils"
+import { retry, screenShot } from "./utils"
 
 /**
  * When creating, select emitters
@@ -17,7 +17,6 @@ async function selectEmitters(page: Page, emitters: string[]) {
  * @param templateName The name of the template that needs to be selected.
  */
 async function selectTemplate(page: Page, templateName: string) {
-  await sleep(5)
   let templateList
   await retry(
     3,

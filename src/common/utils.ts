@@ -8,7 +8,6 @@ import moment from "moment"
 
 interface Context {
   page: Page
-  extensionDir: string
 }
 
 type LaunchFixture = (options: {
@@ -34,17 +33,23 @@ const test = baseTest.extend<{
 
     await use(async (options) => {
       const executablePath = inject("executablePath")
+      console.log(executablePath)
 
       const workspacePath = options.workspacePath
 
       const tempDir = await fs.promises.mkdtemp(
         path.join(os.tmpdir(), "typespec-automation")
       )
+      console.log("before launch")
+      console.log(process.env.DISPLAY)
+
       const app = await _electron.launch({
         executablePath,
         env: {
           ...process.env,
+          VITEST_VSCODE_E2E_LOG_FILE: logPath,
           VITEST_VSCODE_LOG: "verbose",
+          // DISPLAY: ":99",
         },
         args: [
           "--no-sandbox",
@@ -64,8 +69,7 @@ const test = baseTest.extend<{
       })
 
       const page = await app.firstWindow()
-
-      return { page, extensionDir: path.join(tempDir, "extensions") }
+      return { page }
     })
 
     for (const teardown of teardowns) await teardown()
@@ -143,13 +147,11 @@ class Screenshot {
       return
     }
 
-    // date小的在前面,让文件有序
     this.fileList.sort((a, b) => a.date - b.date)
     for (let i = 0; i < this.fileList.length; i++) {
       const fullPathItem = this.fileList[i].fullPath.split("\\")
-      fullPathItem[fullPathItem.length - 1] = `${i}_${
-        fullPathItem[fullPathItem.length - 1]
-      }`
+      fullPathItem[fullPathItem.length - 1] =
+        `${i}_${fullPathItem[fullPathItem.length - 1]}`
       fs.mkdirSync(path.dirname(path.join(...fullPathItem)), {
         recursive: true,
       })
@@ -158,7 +160,6 @@ class Screenshot {
   }
 
   async screenShot(fileName: string) {
-    return
     await sleep(3)
     let img = await screenshot()
     let buffer = Buffer.from(img)
