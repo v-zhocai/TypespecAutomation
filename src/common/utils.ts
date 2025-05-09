@@ -160,6 +160,7 @@ class Screenshot {
   }
 
   async screenShot(fileName: string) {
+    return
     await sleep(3)
     let img = await screenshot()
     let buffer = Buffer.from(img)

@@ -59,11 +59,12 @@ async function start(
   { folderName, command }: { folderName: string; command: string }
 ) {
   await page.locator("li").filter({ hasText: folderName }).first().click()
+  console.log("top click")
+
   // await screenShot.screenShot("open_top_panel.png")
-  await page
-    .getByRole("textbox", { name: "input" })
-    .first()
-    .fill(`>Typespec: ${command}`)
+  await page.getByRole("textbox").first().fill(`>Typespec: ${command}`)
+  console.log("top input")
+
   let listForCreate: Locator
   await retry(
     5,
@@ -86,14 +87,9 @@ async function start(
  */
 async function selectFolder(file: string = "") {
   await sleep(10)
-  if (file) {
-    if (!process.env.CI) {
-      await keyboard.pressKey(Key.CapsLock)
-    }
-    await keyboard.type(file)
-  }
   await screenShot.screenShot("select_folder.png")
   await keyboard.pressKey(Key.Enter)
+  await keyboard.releaseKey(Key.Enter)
 }
 
 /**
