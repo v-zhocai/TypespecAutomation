@@ -17,17 +17,19 @@ async function selectEmitters(page: Page, emitters?: string[]) {
  * @param page vscode project
  * @param templateName The name of the template that needs to be selected.
  */
-async function selectTemplate(page: Page, templateName: string) {
-  let templateList
+async function selectTemplate(page: Page, templateName: string, templateNameDesctiption: string) {
+  let templateListName
+  let templateListDescription
   await retry(
     3,
     async () => {
-      templateList = page.locator("a").filter({ hasText: templateName })
-      return (await templateList.count()) > 0
+      templateListName = page.locator("a").filter({ hasText: templateName })
+      templateListDescription = page.getByLabel(templateNameDesctiption, {exact: true }).locator("a")
+      return (await templateListName.count() > 0 && await templateListDescription.count() > 0)
     },
-    `Failed to find ${templateName} template`
+    `Failed to find the correct templateName and templateNameDesctiption`
   )
-  await templateList!.first().click()
+  await templateListName!.first().click()
 }
 
 /**

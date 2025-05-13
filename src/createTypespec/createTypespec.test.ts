@@ -46,6 +46,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
     caseName,
     triggerType,
     templateName,
+    templateNameDesctiption,
     isEmptyFolder,
     expectedResults,
   } = item
@@ -84,8 +85,8 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
       await notEmptyFolderContinue(page)
       deleteTestFile(workspacePath)
     }
-
-    await selectTemplate(page, templateName)
+  
+    await selectTemplate(page, templateName, templateNameDesctiption)
 
     await inputProjectName(page)
 
