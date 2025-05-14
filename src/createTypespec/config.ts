@@ -344,11 +344,14 @@ CreateCasesConfigList.push(
   }
 )
 
-const ProviderNameTemplates = [
+const DataPlaneAPIProviderNameTemplates = [
   "(rest-api-spec repo) Azure Data Plane Service Project",
-  "(rest-api-spec repo) Azure Resource Manager Service Project",
   "(stand alone) Azure Data Plane Service Project",
-  "(stand alone) Azure Resource Manager Service Project",
 ]
 
-export { CreateCasesConfigList, ProviderNameTemplates }
+const ARMAPIProviderNameTemplates = [
+  "(rest-api-spec repo) Azure Resource Manager Service Project",
+  "(stand alone) Azure Resource Manager Service Project"
+]
+
+export { CreateCasesConfigList, DataPlaneAPIProviderNameTemplates, ARMAPIProviderNameTemplates }

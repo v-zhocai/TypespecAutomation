@@ -7,43 +7,30 @@ import { retry, screenShot } from "./utils"
  * @param emitters The emitters that need to be selected. If you need to select all, just do not transmit them.
  */
 async function selectEmitters(page: Page, emitters?: string[]) {
-  let EmitterNameOpenAPI
-  let EmitterDescriptionOpenAPI
+  const emittersConfig = [
+    { name: 'OpenAPI 3.1 document', description: '@typespec/openapi3' },
+    { name: 'C# client', description: '@typespec/http-client-csharp' },
+    { name: 'Java client', description: '@typespec/http-client-java' },
+    { name: 'JavaScript client', description: '@typespec/http-client-js' },
+    { name: 'Python client', description: '@typespec/http-client-python' },
+    { name: 'C# server stubs', description: '@typespec/http-server-csharp' },
+    { name: 'JavaScript server stubs', description: '@typespec/http-server-js' },
+  ];
+ 
   await retry(
     3,
     async () => {
-      const EmitterNameOpenAPI = page.locator("a").filter({ hasText: 'OpenAPI 3.1 document' })
-      const EmitterDescriptionOpenAPI = page.getByLabel('@typespec/openapi3', {exact: true }).locator("a")
-
-      const EmitterNameCSharpClient = page.locator("a").filter({ hasText: 'C# client' })
-      const EmitterDescriptionCSharpClient = page.getByLabel('@typespec/http-client-csharp', {exact: true }).locator("a")
-
-      const EmitterNameJavaClient = page.locator("a").filter({ hasText: 'Java client' })
-      const EmitterDescriptionJavaClient = page.getByLabel('@typespec/http-client-java', {exact: true }).locator("a")
-
-      const EmitterNameJavaScriptClient = page.locator("a").filter({ hasText: 'JavaScript client' })
-      const EmitterDescriptionJavaScriptClient = page.getByLabel('@typespec/http-client-js', {exact: true }).locator("a")
-
-      const EmitterNamePythonClient = page.locator("a").filter({ hasText: 'Python client' })
-      const EmitterDescriptionPythonClient = page.getByLabel('@typespec/http-client-python', {exact: true }).locator("a")
-
-      const EmitterNameCSharpServer = page.locator("a").filter({ hasText: 'C# server stubs' })
-      const EmitterDescriptionCSharpServer = page.getByLabel('@typespec/http-server-csharp', {exact: true }).locator("a")
-
-      const EmitterNameJavaScriptServer = page.locator("a").filter({ hasText: 'JavaScript server stubs' })
-      const EmitterDescriptionJavaScriptServer = page.getByLabel('@typespec/http-server-js', {exact: true }).locator("a")
-
-      return (await EmitterNameOpenAPI.count() > 0 && await EmitterDescriptionOpenAPI.count() > 0 
-        && await EmitterNameCSharpClient.count() > 0 && await EmitterDescriptionCSharpClient.count() > 0
-        && await EmitterNameJavaClient.count() > 0 && await EmitterDescriptionJavaClient.count() > 0
-        && await EmitterNameJavaScriptClient.count() > 0 && await EmitterDescriptionJavaScriptClient.count() > 0
-        && await EmitterNamePythonClient.count() > 0 && await EmitterDescriptionPythonClient.count() > 0
-        && await EmitterNameCSharpServer.count() > 0 && await EmitterDescriptionCSharpServer.count() > 0
-        && await EmitterNameJavaScriptServer.count() > 0 && await EmitterDescriptionJavaScriptServer.count() > 0
-      )
+      const checks = await Promise.all(
+        emittersConfig.map(async (emitter) => {
+          const nameLocator = page.locator("a").filter({ hasText: emitter.name });
+          const descriptionLocator = page.getByLabel(emitter.description, { exact: true }).locator("a");
+          return (await nameLocator.count() > 0 && await descriptionLocator.count() > 0);
+        })
+      );
+      return checks.every((result) => result);
     },
-    `Failed to find ${EmitterNameOpenAPI} template. Fail to match ${EmitterDescriptionOpenAPI} template description`
-  )
+    `Failed to find emitters or their descriptions as defined in the configuration`
+  );
   await page.getByRole("checkbox", { name: "Toggle all checkboxes" }).check()
   await screenShot.screenShot("select_emitter.png")
   await page.keyboard.press("Enter")
@@ -88,6 +75,40 @@ async function inputProjectName(page: Page) {
 }
 
 /**
+ * When creating, input service namespace
+ * @param page vscode project
+ */
+async function inputServiceNameSpace(page: Page) {
+  await retry(
+    3,
+    async () => {
+      const titleInfoDescription = page.getByText('Please provide service')
+      return (await titleInfoDescription.count() > 0)
+    },
+    "Failed to find the service namespace input box"
+  )
+  await screenShot.screenShot("input_service_namespace.png")
+  await page.keyboard.press("Enter")
+}
+
+/**
+ * When creating, input ARM Resource Provider name
+ * @param page vscode project
+ */
+async function inputARMResourceProviderName(page: Page) {
+  await retry(
+    3,
+    async () => {
+      const titleInfoDescription = page.getByText('Please provide ARM Resource')
+      return (await titleInfoDescription.count() > 0)
+    },
+    "Failed to find the ARM resource name input box"
+  )
+  await screenShot.screenShot("input_ARM_Resource_name.png")
+  await page.keyboard.press("Enter")
+}
+
+/**
  * When creating, start with click
  */
 
@@ -97,4 +118,4 @@ async function startWithClick(page: Page) {
   await screenShot.screenShot("open_tabs.png")
   await page.getByRole("button", { name: "Create TypeSpec Project" }).click()
 }
-export { selectEmitters, selectTemplate, inputProjectName, startWithClick }
+export { selectEmitters, selectTemplate, inputProjectName, inputServiceNameSpace, inputARMResourceProviderName, startWithClick }
