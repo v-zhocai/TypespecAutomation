@@ -159,7 +159,7 @@ CreateCasesConfigList.push(
 )
 
 templateName = "(rest-api-spec repo) Azure Data Plane Service Project"
-templateNameDesctiption = "Create a project in rest-api-spec repo, representing an Azure service Data Plane API."
+templateNameDesctiption = "Create a project in rest-api-spec repo, representing an Azure service Data Plane API"
 expectedResults = [
   "examples",
   ".gitignore",
@@ -204,7 +204,7 @@ CreateCasesConfigList.push(
 )
 
 templateName = "(rest-api-spec repo) Azure Resource Manager Service Project"
-templateNameDesctiption = "Create a project in rest-api-spec repo, representing an Azure service ARM API."
+templateNameDesctiption = "Create a project in rest-api-spec repo, representing an Azure service ARM API"
 expectedResults = [
   "examples",
   ".gitignore",
@@ -249,7 +249,7 @@ CreateCasesConfigList.push(
 )
 
 templateName = "(stand alone) Azure Data Plane Service Project"
-templateNameDesctiption = "Create a stand alone project representing an Azure service Data Plane API."
+templateNameDesctiption = "Create a stand alone project representing an Azure service Data Plane API"
 expectedResults = [
   "examples",
   "node_modules",
@@ -297,7 +297,7 @@ CreateCasesConfigList.push(
 )
 
 templateName = "(stand alone) Azure Resource Manager Service Project"
-templateNameDesctiption = "Create a stand alone project representing an Azure service ARM API."
+templateNameDesctiption = "Create a stand alone project representing an Azure service ARM API"
 expectedResults = [
   "examples",
   "node_modules",
