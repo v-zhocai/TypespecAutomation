@@ -16,20 +16,27 @@ async function selectEmitters(page: Page, emitters?: string[]) {
     { name: 'C# server stubs', description: '@typespec/http-server-csharp' },
     { name: 'JavaScript server stubs', description: '@typespec/http-server-js' },
   ];
- 
+  let checks: any[] = [];
   await retry(
     3,
     async () => {
-      const checks = await Promise.all(
-        emittersConfig.map(async (emitter) => {
+      checks = await Promise.all(
+        emittersConfig.map(async (emitter, index) => {
+          console.log(`Checking emitter: ${emitter.name} (${emitter.description})`);
           const nameLocator = page.locator("a").filter({ hasText: emitter.name });
-          const descriptionLocator = page.getByLabel(emitter.description, { exact: true }).locator("a");
-          return (await nameLocator.count() > 0 && await descriptionLocator.count() > 0);
+          const descriptionLocator = page.locator("a").filter({ hasText: emitter.description });
+          const nameExists = await nameLocator.count() > 0;
+          const descriptionExists = await descriptionLocator.count() > 0;
+
+          if (!nameExists || !descriptionExists) {
+            throw new Error(`Failed to find the following emitter name and description: "${emitter.name}" and "(${emitter.description})".`);
+          }
+          return nameExists && descriptionExists;
         })
       );
       return checks.every((result) => result);
     },
-    `Failed to find emitters or their descriptions as defined in the configuration`
+    ""
   );
   await page.getByRole("checkbox", { name: "Toggle all checkboxes" }).check()
   await screenShot.screenShot("select_emitter.png")
@@ -50,7 +57,7 @@ async function selectTemplate(page: Page, templateName: string, templateNameDesc
       templateListName = page.locator("a").filter({ hasText: templateName })
       return (await templateListName.count() > 0)
     },
-    `Failed to find ${templateName} template.`
+    `Failed to find the following template: "${templateName}".`
   )
   await retry(
     3,
@@ -58,7 +65,7 @@ async function selectTemplate(page: Page, templateName: string, templateNameDesc
       templateListDescription = page.getByLabel(templateNameDesctiption, {exact: true }).locator("a")
       return (await templateListDescription.count() > 0)
     },
-    `Failed to match ${templateNameDesctiption} template description`
+    `Failed to match the following template description: "${templateNameDesctiption}".`
   )
   await templateListName!.first().click()
 }
@@ -75,7 +82,7 @@ async function inputProjectName(page: Page) {
       const titleInfoDescription = page.getByText('Please input the project name')
       return (await titleInfo.count() > 0 && await titleInfoDescription.count() > 0)
     },
-    "Failed to find the project name input box"
+    "Failed to find the project name input box."
   )
   await screenShot.screenShot("input_project_name.png")
   await page.keyboard.press("Enter")
@@ -92,7 +99,7 @@ async function inputServiceNameSpace(page: Page) {
       const titleInfoDescription = page.getByText('Please provide service')
       return (await titleInfoDescription.count() > 0)
     },
-    "Failed to find the service namespace input box"
+    "Failed to find the service namespace input box."
   )
   await screenShot.screenShot("input_service_namespace.png")
   await page.keyboard.press("Enter")
@@ -109,7 +116,7 @@ async function inputARMResourceProviderName(page: Page) {
       const titleInfoDescription = page.getByText('Please provide ARM Resource')
       return (await titleInfoDescription.count() > 0)
     },
-    "Failed to find the ARM resource name input box"
+    "Failed to find the ARM resource name input box."
   )
   await screenShot.screenShot("input_ARM_Resource_name.png")
   await page.keyboard.press("Enter")
