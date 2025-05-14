@@ -48,10 +48,17 @@ async function selectTemplate(page: Page, templateName: string, templateNameDesc
     3,
     async () => {
       templateListName = page.locator("a").filter({ hasText: templateName })
-      templateListDescription = page.getByLabel(templateNameDesctiption, {exact: true }).locator("a")
-      return (await templateListName.count() > 0 && await templateListDescription.count() > 0)
+      return (await templateListName.count() > 0)
     },
-    `Failed to find ${templateName} template. Fail to match ${templateNameDesctiption} template description`
+    `Failed to find ${templateName} template.`
+  )
+  await retry(
+    3,
+    async () => {
+      templateListDescription = page.getByLabel(templateNameDesctiption, {exact: true }).locator("a")
+      return (await templateListDescription.count() > 0)
+    },
+    `Fail to match ${templateNameDesctiption} template description`
   )
   await templateListName!.first().click()
 }
