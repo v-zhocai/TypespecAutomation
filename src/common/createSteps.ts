@@ -58,7 +58,7 @@ async function selectTemplate(page: Page, templateName: string, templateNameDesc
       templateListDescription = page.getByLabel(templateNameDesctiption, {exact: true }).locator("a")
       return (await templateListDescription.count() > 0)
     },
-    `Fail to match ${templateNameDesctiption} template description`
+    `Failed to match ${templateNameDesctiption} template description`
   )
   await templateListName!.first().click()
 }
