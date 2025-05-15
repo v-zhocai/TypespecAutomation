@@ -60,7 +60,7 @@ const CreateCasesConfigList: CreateConfigType[] = [
 ]
 
 templateName = "Typespec library"
-templateNameDesctiption = "Build your own Typespec library with custom types, decorators or linters."
+templateNameDesctiption = "Build your own TypeSpec library with custom types, decorators or linters."
 expectedResults = [
   "lib",
   "node_modules",

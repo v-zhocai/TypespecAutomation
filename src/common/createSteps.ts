@@ -22,7 +22,6 @@ async function selectEmitters(page: Page, emitters?: string[]) {
     async () => {
       checks = await Promise.all(
         emittersConfig.map(async (emitter, index) => {
-          console.log(`Checking emitter: ${emitter.name} (${emitter.description})`);
           const nameLocator = page.locator("a").filter({ hasText: emitter.name });
           const descriptionLocator = page.locator("a").filter({ hasText: emitter.description });
           const nameExists = await nameLocator.count() > 0;
