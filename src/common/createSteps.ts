@@ -28,9 +28,11 @@ async function selectEmitters(page: Page, emitters?: string[]) {
           const nameBoxLocator = page.getByRole("checkbox", { name: `${emitter.name}, @`})
           let nameBoxLocatorText = await nameBoxLocator.textContent()
           let nameDescription = nameBoxLocatorText?.slice(emitter.name.length)
+          // to deal with @typespec/http-client-java case
           if (nameDescription && nameDescription.endsWith("Azure")) {
             nameDescription = nameDescription.slice(0, -5)
           }
+          // to deal with @typespec/http-server-js case
           if (nameDescription && nameDescription.endsWith("Settings")) {
             nameDescription = nameDescription.slice(0, -8)
           }
@@ -39,14 +41,14 @@ async function selectEmitters(page: Page, emitters?: string[]) {
             throw new Error(`Failed to find the following emitter name: "${emitter.name}".`);
           }
           if (nameDescription != emitter.description) {
-            throw new Error(`Comparison failed, matched "${nameDescription}", should be "${emitter.description}".`);
+            throw new Error(`Description mismatched, expected "${emitter.description}", got "${nameDescription}".`);
           }
           return checks.every((result) => result);
         })
       );
       return true;
     },
-    ""
+    "Failed to find the selectEmitter box"
   );
   await page.getByRole("checkbox", { name: "Toggle all checkboxes" }).check()
   await screenShot.screenShot("select_emitter.png")
@@ -79,10 +81,10 @@ async function selectTemplate(page: Page, templateName: string, templateNameDesc
       if (templateNameDesctiption == templateListDescription){
         return true
       } else {
-        throw new Error(`Comparison failed, matched "${templateListDescription}", should be "${templateNameDesctiption}".`)
+        throw new Error(`Description mismatched, expected "${templateNameDesctiption}", got "${templateListDescription}".`)
       }
     },
-    ""
+    "Failed to find the selectTemplate box"
   )
   await templateListName!.first().click()
 }
@@ -108,10 +110,10 @@ async function inputProjectName(page: Page) {
       if (titleBoxText === titleInfoDescription){
         return true
       } else {
-        throw new Error(`Comparison failed, matched "${titleBoxText}", should be "${titleInfoDescription}".`)
+        throw new Error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
       }
     },
-    ""
+    "Failed to find the project name input box"
   )
   await screenShot.screenShot("input_project_name.png")
   await page.keyboard.press("Enter")
@@ -137,10 +139,10 @@ async function inputServiceNameSpace(page: Page) {
       if (titleBoxText === titleInfoDescription){
         return true
       } else {
-        throw new Error(`Comparison failed, matched "${titleBoxText}", should be "${titleInfoDescription}".`)
+        throw new Error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
       }
     },
-    ""
+    "Failed to find the service namespace input box"
   )
   await screenShot.screenShot("input_service_namespace.png")
   await page.keyboard.press("Enter")
@@ -166,10 +168,10 @@ async function inputARMResourceProviderName(page: Page) {
       if (titleBoxText === titleInfoDescription){
         return true
       } else {
-        throw new Error(`Comparison failed, matched "${titleBoxText}", should be "${titleInfoDescription}".`)
+        throw new Error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
       }
     },
-    ""
+    "Failed to find the ARM Resource Provider name input box"
   )
   await screenShot.screenShot("input_ARM_Resource_name.png")
   await page.keyboard.press("Enter")
