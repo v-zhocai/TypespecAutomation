@@ -20,7 +20,7 @@ async function emitSelectProject(page: Page, text: string) {
  */
 async function emitSelectType(page: Page, type: string) {
   await screenShot.screenShot("select_emitter_type.png")
-  let ExpectedDescriptionconfig = [
+  let expectedDescriptionConfig = [
     { name: 'OpenAPI Document', description: 'Emitting OpenAPI3 Document from TypeSpec files.' },
     { name: 'Client Code', description: 'Emitting Client Code from TypeSpec files. Supported languages are .NET, Python, Java, JavaScript.' },
     { name: 'Server Stub', description: 'Emitting Server Stub from TypeSpec files. Supported languages are .NET, JavaScript.' }
@@ -31,8 +31,7 @@ async function emitSelectType(page: Page, type: string) {
       let emiSelectTypeBox = page.getByRole('option', { name: type }).locator('label')
       let emiSelectTypeBoxDescriptionArr = await emiSelectTypeBox.allTextContents();
       let emiSelectTypeBoxDescription = emiSelectTypeBoxDescriptionArr[0].slice(type.length)
-      const expectedConfig = ExpectedDescriptionconfig.find(cfg => cfg.name === type);
-      const expectedDescription = expectedConfig ? expectedConfig.description : "";
+      const expectedDescription = (expectedDescriptionConfig.find(cfg => cfg.name === type) || {}).description || "";
       if (emiSelectTypeBoxDescription == expectedDescription) {
         return true
       } else {
@@ -132,8 +131,7 @@ async function emitSelectLanguage(page: Page, language: string = "", types: stri
       let languageBox = page.getByRole("option", { name: language}).locator('label')
       let languageDescriptionArr = await languageBox.allTextContents();
       languageDescription = languageDescriptionArr[0].slice(language.length)
-      const expectedConfig = selectLangConfig.find(cfg => cfg.name === language);
-      const expectedDescription = expectedConfig ? expectedConfig.description : "";
+      const expectedDescription = (selectLangConfig.find(cfg => cfg.name === language) || {}).description || "";
       if (languageDescription == expectedDescription){
         return true
       } else {
