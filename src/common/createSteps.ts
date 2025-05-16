@@ -28,27 +28,25 @@ async function selectEmitters(page: Page, emitters?: string[]) {
           const nameBoxLocator = page.getByRole("checkbox", { name: `${emitter.name}, @`})
           let nameBoxLocatorText = await nameBoxLocator.textContent()
           let nameDescription = nameBoxLocatorText?.slice(emitter.name.length)
-          // to deal with @typespec/http-client-java case
-          if (nameDescription && nameDescription.endsWith("Azure")) {
-            nameDescription = nameDescription.slice(0, -5)
-          }
-          // to deal with @typespec/http-server-js case
-          if (nameDescription && nameDescription.endsWith("Settings")) {
-            nameDescription = nameDescription.slice(0, -8)
-          }
+
+          // Remove the known prefix and suffix noise in the captured lines.
+          // "Azure" prefix will appear with "@typespec/http-client-java" package. "Settings" suffix will appear with "@typespec/http-server-js" package.
+          nameDescription = nameDescription ? nameDescription.replace(/Azure$/, "").replace(/Settings$/, "") : undefined;
 
           if (!nameExists) {
-            throw new Error(`Failed to find the following emitter name: "${emitter.name}".`);
+            console.error(`Failed to find the following emitter name: "${emitter.name}".`)
+            return false
           }
           if (nameDescription != emitter.description) {
-            throw new Error(`Description mismatched, expected "${emitter.description}", got "${nameDescription}".`);
+            console.error(`Description mismatched, expected "${emitter.description}", got "${nameDescription}".`)
+            return false
           }
-          return checks.every((result) => result);
+          return true
         })
       );
-      return true;
+      return checks.every((result) => result);
     },
-    "Failed to find the selectEmitter box"
+    "Failed to find the selectEmitter box."
   );
   await page.getByRole("checkbox", { name: "Toggle all checkboxes" }).check()
   await screenShot.screenShot("select_emitter.png")
@@ -81,10 +79,11 @@ async function selectTemplate(page: Page, templateName: string, templateNameDesc
       if (templateNameDesctiption == templateListDescription){
         return true
       } else {
-        throw new Error(`Description mismatched, expected "${templateNameDesctiption}", got "${templateListDescription}".`)
+        console.error(`Description mismatched, expected "${templateNameDesctiption}", got "${templateListDescription}".`)
+        return false
       }
     },
-    "Failed to find the selectTemplate box"
+    "Failed to find the selectTemplate box."
   )
   await templateListName!.first().click()
 }
@@ -100,20 +99,16 @@ async function inputProjectName(page: Page) {
     async () => {
       let titleBox = page.locator('div').filter({ hasText: '0 Results0 SelectedPlease' }).nth(2)
       let titleBoxText = await titleBox.textContent()
-      if (titleBoxText && titleBoxText.startsWith("0 Results0 Selected")) {
-        titleBoxText = titleBoxText.slice(19)
-      }
-      if (titleBoxText && titleBoxText.endsWith("OK")) {
-        titleBoxText = titleBoxText.slice(0, -2)
-      }
-
+      // Remove the known prefix and suffix noise in the captured lines.
+      titleBoxText = titleBoxText ? titleBoxText.replace(/^0 Results0 Selected/, "").replace(/OK$/, "") : null;
       if (titleBoxText === titleInfoDescription){
         return true
       } else {
-        throw new Error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
+        console.error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
+        return false
       }
     },
-    "Failed to find the project name input box"
+    "Failed to find the project name input box."
   )
   await screenShot.screenShot("input_project_name.png")
   await page.keyboard.press("Enter")
@@ -130,19 +125,16 @@ async function inputServiceNameSpace(page: Page) {
     async () => {
       let titleBox = page.locator('div').filter({ hasText: '0 Results0 SelectedPlease' }).nth(2)
       let titleBoxText = await titleBox.textContent()
-      if (titleBoxText && titleBoxText.startsWith("0 Results0 Selected")) {
-        titleBoxText = titleBoxText.slice(19)
-      } 
-      if (titleBoxText && titleBoxText.endsWith("OK")) {
-        titleBoxText = titleBoxText.slice(0, -2)
-      }
+      // Remove the known prefix and suffix noise in the captured lines.
+      titleBoxText = titleBoxText ? titleBoxText.replace(/^0 Results0 Selected/, "").replace(/OK$/, "") : null;
       if (titleBoxText === titleInfoDescription){
         return true
       } else {
-        throw new Error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
+        console.error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
+        return false
       }
     },
-    "Failed to find the service namespace input box"
+    "Failed to find the service namespace input box."
   )
   await screenShot.screenShot("input_service_namespace.png")
   await page.keyboard.press("Enter")
@@ -159,19 +151,16 @@ async function inputARMResourceProviderName(page: Page) {
     async () => {
       let titleBox = page.locator('div').filter({ hasText: '0 Results0 SelectedPlease' }).nth(2)
       let titleBoxText = await titleBox.textContent()
-      if (titleBoxText && titleBoxText.startsWith("0 Results0 Selected")) {
-        titleBoxText = titleBoxText.slice(19)
-      } 
-      if (titleBoxText && titleBoxText.endsWith("OK")) {
-        titleBoxText = titleBoxText.slice(0, -2)
-      }
+      // Remove the known prefix and suffix noise in the captured lines.
+      titleBoxText = titleBoxText ? titleBoxText.replace(/^0 Results0 Selected/, "").replace(/OK$/, "") : null;
       if (titleBoxText === titleInfoDescription){
         return true
       } else {
-        throw new Error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
+        console.error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
+        return false
       }
     },
-    "Failed to find the ARM Resource Provider name input box"
+    "Failed to find the ARM Resource Provider name input box."
   )
   await screenShot.screenShot("input_ARM_Resource_name.png")
   await page.keyboard.press("Enter")
