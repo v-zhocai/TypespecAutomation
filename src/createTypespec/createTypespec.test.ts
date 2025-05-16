@@ -14,6 +14,8 @@ import { screenShot, test } from "../common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
+  inputServiceNameSpace,
+  inputARMResourceProviderName,
   inputProjectName,
   selectEmitters,
   selectTemplate,
@@ -22,7 +24,8 @@ import {
 import {
   CreateCasesConfigList,
   CreateProjectTriggerType,
-  ProviderNameTemplates,
+  DataPlaneAPIProviderNameTemplates,
+  ARMAPIProviderNameTemplates
 } from "./config"
 
 beforeAll(() => {
@@ -46,6 +49,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
     caseName,
     triggerType,
     templateName,
+    templateNameDesctiption,
     isEmptyFolder,
     expectedResults,
   } = item
@@ -84,15 +88,17 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
       await notEmptyFolderContinue(page)
       deleteTestFile(workspacePath)
     }
-
-    await selectTemplate(page, templateName)
+  
+    await selectTemplate(page, templateName, templateNameDesctiption)
 
     await inputProjectName(page)
 
     if (templateName === "Generic Rest API") {
       await selectEmitters(page)
-    } else if (ProviderNameTemplates.includes(templateName)) {
-      await page.keyboard.press("Enter")
+    } else if (DataPlaneAPIProviderNameTemplates.includes(templateName)) {
+      await inputServiceNameSpace(page)
+    } else if (ARMAPIProviderNameTemplates.includes(templateName)) {
+      await inputARMResourceProviderName(page)
     }
 
     await preContrastResult(
