@@ -60,7 +60,7 @@ async function startWithCommandPalette(
   await page.locator("li").filter({ hasText: folderName }).first().click()
   await screenShot.screenShot("open_top_panel.png")
   await page
-    .getByRole("textbox", { name: "input" })
+    .getByRole("textbox", { name: "Search files by name (append" })
     .first()
     .fill(`>TypeSpec: ${command}`)
   let listForCreate: Locator
@@ -272,7 +272,16 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   )
   await screenShot.screenShot("start_install_extension.png")
   await page.keyboard.press("Enter")
-  await sleep(2)
+  await retry(
+    2,
+    async () => {
+      const installed = page.locator('.codicon-terminal-decoration-success')
+      return (await installed.count()) > 0
+    },
+    `Failed to install the extension.`,
+    1
+  )
+  await screenShot.screenShot("start_install_extension_result.png")
 }
 
 async function closeVscode() {

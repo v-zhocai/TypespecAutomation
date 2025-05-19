@@ -6,7 +6,7 @@ import type { GlobalSetupContext } from "vitest/node"
  * Subsequent cases will be executed in this vscode.
  */
 export default async function downloadVscode({ provide }: GlobalSetupContext) {
-  const version = "1.99.3";
+  const version = "1.100.2";
   const platform = "win32-x64-archive";
 
   if (process.env.VSCODE_E2E_DOWNLOAD_PATH) {
