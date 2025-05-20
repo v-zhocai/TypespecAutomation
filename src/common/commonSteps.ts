@@ -145,9 +145,20 @@ async function notEmptyFolderContinue(page: Page) {
     5,
     async () => {
       yesBtn = page.locator("a").filter({ hasText: "Yes" }).first()
-      return (await yesBtn.count()) > 0
+      let noBtn = page.locator("a").filter({ hasText: "No" }).first() 
+      return (await yesBtn.count() > 0) && (await noBtn.count() > 0) 
     },
-    "Failed to find yes button",
+    "Failed to find yes/no button",
+    1
+  )
+  await retry(
+    5,
+    async () => {
+      let yesdescriptionBox = page.getByRole("option", { name: "Yes" }).locator('label')
+      let yesdescriptionText = await yesdescriptionBox.textContent();
+      return yesdescriptionText !== null && (yesdescriptionText.includes("YesSelected folder"))
+    },
+    "Failed to match the description for the non-empty folder cases",
     1
   )
   await screenShot.screenShot("not_empty_folder_continue.png")
