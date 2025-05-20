@@ -10,7 +10,9 @@ import {
   preContrastResult,
   selectFolder,
   startWithCommandPalette,
-  startWithRightClick
+  startWithRightClick,
+  installDependency,
+  deleteDependency,
 } from "../common/commonSteps"
 import { ImportCasesConfigList } from "./config"
 
@@ -95,9 +97,11 @@ describe.each(ImportCasesConfigList) ("ImportTypespecFromOpenApi3", async ( item
       await notEmptyFolderContinue(page)  
     }
     
+    await deleteDependency(workspacePath)
     await selectFolder("openapi.3.0.yaml")
     await screenShot.screenShot("result_list.png")
-
+    
+    await installDependency(page)
     await preContrastResult(
       page,
       "OpenAPI succeeded",
