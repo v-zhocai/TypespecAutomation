@@ -299,51 +299,6 @@ function deleteTestFile(folderName: string) {
   fs.rmSync(filePath)
 }
 
-/**
- * Remove dependencies beforehand to enable "install dependency page" to appear.
- * @param workspacePath The path where dependency is located. 
- */
-async function deleteDependency(workspacePath: string) {
-  const filePath = path.resolve(workspacePath, "../node_modules/@typespec/openapi3")
-  if (fs.existsSync(filePath)) {
-    fs.rmdirSync(filePath, { recursive: true })
-  }
-}
-
-/**
- * Install the required dependency package to the proceed the process.
- * @param page vscode object
- */
-async function installDependency(page: Page) {
-  let expectedDescription = "TypeSpec library for emitting OpenAPI 3.0 from the TypeSpec REST protocol binding and converting OpenAPI3 to TypeSpec"
-  await retry(
-    3,
-    async () => {
-      let installBtn = page.locator("a").filter({ hasText: "Install" })
-      return (await installBtn.count() > 0)
-    },
-    `Failed to find the "Install @typespec/openapi3" button.`
-  )
-  await retry(
-    3,
-    async () => {
-      let installBtnBox = page.getByRole("option", { name: "Install @typespec/openapi3,"}).locator('label')
-      let installBtnDescription = await installBtnBox.textContent();
-      installBtnDescription = installBtnDescription?.split("'")[2] || installBtnDescription;
-      if (installBtnDescription == expectedDescription){
-        return true
-      } else {
-        console.error(`Description mismatched, expected "${expectedDescription}", got "${installBtnDescription}".`)
-        return false
-      }
-
-    },
-    "Failed to find the install Dependency box."
-  )
-  await page.locator("a").filter({ hasText: "Install" }).click()
-  await screenShot.screenShot("install_dependency.png")
-}
-
 export {
   startWithRightClick,
   startWithCommandPalette,
@@ -357,6 +312,4 @@ export {
   closeVscode,
   createTestFile,
   deleteTestFile,
-  installDependency,
-  deleteDependency
 }
