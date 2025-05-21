@@ -30,8 +30,8 @@ async function selectEmitters(page: Page, emitters?: string[]) {
           let nameDescription = nameBoxLocatorText?.slice(emitter.name.length)
 
           // Remove the known prefix and suffix noise in the captured lines.
-          // "Azure" prefix will appear with "@typespec/http-client-java" package. "Settings" suffix will appear with "@typespec/http-server-js" package.
-          nameDescription = nameDescription ? nameDescription.replace(/Azure$/, "").replace(/Settings$/, "") : undefined;
+          // "Azure" prefix will appear with "@typespec/http-client-java" package. "Settings" suffix will appear with "@typespec/http-server-js" package. "similar commands" suffix will appear with "@typespec/http-client-js" package.
+          nameDescription = nameDescription ? nameDescription.replace(/Azure$/, "").replace(/Settings$/, "").replace(/similar commands$/, "") : undefined;
 
           if (!nameExists) {
             console.error(`Failed to find the following emitter name: "${emitter.name}".`)
