@@ -35,6 +35,13 @@ jobs:
         displayName: "Install deps and download VSCode"
 
       - script: |
+          which code 
+          code --version
+          code --status
+          code --help
+          code --list-extensions
+        displayName: "VScode installation confirm"
+      - script: |
           export DISPLAY=:99
           export VSCODE_E2E_DOWNLOAD_PATH=$(VSCODE_E2E_DOWNLOAD_PATH)
           chmod +x screen.sh
@@ -49,6 +56,13 @@ jobs:
           ELECTRON_DISABLE_SANDBOX: "1"
           BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
         continueOnError: true
+      - script: |
+          which code 
+          code --version
+          code --status
+          code --help
+          code --list-extensions
+        displayName: "VScode installation confirm"
       - script: |
           ls /home/vsts/work/1/a
         displayName: "List artifacts"

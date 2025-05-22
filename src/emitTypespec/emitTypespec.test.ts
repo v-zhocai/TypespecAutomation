@@ -6,9 +6,9 @@ import {
   installExtensionForFile,
   preContrastResult,
   start,
-} from "./common/commonSteps"
-import { emitSelectLanguageForOpenapi, emitSelectType } from "./common/emiSteps"
-import { screenShot, test } from "./common/utils"
+} from "../common/commonSteps"
+import { emitSelectLanguageForOpenapi, emitSelectType } from "../common/emiSteps"
+import { screenShot, test } from "../common/utils"
 import path from "node:path"
 import fs from "node:fs"
 
@@ -17,7 +17,7 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  const dir = path.resolve(__dirname, "../EmitTypespecProject/tsp-output")
+  const dir = path.resolve(__dirname, "../../EmitTypespecProject/tsp-output")
   if (fs.existsSync(dir)) {
     for (const file of fs.readdirSync(dir)) {
       const filePath = path.resolve(dir, file)
@@ -28,7 +28,7 @@ beforeEach(() => {
 
 test("EmitTypespec-OpenAPI Document", async ({ launch }) => {
   screenShot.setDir("EmitTypespec-OpenAPI Document")
-  const workspacePath = path.resolve(__dirname, "../EmitTypespecProject")
+  const workspacePath = path.resolve(__dirname, "../../EmitTypespecProject")
   const { page } = await launch({
     workspacePath,
   })
@@ -39,6 +39,7 @@ test("EmitTypespec-OpenAPI Document", async ({ launch }) => {
   // //   page,
   // //   path.resolve(__dirname, "../extension.vsix")
   // // )
+
   await installExtension(page)
   // await page.pause()
   console.log("installed extension")

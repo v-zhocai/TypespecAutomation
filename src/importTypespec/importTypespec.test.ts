@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, beforeEach } from "vitest"
-import { screenShot, sleep, test } from "./common/utils"
+import { screenShot, sleep, test } from "../common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
@@ -11,7 +11,7 @@ import {
   preContrastResult,
   selectFolder,
   start,
-} from "./common/commonSteps"
+} from "../common/commonSteps"
 
 beforeAll(() => {
   screenShot.setCreateType("import")
@@ -20,7 +20,7 @@ beforeAll(() => {
 beforeEach(() => {
   const importTypespec = path.resolve(
     __dirname,
-    "../ImportTypespecProjectOpenApi3"
+    "../../ImportTypespecProjectOpenApi3"
   )
   if (fs.existsSync(importTypespec)) {
     let hasOpenapi3File = false
@@ -44,7 +44,7 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
   screenShot.setDir("ImportTypespecFromOpenApi3")
   const workspacePath = path.resolve(
     __dirname,
-    "../ImportTypespecProjectOpenApi3"
+    "../../ImportTypespecProjectOpenApi3"
   )
   const { page } = await launch({
     workspacePath,
@@ -53,6 +53,7 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
   //   page,
   //   path.resolve(__dirname, "../extension.vsix")
   // )
+
   await installExtension(page)
   console.log("install extension")
 
