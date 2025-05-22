@@ -145,11 +145,19 @@ async function installExtension(page: Page) {
 async function installExtensionForFile(page: Page, fullFilePath: string, workspacePath: string) {
 
   await fs.promises.copyFile(fullFilePath, path.resolve(workspacePath, "extension.vsix"))
-  await sleep(3)
-  await page
-    .getByRole("treeitem", { name: "extension.vsix" })
-    .locator('a')
-    .click({ button: "right" })
+  await retry(
+    10,
+    async () => {
+      await page.getByRole('heading', { name: 'Explorer', exact: true }).click()
+      await sleep(2)
+      await page.getByRole("treeitem", { name : "extension.vsix" }).locator('a').click({button: "right"})
+      let locator = page.getByRole('menuitem', { name: 'Install Extension VSIX'})
+      return await locator.count() > 0
+    },
+    `Failed to locate "Install Extension VSIX"`,
+    1
+  )
+
   await sleep(3)
   await page.getByRole('menuitem', { name: 'Install Extension VSIX'})
     .click()
