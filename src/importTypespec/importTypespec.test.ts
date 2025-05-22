@@ -47,14 +47,14 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
     __dirname,
     "../../ImportTypespecProjectOpenApi3"
   )
-  const { page } = await launch({
+  const { page, executablePath } = await launch({
     workspacePath,
   })
   // await installExtensionForFile(
   //   page,
   //   path.resolve(__dirname, "../extension.vsix")
   // )
-  await installExtensionForCommand(page, "")
+  await installExtensionForCommand(page, executablePath)
   // await installExtension(page)
   console.log("install extension")
 
