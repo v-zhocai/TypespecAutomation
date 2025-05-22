@@ -227,7 +227,7 @@ async function installExtensionForCommand(page: Page, executablePath: string) {
   await cmd.click()
   await sleep(5)
   await cmd.fill(
-    `${executablePath} --install-extension ${vsixPath}`
+    `sudo ${executablePath} --install-extension ${vsixPath}`
   )
   await screenShot.screenShot("start_install_extension.png")
   await page.keyboard.press("Enter")
