@@ -8,7 +8,6 @@ import moment from "moment"
 
 interface Context {
   page: Page
-  executablePath: string
 }
 
 type LaunchFixture = (options: {
@@ -70,7 +69,7 @@ const test = baseTest.extend<{
       })
 
       const page = await app.firstWindow()
-      return { page , executablePath}
+      return { page }
     })
 
     for (const teardown of teardowns) await teardown()

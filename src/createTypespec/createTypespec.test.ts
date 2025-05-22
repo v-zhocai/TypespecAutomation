@@ -41,7 +41,12 @@ test("CreateTypespec-Generic REST API", async ({ launch }) => {
     workspacePath,
   })
 
-  await installExtension(page)
+  await installExtensionForFile(
+    page,
+    path.resolve(__dirname, "../../extension.vsix"),
+    workspacePath
+  )
+  
   console.log("installed extension")
   await start(page, {
     folderName: "CreateTypespecProject",
