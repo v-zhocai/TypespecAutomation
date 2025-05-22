@@ -35,13 +35,6 @@ jobs:
         displayName: "Install deps and download VSCode"
 
       - script: |
-          which code 
-          code --version
-          code --status
-          code --help
-          code --list-extensions
-        displayName: "VScode installation confirm"
-      - script: |
           export DISPLAY=:99
           export VSCODE_E2E_DOWNLOAD_PATH=$(VSCODE_E2E_DOWNLOAD_PATH)
           chmod +x screen.sh
