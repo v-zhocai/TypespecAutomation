@@ -14,7 +14,7 @@ while true; do
  
   if [ $elapsed -ge 600 ]; then
 
-    echo "截图已运行10分钟，任务结束。"
+    echo "The screenshot has been running for 10 minutes, at which point the task has stopped."
 
     break
 
