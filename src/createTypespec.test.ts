@@ -7,15 +7,15 @@ import {
   installExtensionForFile,
   closeVscode,
   installExtension,
-} from "../common/commonSteps"
-import { screenShot, sleep, test } from "../common/utils"
+} from "./common/commonSteps"
+import { screenShot, sleep, test } from "./common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
   inputProjectName,
   selectEmitters,
   selectTemplate,
-} from "../common/createSteps"
+} from "./common/createSteps"
 import { afterEach } from "node:test"
 
 beforeAll(() => {
@@ -23,7 +23,7 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  const dir = path.resolve(__dirname, "../../CreateTypespecProject")
+  const dir = path.resolve(__dirname, "../CreateTypespecProject")
   if (fs.existsSync(dir)) {
     for (const file of fs.readdirSync(dir)) {
       const filePath = path.resolve(dir, file)
@@ -36,14 +36,14 @@ beforeEach(() => {
 
 test("CreateTypespec-Generic REST API", async ({ launch }) => {
   screenShot.setDir("CreateTypespec-Generic REST API1")
-  const workspacePath = path.resolve(__dirname, "../../CreateTypespecProject")
+  const workspacePath = path.resolve(__dirname, "../CreateTypespecProject")
   const { page } = await launch({
     workspacePath,
   })
 
   await installExtensionForFile(
     page,
-    path.resolve(__dirname, "../../extension.vsix"),
+    path.resolve(__dirname, "../extension.vsix"),
     workspacePath
   )
   
