@@ -205,7 +205,21 @@ async function installExtensionForCommand(page: Page, executablePath: string) {
   )
   await screenShot.screenShot("start_install_extension.png")
   await page.keyboard.press("Enter")
-  await sleep(5)
+  await sleep(15)
+  await cmd.fill(
+    `snap install code`
+  )
+  await page.keyboard.press("Enter")
+  await sleep(15)
+  await cmd.fill(
+    `code --install-extension ../extension.vsix`
+  )
+  await page.keyboard.press("Enter")
+  await sleep(15)
+  await cmd.fill(
+    `which code`
+  )
+  await page.keyboard.press("Enter")
 }
 
 async function closeVscode() {
