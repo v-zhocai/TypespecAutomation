@@ -215,11 +215,7 @@ async function installExtensionForCommand(page: Page, executablePath: string) {
     `code --install-extension ../extension.vsix`
   )
   await page.keyboard.press("Enter")
-  await sleep(15)
-  await cmd.fill(
-    `which code`
-  )
-  await page.keyboard.press("Enter")
+  await sleep(10)
 }
 
 async function closeVscode() {
