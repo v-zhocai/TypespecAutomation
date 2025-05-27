@@ -207,7 +207,7 @@ async function installExtensionForCommand(page: Page, executablePath: string) {
   await page.keyboard.press("Enter")
   await sleep(15)
   await cmd.fill(
-    `snap install code`
+    `sudo snap install code`
   )
   await page.keyboard.press("Enter")
   await sleep(15)
