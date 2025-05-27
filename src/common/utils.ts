@@ -8,6 +8,7 @@ import moment from "moment"
 
 interface Context {
   page: Page
+  extensionDir: string
 }
 
 type LaunchFixture = (options: {
@@ -67,9 +68,9 @@ const test = baseTest.extend<{
           `--folder-uri=file:${path.resolve(workspacePath)}`,
         ].filter((v): v is string => !!v),
       })
-
+      const extensionDir = path.resolve(tempDir, "extensions");
       const page = await app.firstWindow()
-      return { page }
+      return { page, extensionDir }
     })
 
     for (const teardown of teardowns) await teardown()

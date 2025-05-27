@@ -177,7 +177,7 @@ async function installExtensionForFile(page: Page, fullFilePath: string, workspa
   await screenShot.screenShot("install_extension_file.png")
 }
 
-async function installExtensionForCommand(page: Page, executablePath: string) {
+async function installExtensionForCommand(page: Page, extensionDirPath: string) {
   const vsixPath =
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix")
   // await page.getByRole("menuitem", { name: "More" }).locator("div").click()
@@ -212,7 +212,7 @@ async function installExtensionForCommand(page: Page, executablePath: string) {
   await page.keyboard.press("Enter")
   await sleep(10)
   await cmd.fill(
-    `code --install-extension ../extension.vsix`
+    `code --install-extension ../extension.vsix --extensions-dir ${extensionDirPath}`
   )
   await page.keyboard.press("Enter")
   await sleep(10)
