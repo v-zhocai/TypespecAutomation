@@ -200,12 +200,7 @@ async function installExtensionForCommand(page: Page, executablePath: string) {
   const cmd = page.getByRole("textbox", { name: /Terminal/ }).first()
   await cmd.click()
   await sleep(5)
-  await cmd.fill(
-    `code --install-extension ../extension.vsix`
-  )
   await screenShot.screenShot("start_install_extension.png")
-  await page.keyboard.press("Enter")
-  await sleep(15)
   await cmd.fill(
     `sudo snap install code --classic`
   )
