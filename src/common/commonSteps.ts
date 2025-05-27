@@ -207,17 +207,7 @@ async function installExtensionForCommand(page: Page, extensionDirPath: string) 
   await page.keyboard.press("Enter")
   await sleep(80)
   await cmd.fill(
-    `code --list-extensions`
-  )
-  await page.keyboard.press("Enter")
-  await sleep(10)
-  await cmd.fill(
     `code --install-extension ../extension.vsix --extensions-dir ${extensionDirPath}`
-  )
-  await page.keyboard.press("Enter")
-  await sleep(10)
-  await cmd.fill(
-    `code --list-extensions`
   )
   await page.keyboard.press("Enter")
   await sleep(10)
