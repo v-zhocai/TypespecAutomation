@@ -63,7 +63,7 @@ async function start(
   console.log("top click")
 
   // await screenShot.screenShot("open_top_panel.png")
-  await page.getByRole("textbox").first().fill(`>Typespec: ${command}`)
+  await page.getByRole("textbox", { name: "Search files by name (append" }).first().fill(`>Typespec: ${command}`)
   console.log("top input")
 
   let listForCreate: Locator
