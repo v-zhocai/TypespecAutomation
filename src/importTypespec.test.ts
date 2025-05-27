@@ -61,7 +61,7 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
 
   await start(page, {
     folderName: "ImportTypespecProjectOpenApi3",
-    command: "Import TypeSpec from OpenAPI 3",
+    command: "Import TypeSpec from OpenApi3",
   })
   console.log("top input")
 
