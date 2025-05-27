@@ -177,6 +177,37 @@ async function installExtensionForFile(page: Page, fullFilePath: string, workspa
   await screenShot.screenShot("install_extension_file.png")
 }
 
+async function installExtensionForCommand(page: Page, executablePath: string) {
+  const vsixPath =
+    process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix")
+  // await page.getByRole("menuitem", { name: "More" }).locator("div").click()
+  // await screenShot.screenShot("click_more.png")
+  // await page.getByRole("menuitem", { name: "Terminal", exact: true }).click()
+  // await screenShot.screenShot("click_terminal.png")
+  // await page.getByRole("menuitem", { name: /New Terminal/ }).click()
+  await sleep(5)
+  await page.keyboard.press("Control+Backquote")
+  await screenShot.screenShot("open_terminal.png")
+  await retry(
+    10,
+    async () => {
+      const cmd = page.getByRole("textbox", { name: /Terminal/ }).first()
+      return (await cmd.count()) > 0
+    },
+    "Failed to find command palette",
+    3
+  )
+  const cmd = page.getByRole("textbox", { name: /Terminal/ }).first()
+  await cmd.click()
+  await sleep(5)
+  await cmd.fill(
+    `code --install-extension ../extension.vsix`
+  )
+  await screenShot.screenShot("start_install_extension.png")
+  await page.keyboard.press("Enter")
+  await sleep(5)
+}
+
 async function closeVscode() {
   await keyboard.pressKey(Key.LeftAlt, Key.F4)
   await keyboard.releaseKey(Key.LeftAlt, Key.F4)
@@ -190,5 +221,6 @@ export {
   notEmptyFolderContinue,
   installExtension,
   installExtensionForFile,
+  installExtensionForCommand,
   closeVscode,
 }

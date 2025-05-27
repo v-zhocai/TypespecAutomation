@@ -7,6 +7,7 @@ import {
   contrastResult,
   installExtension,
   installExtensionForFile,
+  installExtensionForCommand,
   notEmptyFolderContinue,
   preContrastResult,
   selectFolder,
@@ -49,12 +50,13 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
   const { page } = await launch({
     workspacePath,
   })
-  await installExtensionForFile(
-    page,
-    path.resolve(__dirname, "../extension.vsix"),
-    workspacePath
-  )
+  // await installExtensionForFile(
+  //   page,
+  //   path.resolve(__dirname, "../extension.vsix"),
+  //   workspacePath
+  // )
   // await installExtension(page)
+  await installExtensionForCommand(page,"")
   console.log("install extension")
 
   await start(page, {
