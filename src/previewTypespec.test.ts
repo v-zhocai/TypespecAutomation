@@ -6,6 +6,7 @@ import {
   closeVscode,
   contrastResult,
   installExtensionForFile,
+  installExtensionForCommand,
   start,
 } from "./common/commonSteps"
 
@@ -42,15 +43,15 @@ test("PreviewTypespecProject", async ({ launch }) => {
     __dirname,
     "../PreviewTypespecProject"
   )
-  const { page } = await launch({
+  const { page, extensionDir } = await launch({
     workspacePath,
   })
-  await installExtensionForFile(
-    page,
-    path.resolve(__dirname, "../extension.vsix"),
-    workspacePath
-  )
-  // await installExtension(page)
+  // await installExtensionForFile(
+  //   page,
+  //   path.resolve(__dirname, "../extension.vsix"),
+  //   workspacePath
+  // )
+  await installExtensionForCommand(page, extensionDir)
   console.log("install extension")
   await page
     .getByRole("treeitem", { name: "main.tsp" })
