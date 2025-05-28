@@ -107,7 +107,7 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
   } else if (command == "Import TypeSpec from Openapi 3") {
     const targetName =
       type === "emptyfolder"
-        ? "ImportTypespecProjectEmptyFolder"
+        ? "ImportTypespecProjectOpenApi3EmptyFolder"
         : "openapi.3.0.yaml"
     const target = page.getByRole("treeitem", { name: targetName }).locator("a")
     await target.click({ button: "right" })

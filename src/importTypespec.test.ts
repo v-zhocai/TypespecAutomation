@@ -80,25 +80,27 @@ describe.each(ImportCasesConfigList) ("ImportTypespecFromOpenApi3", async ( item
           folderName: "importTypespecProjectOpenApi3",
           command: "Import TypeSpec from OpenAPI 3",
       })
+
     } else if (triggerType == ImportProjectTriggerType.RightClickonFile) {
       await startWithRightClick(page, "Import TypeSpec from Openapi 3", "file")
     } else if (triggerType == ImportProjectTriggerType.RightClickonFolder) {
       await startWithRightClick(page, "Import TypeSpec from Openapi 3", "emptyfolder")
     }
     console.log("top input")
-
-    await selectFolder()
+    if (triggerType != ImportProjectTriggerType.RightClickonFolder){
+      await selectFolder()
+    }
     console.log("selected folder")
 
     if (selectFolderEmptyOrNonEmpty === "non-empty") {
       await notEmptyFolderContinue(page)
     }
     console.log("yes")
-    if (selectFolderEmptyOrNonEmpty == "non-empty") {
-      await sleep(3)
-      await keyboard.pressKey(Key.Down)
-      await keyboard.releaseKey(Key.Down)
-    }
+
+    await sleep(3)
+    await keyboard.pressKey(Key.Down)
+    await keyboard.releaseKey(Key.Down)
+
     await selectFolder()
 
     console.log("selected file")
