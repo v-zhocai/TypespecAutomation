@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach } from "vitest"
 import {
   contrastResult,
-  start,
+  startWithCommandPalette,
   selectFolder,
   preContrastResult,
   installExtensionForFile,
@@ -44,7 +44,7 @@ test("CreateTypespec-Generic REST API", async ({ launch }) => {
 
   await installExtensionForCommand(page, extensionDir)
   console.log("installed extension")
-  await start(page, {
+  await startWithCommandPalette(page, {
     folderName: "CreateTypespecProject",
     command: "Create Typespec Project",
   })

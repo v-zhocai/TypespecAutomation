@@ -6,7 +6,7 @@ import {
   installExtensionForFile,
   installExtensionForCommand,
   preContrastResult,
-  start,
+  startWithCommandPalette,
 } from "./common/commonSteps"
 import { emitSelectLanguageForOpenapi, emitSelectType } from "./common/emiSteps"
 import { screenShot, test } from "./common/utils"
@@ -42,10 +42,9 @@ test("EmitTypespec-OpenAPI Document", async ({ launch }) => {
   //   workspacePath
   // )
   // await page.pause()
-  console.log("installed extension")
-
   await installExtensionForCommand(page, extensionDir)
-  await start(page, {
+  console.log("installed extension")
+  await startWithCommandPalette(page, {
     folderName: "EmitTypespecProject",
     command: "Emit from Typespec",
   })

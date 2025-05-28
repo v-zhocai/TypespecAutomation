@@ -55,7 +55,7 @@ async function contrastResult(res: string[], dir: string) {
  * folderName: The text in the top input box is usually the current open root directory,
  * command: After the top input box pops up, the command to be executed
  */
-async function start(
+async function startWithCommandPalette(
   page: Page,
   { folderName, command }: { folderName: string; command: string }
 ) {
@@ -81,6 +81,43 @@ async function start(
   )
   // await screenShot.screenShot("input_command.png")
   await listForCreate!.click()
+}
+
+/**
+ * Start the Project with Right click on the file
+ * @param page vscode object
+ * @param command create, emit or import
+ * @param type specify whether the click is on file, folder or empty folder
+ * command: specify which command to execute to the project
+ */
+async function startWithRightClick(page: Page, command: string, type?: string) {
+  if (
+    command == "Emit from TypeSpec" ||
+    command == "Preview API Documentation"
+  ) {
+    console.log("command", command)
+    const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a")
+    await target.click({ button: "right" })
+    await screenShot.screenShot("click_main.png")
+    await sleep(3)
+    await page.getByRole("menuitem", { name: command }).click()
+    await screenShot.screenShot(
+      `${command == "Emit from TypeSpec" ? "emit" : "preview"}_typespec.png`
+    )
+  } else if (command == "Import TypeSpec from Openapi 3") {
+    const targetName =
+      type === "emptyfolder"
+        ? "ImportTypespecProjectEmptyFolder"
+        : "openapi.3.0.yaml"
+    const target = page.getByRole("treeitem", { name: targetName }).locator("a")
+    await target.click({ button: "right" })
+    await screenShot.screenShot("openapi.3.0.png")
+    await sleep(3)
+    await page
+      .getByRole("menuitem", { name: "Import TypeSpec from OpenAPI" })
+      .click()
+    await screenShot.screenShot("import_typespec.png")
+  }
 }
 
 /**
@@ -215,7 +252,8 @@ async function closeVscode() {
 }
 
 export {
-  start,
+  startWithCommandPalette,
+  startWithRightClick,
   contrastResult,
   selectFolder,
   preContrastResult,
