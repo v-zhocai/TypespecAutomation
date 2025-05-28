@@ -4,6 +4,7 @@ import {
   contrastResult,
   installExtension,
   installExtensionForFile,
+  installExtensionForCommand,
   preContrastResult,
   start,
 } from "./common/commonSteps"
@@ -29,21 +30,21 @@ beforeEach(() => {
 test("EmitTypespec-OpenAPI Document", async ({ launch }) => {
   screenShot.setDir("EmitTypespec-OpenAPI Document")
   const workspacePath = path.resolve(__dirname, "../EmitTypespecProject")
-  const { page } = await launch({
+  const { page, extensionDir } = await launch({
     workspacePath,
   })
   // await page.screenshot({ path: `vscode${+new Date()}.png` });
 
   console.log("launched")
-  // // await installExtensionForFile(
-  // //   page,
-  // //   path.resolve(__dirname, "../extension.vsix")
-  // // )
-  await installExtension(page)
+  // await installExtensionForFile(
+  //   page,
+  //   path.resolve(__dirname, "../extension.vsix"),
+  //   workspacePath
+  // )
   // await page.pause()
   console.log("installed extension")
 
-  // await installExtension(page)
+  await installExtensionForCommand(page, extensionDir)
   await start(page, {
     folderName: "EmitTypespecProject",
     command: "Emit from Typespec",

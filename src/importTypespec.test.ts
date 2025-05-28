@@ -7,6 +7,7 @@ import {
   contrastResult,
   installExtension,
   installExtensionForFile,
+  installExtensionForCommand,
   notEmptyFolderContinue,
   preContrastResult,
   selectFolder,
@@ -46,19 +47,21 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
     __dirname,
     "../ImportTypespecProjectOpenApi3"
   )
-  const { page } = await launch({
+  const { page, extensionDir } = await launch({
     workspacePath,
   })
   // await installExtensionForFile(
   //   page,
-  //   path.resolve(__dirname, "../extension.vsix")
+  //   path.resolve(__dirname, "../extension.vsix"),
+  //   workspacePath
   // )
-  await installExtension(page)
+  // await installExtension(page)
+  await installExtensionForCommand(page, extensionDir)
   console.log("install extension")
 
   await start(page, {
-    folderName: "importTypespecProjectOpenApi3",
-    command: "Import TypeSpec from Openapi 3",
+    folderName: "ImportTypespecProjectOpenApi3",
+    command: "Import TypeSpec from OpenApi3",
   })
   console.log("top input")
 

@@ -2,6 +2,7 @@ import { Locator, Page } from "playwright"
 import { retry, screenShot, sleep } from "./utils"
 import { keyboard, Key } from "@nut-tree-fork/nut-js"
 import fs from "node:fs"
+import path from "node:path"
 
 /**
  * Before comparing the results, you need to check whether the conditions for result comparison are met.
@@ -62,7 +63,7 @@ async function start(
   console.log("top click")
 
   // await screenShot.screenShot("open_top_panel.png")
-  await page.getByRole("textbox").first().fill(`>Typespec: ${command}`)
+  await page.getByRole("textbox", { name: "Search files by name (append" }).first().fill(`>Typespec: ${command}`)
   console.log("top input")
 
   let listForCreate: Locator
@@ -139,64 +140,77 @@ async function installExtension(page: Page) {
  * Install plugins directly from a local file
  * @param page vscode object
  * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
+ * @param workspacePath The workspace path of the given test case
  */
-async function installExtensionForFile(page: Page, fullFilePath: string) {
-  // await screenShot.screenShot("open_vscode.png")
-  console.log("进入1")
+async function installExtensionForFile(page: Page, fullFilePath: string, workspacePath: string) {
 
-  await page
-    .getByRole("tab", { name: /Extensions/ })
-    .locator("a")
+  await fs.promises.copyFile(fullFilePath, path.resolve(workspacePath, "extension.vsix"))
+  await sleep(8)
+  await retry(
+    10,
+    async () => {
+      await page.getByRole('heading', { name: 'Explorer', exact: true }).click()
+      await sleep(5)
+      await page.getByRole("treeitem", { name : "extension.vsix" }).locator('a').click({button: "right"})
+      let locator = page.getByRole('menuitem', { name: 'Install Extension VSIX'})
+      return await locator.count() > 0
+    },
+    `Failed to locate "Install Extension VSIX"`,
+    1
+  )
+
+  await sleep(3)
+  await page.getByRole('menuitem', { name: 'Install Extension VSIX'})
     .click()
-  console.log(page.getByRole("tab", { name: /Extensions/ }).locator("a"))
 
-  console.log("111")
-
-  // await screenShot.screenShot("change_extension.png")
-  let moreItem: Locator
   await retry(
     10,
     async () => {
-      moreItem = page.getByLabel(/Views and More Actions/).first()
-      return (await moreItem.count()) > 0
+      let completeLocator = page.getByText("Completed installing")
+      return await completeLocator.count() > 0
     },
-    "Failed to find more item",
+    "Fail to install the extension.",
     1
   )
-  await moreItem!.click()
-  console.log("2222")
-  // await screenShot.screenShot("more_item.png")
-  let fromInstall: Locator
-  await retry(
-    10,
-    async () => {
-      fromInstall = page.getByLabel(/Install from VSIX/).first()
-      return (await fromInstall.count()) > 0
-    },
-    "Failed to find install from VSIX item",
-    1
-  )
-  await fromInstall!.click()
-  console.log(333)
-  // await selectFolder(fullFilePath)
-  await retry(
-    30,
-    async () => {
-      const installed = page.getByText(/Completed installing/).first()
-      return (await installed.count()) > 0
-    },
-    "Failed to find installed status",
-    1
-  )
-  // await screenShot.screenShot("extension_installed.png")
+  await sleep(3)
+  await fs.promises.rm(path.resolve(workspacePath, "extension.vsix"))
+  await screenShot.screenShot("install_extension_file.png")
+}
+
+async function installExtensionForCommand(page: Page, extensionDirPath: string) {
+  const vsixPath =
+    process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix")
+  // await page.getByRole("menuitem", { name: "More" }).locator("div").click()
+  // await screenShot.screenShot("click_more.png")
+  // await page.getByRole("menuitem", { name: "Terminal", exact: true }).click()
+  // await screenShot.screenShot("click_terminal.png")
+  // await page.getByRole("menuitem", { name: /New Terminal/ }).click()
   await sleep(5)
-  await page
-    .getByRole("tab", { name: /Explorer/ })
-    .locator("a")
-    .click()
-  console.log(333)
-
-  // await screenShot.screenShot("change_explorer.png")
+  await page.keyboard.press("Control+Backquote")
+  await screenShot.screenShot("open_terminal.png")
+  await retry(
+    10,
+    async () => {
+      const cmd = page.getByRole("textbox", { name: /Terminal/ }).first()
+      return (await cmd.count()) > 0
+    },
+    "Failed to find command palette",
+    3
+  )
+  const cmd = page.getByRole("textbox", { name: /Terminal/ }).first()
+  await cmd.click()
+  await sleep(5)
+  await screenShot.screenShot("start_install_extension.png")
+  await cmd.fill(
+    `sudo snap install code --classic`
+  )
+  await page.keyboard.press("Enter")
+  await sleep(80)
+  await cmd.fill(
+    `code --install-extension ../extension.vsix --extensions-dir ${extensionDirPath}`
+  )
+  await page.keyboard.press("Enter")
+  await sleep(10)
 }
 
 async function closeVscode() {
@@ -212,5 +226,6 @@ export {
   notEmptyFolderContinue,
   installExtension,
   installExtensionForFile,
+  installExtensionForCommand,
   closeVscode,
 }

@@ -5,6 +5,7 @@ import {
   selectFolder,
   preContrastResult,
   installExtensionForFile,
+  installExtensionForCommand,
   closeVscode,
   installExtension,
 } from "./common/commonSteps"
@@ -37,10 +38,11 @@ beforeEach(() => {
 test("CreateTypespec-Generic REST API", async ({ launch }) => {
   screenShot.setDir("CreateTypespec-Generic REST API1")
   const workspacePath = path.resolve(__dirname, "../CreateTypespecProject")
-  const { page } = await launch({
+  const { page, extensionDir } = await launch({
     workspacePath,
   })
-  await installExtension(page)
+
+  await installExtensionForCommand(page, extensionDir)
   console.log("installed extension")
   await start(page, {
     folderName: "CreateTypespecProject",
