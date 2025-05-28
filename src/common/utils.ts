@@ -121,7 +121,7 @@ async function retry(
  * @method setIsLocalSave: - If you need to save the screenshot locally, you need to call this method
  */
 class Screenshot {
-  private createType: "create" | "emit" | "import" = "create"
+  private createType: "create" | "emit" | "import" | "preview" = "create"
   private currentDir = ""
   private fileList: {
     fullPath: string
@@ -132,6 +132,7 @@ class Screenshot {
     create: "CreateTypeSpecProject",
     emit: "EmitFromTypeSpec",
     import: "ImportTypeSpecFromOpenAPI3",
+    preview: "PreviewTypeSpec",
   }
   private isLocalSave = process.env.CI || false
 
@@ -139,7 +140,7 @@ class Screenshot {
     this.isLocalSave = isLocalSave
   }
 
-  setCreateType(createType: "create" | "emit" | "import") {
+  setCreateType(createType: "create" | "emit" | "import" | "preview") {
     this.createType = createType
   }
 

@@ -60,8 +60,8 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
   console.log("install extension")
 
   await start(page, {
-    folderName: "ImportTypespecProjectOpenApi3",
-    command: "Import TypeSpec from OpenApi3",
+    folderName: "importTypespecProjectOpenApi3",
+    command: "Import TypeSpec from OpenAPI 3",
   })
   console.log("top input")
 
