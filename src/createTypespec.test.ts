@@ -70,12 +70,12 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
       createTestFile(workspacePath)
     }
 
-    // await installExtensionForCommand(page, extensionDir)
-    await installExtensionForFile(
-      page,
-      path.resolve(__dirname, "../extension.vsix"),
-      workspacePath
-    )
+    await installExtensionForCommand(page, extensionDir)
+    // await installExtensionForFile(
+    //   page,
+    //   path.resolve(__dirname, "../extension.vsix"),
+    //   workspacePath
+    // )
     if (triggerType === CreateProjectTriggerType.Command) {
       await startWithCommandPalette(page, {
         folderName: "CreateTypespecProject",
