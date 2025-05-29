@@ -1,23 +1,33 @@
-import { beforeAll, beforeEach } from "vitest"
+import { beforeAll, beforeEach, describe } from "vitest"
 import {
   contrastResult,
   startWithCommandPalette,
   selectFolder,
   preContrastResult,
-  installExtensionForFile,
-  installExtensionForCommand,
   closeVscode,
-  installExtension,
+  installExtensionForCommand,
+  installExtensionForFile,
+  createTestFile,
+  deleteTestFile,
+  notEmptyFolderContinue,
 } from "./common/commonSteps"
-import { screenShot, sleep, test } from "./common/utils"
+import { screenShot, test } from "./common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
+  inputServiceNameSpace,
+  inputARMResourceProviderName,
   inputProjectName,
   selectEmitters,
   selectTemplate,
+  startWithClick,
 } from "./common/createSteps"
-import { afterEach } from "node:test"
+import {
+  CreateCasesConfigList,
+  CreateProjectTriggerType,
+  DataPlaneAPIProviderNameTemplates,
+  ARMAPIProviderNameTemplates
+} from "./config"
 
 beforeAll(() => {
   screenShot.setCreateType("create")
@@ -35,49 +45,74 @@ beforeEach(() => {
   }
 })
 
-test("CreateTypespec-Generic REST API", async ({ launch }) => {
-  screenShot.setDir("CreateTypespec-Generic REST API1")
-  const workspacePath = path.resolve(__dirname, "../CreateTypespecProject")
-  const { page, extensionDir } = await launch({
-    workspacePath,
+describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
+  const {
+    caseName,
+    triggerType,
+    templateName,
+    templateNameDesctiption,
+    isEmptyFolder,
+    expectedResults,
+  } = item
+
+  test(caseName, async ({ launch }) => {
+    screenShot.setDir(caseName)
+    const workspacePath = path.resolve(__dirname, "../CreateTypespecProject")
+
+    const { page, extensionDir } = await launch({
+      workspacePath:
+        triggerType === CreateProjectTriggerType.Command
+          ? workspacePath
+          : "test",
+    })
+
+    if (!isEmptyFolder) {
+      createTestFile(workspacePath)
+    }
+
+    // await installExtensionForCommand(page, extensionDir)
+    await installExtensionForFile(
+      page,
+      path.resolve(__dirname, "../extension.vsix"),
+      workspacePath
+    )
+    if (triggerType === CreateProjectTriggerType.Command) {
+      await startWithCommandPalette(page, {
+        folderName: "CreateTypespecProject",
+        command: "Create Typespec Project",
+      })
+    } else {
+      await startWithClick(page)
+    }
+
+    await selectFolder(
+      triggerType === CreateProjectTriggerType.Command ? "" : workspacePath
+    )
+
+    if (!isEmptyFolder) {
+      await notEmptyFolderContinue(page)
+      deleteTestFile(workspacePath)
+    }
+  
+    await selectTemplate(page, templateName, templateNameDesctiption)
+
+    await inputProjectName(page)
+
+    if (templateName === "Generic Rest API") {
+      await selectEmitters(page)
+    } else if (DataPlaneAPIProviderNameTemplates.includes(templateName)) {
+      await inputServiceNameSpace(page)
+    } else if (ARMAPIProviderNameTemplates.includes(templateName)) {
+      await inputARMResourceProviderName(page)
+    }
+
+    await preContrastResult(
+      page,
+      "Project created",
+      "Failed to create project Successful",
+      [20, 15]
+    )
+    await closeVscode()
+    await contrastResult(expectedResults, workspacePath)
   })
-
-  await installExtensionForCommand(page, extensionDir)
-  console.log("installed extension")
-  await startWithCommandPalette(page, {
-    folderName: "CreateTypespecProject",
-    command: "Create Typespec Project",
-  })
-  console.log("top input")
-
-  await selectFolder()
-  console.log("selected folder")
-
-  await selectTemplate(page, "Generic REST API")
-  console.log("selected template")
-
-  await inputProjectName(page)
-  console.log("input projectName")
-
-  await selectEmitters(page, ["OpenAPI"])
-  console.log("selected emitters")
-
-  await preContrastResult(
-    page,
-    "Project created!",
-    "Failed to create project Successful",
-    [20, 10]
-  )
-
-  await contrastResult(
-    [
-      ".gitignore",
-      "main.tsp",
-      "node_modules",
-      "package-lock.json",
-      "package.json",
-      "tspconfig.yaml",
-    ],
-    workspacePath
-  )
 })

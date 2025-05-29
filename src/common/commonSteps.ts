@@ -252,6 +252,25 @@ async function closeVscode() {
   await keyboard.releaseKey(Key.LeftAlt, Key.F4)
 }
 
+/**
+ * If the current scenario is: the folder is not empty, you need to call this method
+ * @param page vscode project
+ * @param folderName The name of the folder that needs to be selected.
+ */
+function createTestFile(folderName: string) {
+  const filePath = path.join(folderName, "test.txt")
+  fs.writeFileSync(filePath, "test")
+}
+
+/**
+ * Placeholder file, need to be deleted
+ * @param folderName The name of the folder that needs to be selected.
+ */
+function deleteTestFile(folderName: string) {
+  const filePath = path.join(folderName, "test.txt")
+  fs.rmSync(filePath)
+}
+
 export {
   startWithCommandPalette,
   startWithRightClick,
@@ -263,4 +282,6 @@ export {
   installExtensionForFile,
   installExtensionForCommand,
   closeVscode,
+  createTestFile,
+  deleteTestFile,
 }
