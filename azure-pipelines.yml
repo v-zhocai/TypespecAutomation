@@ -35,9 +35,20 @@ jobs:
         displayName: "Start xvfb and Set DISPLAY"
 
       - script: |
-          npm install
+          python --version
+          python3 --version
+          pip3 --version
+          java --version
+          mvn --version
+          node --version
+          npm --version
+          dotnet --version
+        displayName: "Test Dependencies"
 
+      - script: |
+          npm install
           node -e "require('@vscode/test-electron').download().then(p => console.log('##vso[task.setvariable variable=VSCODE_E2E_DOWNLOAD_PATH]' + p))"
+          sudo snap install code --classic
         displayName: "Install deps and download VSCode"
 
       - script: |
@@ -46,7 +57,6 @@ jobs:
           chmod +x screen.sh
           ./screen.sh &
           echo ">>> end screen"
-          sudo snap install code --classic
           npm run test
         displayName: "Run Playwright Electron UI Tests"
         env:

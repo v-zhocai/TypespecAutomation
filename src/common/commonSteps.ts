@@ -96,6 +96,7 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
     command == "Preview API Documentation"
   ) {
     console.log("command", command)
+    await sleep(3)
     const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a")
     await target.click({ button: "right" })
     await screenShot.screenShot("click_main.png")
