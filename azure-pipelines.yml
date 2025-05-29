@@ -35,17 +35,6 @@ jobs:
         displayName: "Start xvfb and Set DISPLAY"
 
       - script: |
-          python --version
-          python3 --version
-          pip3 --version
-          java --version
-          mvn --version
-          node --version
-          npm --version
-          dotnet --version
-        displayName: "Test Dependencies"
-
-      - script: |
           npm install
           node -e "require('@vscode/test-electron').download().then(p => console.log('##vso[task.setvariable variable=VSCODE_E2E_DOWNLOAD_PATH]' + p))"
           sudo snap install code --classic

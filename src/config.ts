@@ -15,20 +15,20 @@ const EmitcaseName = `EmitTypespecProject`
 const EmitCasesConfigList: EmitConfigType[] = []
 
 EmitCasesConfigList.push(
-  // {
-  //   caseName: "EmitTypespecProject-ClientCode-Python-CommandPallette",
-  //   selectType: "Client Code",
-  //   selectTypeLanguage: "Python",
-  //   triggerType: EmitProjectTriggerType.Command,
-  //   expectedResults: ["http-client-python"],
-  // },
-  // {
-  //   caseName: "EmitTypespecProject-ClientCode-Java-CommandPallette",
-  //   selectType: "Client Code",
-  //   selectTypeLanguage: "Java",
-  //   triggerType: EmitProjectTriggerType.Command,
-  //   expectedResults: ["http-client-java"],
-  // },
+  {
+    caseName: "EmitTypespecProject-ClientCode-Python-CommandPallette",
+    selectType: "Client Code",
+    selectTypeLanguage: "Python",
+    triggerType: EmitProjectTriggerType.Command,
+    expectedResults: ["http-client-python"],
+  },
+  {
+    caseName: "EmitTypespecProject-ClientCode-Java-CommandPallette",
+    selectType: "Client Code",
+    selectTypeLanguage: "Java",
+    triggerType: EmitProjectTriggerType.Command,
+    expectedResults: ["http-client-java"],
+  },
   {
     caseName: "EmitTypespecProject-ClientCode-DotNet-RightClick",
     selectType: "Client Code",
