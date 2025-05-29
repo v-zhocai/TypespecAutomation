@@ -64,13 +64,13 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
     // await page.screenshot({ path: `vscode${+new Date()}.png` });
 
     console.log("launched")
-    await installExtensionForFile(
-      page,
-      path.resolve(__dirname, "../extension.vsix"),
-      workspacePath
-    )
+    // await installExtensionForFile(
+    //   page,
+    //   path.resolve(__dirname, "../extension.vsix"),
+    //   workspacePath
+    // )
     // await page.pause()
-    // await installExtensionForCommand(page, extensionDir)
+    await installExtensionForCommand(page, extensionDir)
     console.log("installed extension")
     if (triggerType === "Command") {
       await startWithCommandPalette(page, {
