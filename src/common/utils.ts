@@ -179,6 +179,8 @@ class Screenshot {
     let rootDir =
       process.env.BUILD_ARTIFACT_STAGING_DIRECTORY ||
       path.resolve(__dirname, "../..")
+    console.log("process.env.BUILD_ARTIFACT_STAGING_DIRECTORY", process.env.BUILD_ARTIFACT_STAGING_DIRECTORY)
+    console.log("rootDir", rootDir)
     let fullPath = path.join(
       rootDir,
       "/images",
