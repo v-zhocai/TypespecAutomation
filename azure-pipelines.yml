@@ -62,7 +62,16 @@ jobs:
       - task: PublishBuildArtifacts@1
         inputs:
           path: "$(Build.ArtifactStagingDirectory)"
-          artifact: "screenshots"
+          artifact: "screenshots-bash"
           publishLocation: "Container"
           includePatterns: "*.png"
-        displayName: "Publish Screenshots"
+        displayName: "Publish bash Screenshots"
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          path: "$(Build.ArtifactStagingDirectory)"
+          artifact: "screenshots-images"
+          publishLocation: "Container"
+          includePatterns: "images/**/*.png"
+        displayName: "Publish images PNGs"
+
