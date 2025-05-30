@@ -162,13 +162,11 @@ class Screenshot {
     this.fileList.sort((a, b) => a.date - b.date)
     for (let i = 0; i < this.fileList.length; i++) {
       const fullPathItem = this.fileList[i].fullPath.split("\\")
-      fullPathItem[fullPathItem.length - 1] = `${i}_${
-        fullPathItem[fullPathItem.length - 1]
-      }`
+      const lastslashIdx = fullPathItem[fullPathItem.length - 1].lastIndexOf("/")
+      fullPathItem[fullPathItem.length - 1] = `${fullPathItem[fullPathItem.length - 1].substring(0, lastslashIdx + 1)}${i}_${fullPathItem[fullPathItem.length - 1].substring(lastslashIdx + 1)}`
       fs.mkdirSync(path.dirname(path.join(...fullPathItem)), {
         recursive: true,
       })
-      console.log("Saving screenshot to", path.join(...fullPathItem))
       fs.writeFileSync(path.join(...fullPathItem), this.fileList[i].buffer)
     }
   }
@@ -180,8 +178,6 @@ class Screenshot {
     let rootDir =
       process.env.BUILD_ARTIFACT_STAGING_DIRECTORY ||
       path.resolve(__dirname, "../..")
-    console.log("process.env.BUILD_ARTIFACT_STAGING_DIRECTORY", process.env.BUILD_ARTIFACT_STAGING_DIRECTORY)
-    console.log("rootDir", rootDir)
     let fullPath = path.join(
       rootDir,
       "/images",
@@ -189,7 +185,6 @@ class Screenshot {
       this.currentDir,
       fileName
     )
-    console.log("fullPath", fullPath)
     this.fileList.push({
       fullPath,
       buffer,
