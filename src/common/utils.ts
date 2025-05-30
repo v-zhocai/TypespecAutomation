@@ -168,6 +168,7 @@ class Screenshot {
       fs.mkdirSync(path.dirname(path.join(...fullPathItem)), {
         recursive: true,
       })
+      console.log("Saving screenshot to", path.join(...fullPathItem))
       fs.writeFileSync(path.join(...fullPathItem), this.fileList[i].buffer)
     }
   }
@@ -188,6 +189,7 @@ class Screenshot {
       this.currentDir,
       fileName
     )
+    console.log("fullPath", fullPath)
     this.fileList.push({
       fullPath,
       buffer,
