@@ -163,7 +163,14 @@ class Screenshot {
     for (let i = 0; i < this.fileList.length; i++) {
       const fullPathItem = this.fileList[i].fullPath.split("\\")
       const lastslashIdx = fullPathItem[fullPathItem.length - 1].lastIndexOf("/")
-      fullPathItem[fullPathItem.length - 1] = `${fullPathItem[fullPathItem.length - 1].substring(0, lastslashIdx + 1)}${i}_${fullPathItem[fullPathItem.length - 1].substring(lastslashIdx + 1)}`
+      const fileName = fullPathItem[fullPathItem.length - 1];
+      if (lastslashIdx !== -1) {
+        const prefix = fileName.substring(0, lastslashIdx + 1);
+        const suffix = fileName.substring(lastslashIdx + 1);
+        fullPathItem[fullPathItem.length - 1] = `${prefix}${i}_${suffix}`;
+      } else {
+        fullPathItem[fullPathItem.length - 1] = `${i}_${fileName}`;
+      }
       fs.mkdirSync(path.dirname(path.join(...fullPathItem)), {
         recursive: true,
       })
