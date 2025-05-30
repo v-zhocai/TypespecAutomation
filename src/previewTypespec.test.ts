@@ -66,7 +66,7 @@ describe.each(PreviewCasesConfigList)("PreviewAPIDocument", async (item) => {
         .click()
       await startWithCommandPalette(page, {
         folderName: "PreviewTypespecProject",
-        command: "Preview API Documentation",
+        command: "Preview API Documentationerror",
       })
     } else {
       await startWithRightClick(page, "Preview API Documentation")
