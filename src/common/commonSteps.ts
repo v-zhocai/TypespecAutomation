@@ -59,9 +59,10 @@ async function start(
   page: Page,
   { folderName, command }: { folderName: string; command: string }
 ) {
+  await sleep(2)
   await page.locator("li").filter({ hasText: folderName }).first().click()
   console.log("top click")
-
+  await sleep(2)
   // await screenShot.screenShot("open_top_panel.png")
   await page.getByRole("textbox", { name: "Search files by name (append" }).first().fill(`>Typespec: ${command}`)
   console.log("top input")
@@ -185,7 +186,7 @@ async function installExtensionForCommand(page: Page, extensionDirPath: string) 
   // await page.getByRole("menuitem", { name: "Terminal", exact: true }).click()
   // await screenShot.screenShot("click_terminal.png")
   // await page.getByRole("menuitem", { name: /New Terminal/ }).click()
-  await sleep(5)
+  await sleep(3)
   await page.keyboard.press("Control+Backquote")
   await screenShot.screenShot("open_terminal.png")
   await retry(
@@ -199,18 +200,13 @@ async function installExtensionForCommand(page: Page, extensionDirPath: string) 
   )
   const cmd = page.getByRole("textbox", { name: /Terminal/ }).first()
   await cmd.click()
-  await sleep(5)
+  await sleep(3)
   await screenShot.screenShot("start_install_extension.png")
-  await cmd.fill(
-    `sudo snap install code --classic`
-  )
-  await page.keyboard.press("Enter")
-  await sleep(80)
   await cmd.fill(
     `code --install-extension ../extension.vsix --extensions-dir ${extensionDirPath}`
   )
   await page.keyboard.press("Enter")
-  await sleep(10)
+  await sleep(3)
 }
 
 async function closeVscode() {

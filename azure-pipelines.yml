@@ -40,6 +40,7 @@ jobs:
           chmod +x screen.sh
           ./screen.sh &
           echo ">>> end screen"
+          sudo snap install code --classic
           npm run test
         displayName: "Run Playwright Electron UI Tests"
         env:
