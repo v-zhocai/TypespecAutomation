@@ -61,11 +61,9 @@ async function start(
 ) {
   await sleep(2)
   await page.locator("li").filter({ hasText: folderName }).first().click()
-  console.log("top click")
   await sleep(2)
-  // await screenShot.screenShot("open_top_panel.png")
+  await screenShot.screenShot("open_top_panel.png")
   await page.getByRole("textbox", { name: "Search files by name (append" }).first().fill(`>Typespec: ${command}`)
-  console.log("top input")
 
   let listForCreate: Locator
   await retry(
@@ -79,7 +77,7 @@ async function start(
     },
     "Failed to find the specified option"
   )
-  // await screenShot.screenShot("input_command.png")
+  await screenShot.screenShot("input_command.png")
   await listForCreate!.click()
 }
 

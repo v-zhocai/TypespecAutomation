@@ -101,8 +101,8 @@ async function retry(
     }
     count--
   }
-  // await screenShot.screenShot("error.png")
-  // screenShot.save()
+  await screenShot.screenShot("error.png")
+  screenShot.save()
   throw new Error(errMessage)
 }
 
@@ -117,8 +117,6 @@ async function retry(
  * @method setCreateType - Set the screenshot type. Different types correspond to different folders.
  * @method setDir - Set the directory where the screenshots are saved. Each case has its own directory.
  * @method screenShot - Screenshot method
- * @method save - Save Screenshot
- * @method setIsLocalSave: - If you need to save the screenshot locally, you need to call this method
  */
 class Screenshot {
   private createType: "create" | "emit" | "import" | "preview" = "create"
@@ -132,12 +130,7 @@ class Screenshot {
     create: "CreateTypeSpecProject",
     emit: "EmitFromTypeSpec",
     import: "ImportTypeSpecFromOpenAPI3",
-    preview: "PreviewTypeSpec",
-  }
-  private isLocalSave = process.env.CI || false
-
-  setIsLocalSave(isLocalSave: boolean) {
-    this.isLocalSave = isLocalSave
+    preview: "PreviewAPIDocument",
   }
 
   setCreateType(createType: "create" | "emit" | "import" | "preview") {
@@ -145,15 +138,22 @@ class Screenshot {
   }
 
   save() {
-    if (this.fileList.length === 0 || !this.isLocalSave) {
+    if (this.fileList.length === 0) {
       return
     }
-
+    // Smaller dates are placed first to keep the files in order
     this.fileList.sort((a, b) => a.date - b.date)
     for (let i = 0; i < this.fileList.length; i++) {
       const fullPathItem = this.fileList[i].fullPath.split("\\")
-      fullPathItem[fullPathItem.length - 1] =
-        `${i}_${fullPathItem[fullPathItem.length - 1]}`
+      const lastslashIdx = fullPathItem[fullPathItem.length - 1].lastIndexOf("/")
+      const fileName = fullPathItem[fullPathItem.length - 1];
+      if (lastslashIdx !== -1) {
+        const prefix = fileName.substring(0, lastslashIdx + 1);
+        const suffix = fileName.substring(lastslashIdx + 1);
+        fullPathItem[fullPathItem.length - 1] = `${prefix}${i}_${suffix}`;
+      } else {
+        fullPathItem[fullPathItem.length - 1] = `${i}_${fileName}`;
+      }
       fs.mkdirSync(path.dirname(path.join(...fullPathItem)), {
         recursive: true,
       })
@@ -162,15 +162,12 @@ class Screenshot {
   }
 
   async screenShot(fileName: string) {
-    return
     await sleep(3)
     let img = await screenshot()
     let buffer = Buffer.from(img)
     let rootDir =
       process.env.BUILD_ARTIFACT_STAGING_DIRECTORY ||
       path.resolve(__dirname, "../..")
-    console.log(rootDir)
-
     let fullPath = path.join(
       rootDir,
       "/images",
@@ -196,5 +193,6 @@ class Screenshot {
 }
 
 const screenShot = new Screenshot()
+
 
 export { sleep, test, retry, screenShot }
