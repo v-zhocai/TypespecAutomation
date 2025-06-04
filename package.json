@@ -9,7 +9,8 @@
     "test:create": "vitest --root ./src/createTypespec",
     "test:emit": "vitest --root ./src/emitTypespec",
     "test:import": "vitest --root ./src/importTypespec",
-    "test:preview": "vitest --root ./src/previewTypespec"
+    "test:preview": "vitest --root ./src/previewTypespec",
+    "test:linux": "vitest --root src_linux"
   },
   "dependencies": {
     "@nut-tree-fork/nut-js": "^4.2.6",
