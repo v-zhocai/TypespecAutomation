@@ -19,10 +19,14 @@ parameters:
     default: false
 
 stages:
-  - template: windows-tests-stage.yml
-    parameters:
-      runWindows: ${{ parameters.runWindows }}
+  - stage: WindowsTests
+    jobs:
+      - template: windows-tests-stage.yml
+        parameters:
+          runWindows: ${{ parameters.runWindows }}
 
-  - template: linux-tests-stage.yml
-    parameters:
-      runLinux: ${{ parameters.runLinux }}
+  - stage: LinuxTests
+    jobs:
+      - template: linux-tests-stage.yml
+        parameters:
+          runWindows: ${{ parameters.runLinux }}
