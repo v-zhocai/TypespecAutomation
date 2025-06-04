@@ -20,13 +20,11 @@ parameters:
 
 stages:
   - stage: WindowsTests
+    condition: eq('${{ parameters.runWindows }}', true)
     jobs:
       - template: windows-tests-stage.yml
-        parameters:
-          runWindows: ${{ parameters.runWindows }}
 
   - stage: LinuxTests
+    condition: eq('${{ parameters.runLinux }}', true)
     jobs:
       - template: linux-tests-stage.yml
-        parameters:
-          runWindows: ${{ parameters.runLinux }}
