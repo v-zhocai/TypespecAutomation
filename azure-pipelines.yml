@@ -2,13 +2,11 @@ trigger:
   branches:
     include:
       - master
-      - master-linux
 
 pr:
   branches:
     include:
       - master
-      - master-linux
 
 parameters:
   - name: runWindows
