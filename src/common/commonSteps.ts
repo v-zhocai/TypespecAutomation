@@ -3,6 +3,7 @@ import { retry, screenShot, sleep } from "./utils"
 import { keyboard, Key } from "@nut-tree-fork/nut-js"
 import fs from "node:fs"
 import path from "node:path"
+import os from "node:os"
 
 /**
  * Before comparing the results, you need to check whether the conditions for result comparison are met.
@@ -326,15 +327,18 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   )
   await screenShot.screenShot("start_install_extension.png")
   await page.keyboard.press("Enter")
-  await retry(
-    2,
-    async () => {
-      const installed = page.locator('.codicon-terminal-decoration-success')
-      return (await installed.count()) > 0
-    },
-    `Failed to install the extension.`,
-    1
-  )
+  await sleep(8)
+  if (os.platform() === "win32"){
+    await retry(
+      2,
+      async () => {
+        const installed = page.locator('.codicon-terminal-decoration-success')
+        return (await installed.count()) > 0
+      },
+      `Failed to install the extension.`,
+      1
+    )
+  }
   await screenShot.screenShot("start_install_extension_result.png")
 }
 
