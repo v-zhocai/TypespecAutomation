@@ -16,7 +16,7 @@
     "test:emit_linux": "vitest --root ./src/emitTypespec_linux",
     "test:import_linux": "vitest --root ./src/importTypespec_linux",
     "test:preview_linux": "vitest --root ./src/previewTypespec_linux",
-    "test:all_linx": "npm run test:create_linux && npm run test:emit_linux && npm run test:import_linux && npm run test:preview_linux"
+    "test:all_linux": "npm run test:create_linux && npm run test:emit_linux && npm run test:import_linux && npm run test:preview_linux"
   },
   "dependencies": {
     "@nut-tree-fork/nut-js": "^4.2.6",
