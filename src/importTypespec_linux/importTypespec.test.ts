@@ -21,7 +21,7 @@ beforeAll(() => {
 beforeEach(() => {
   const importTypespec = path.resolve(
     __dirname,
-    "../ImportTypespecProjectOpenApi3"
+    "../../ImportTypespecProjectOpenApi3"
   )
   if (fs.existsSync(importTypespec)) {
     let hasOpenapi3File = false
@@ -45,7 +45,7 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
   screenShot.setDir("ImportTypespecFromOpenApi3")
   const workspacePath = path.resolve(
     __dirname,
-    "../ImportTypespecProjectOpenApi3"
+    "../../ImportTypespecProjectOpenApi3"
   )
   const { page, extensionDir } = await launch({
     workspacePath,

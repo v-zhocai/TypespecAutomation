@@ -18,7 +18,7 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  const dir = path.resolve(__dirname, "../EmitTypespecProject/tsp-output")
+  const dir = path.resolve(__dirname, "../../EmitTypespecProject/tsp-output")
   if (fs.existsSync(dir)) {
     for (const file of fs.readdirSync(dir)) {
       const filePath = path.resolve(dir, file)
@@ -29,7 +29,7 @@ beforeEach(() => {
 
 test("EmitTypespec-OpenAPI Document", async ({ launch }) => {
   screenShot.setDir("EmitTypespec-OpenAPI Document")
-  const workspacePath = path.resolve(__dirname, "../EmitTypespecProject")
+  const workspacePath = path.resolve(__dirname, "../../EmitTypespecProject")
   const { page, extensionDir } = await launch({
     workspacePath,
   })

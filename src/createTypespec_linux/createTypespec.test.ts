@@ -24,7 +24,7 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  const dir = path.resolve(__dirname, "../CreateTypespecProject")
+  const dir = path.resolve(__dirname, "../../CreateTypespecProject")
   if (fs.existsSync(dir)) {
     for (const file of fs.readdirSync(dir)) {
       const filePath = path.resolve(dir, file)
@@ -37,7 +37,7 @@ beforeEach(() => {
 
 test("CreateTypespec-Generic REST API", async ({ launch }) => {
   screenShot.setDir("CreateTypespec-Generic REST API1")
-  const workspacePath = path.resolve(__dirname, "../CreateTypespecProject")
+  const workspacePath = path.resolve(__dirname, "../../CreateTypespecProject")
   const { page, extensionDir } = await launch({
     workspacePath,
   })
