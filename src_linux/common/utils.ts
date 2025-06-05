@@ -5,6 +5,7 @@ import path, { resolve } from "node:path"
 import { test as baseTest, inject } from "vitest"
 import screenshot from "screenshot-desktop"
 import moment from "moment"
+import { closeVscode } from "./commonSteps"
 
 interface Context {
   page: Page
@@ -34,30 +35,26 @@ const test = baseTest.extend<{
 
     await use(async (options) => {
       const executablePath = inject("executablePath")
-      console.log(executablePath)
-
       const workspacePath = options.workspacePath
-
+      let envOverrides = {}
+      const codePath = path.join(executablePath, "../bin")
+      envOverrides = {
+        PATH: `${codePath}${path.delimiter}${process.env.PATH}`,
+      }
       const tempDir = await fs.promises.mkdtemp(
         path.join(os.tmpdir(), "typespec-automation")
       )
-      console.log("before launch")
-      console.log(process.env.DISPLAY)
 
       const app = await _electron.launch({
         executablePath,
         env: {
           ...process.env,
+          ...envOverrides,
           VITEST_VSCODE_E2E_LOG_FILE: logPath,
           VITEST_VSCODE_LOG: "verbose",
-          // DISPLAY: ":99",
         },
         args: [
           "--no-sandbox",
-          "--disable-gpu",
-          "--disable-software-rasterizer",
-          "--disable-gpu-compositing",
-          "--disable-gl-drawing-for-tests",
           "--disable-gpu-sandbox",
           "--disable-updates",
           "--skip-welcome",
@@ -68,9 +65,31 @@ const test = baseTest.extend<{
           `--folder-uri=file:${path.resolve(workspacePath)}`,
         ].filter((v): v is string => !!v),
       })
-      const extensionDir = path.resolve(tempDir, "extensions");
       const page = await app.firstWindow()
-      return { page, extensionDir }
+      const userSettingsPath = path.join(
+        tempDir,
+        "user-data",
+        "User",
+        "settings.json"
+      )
+      fs.writeFileSync(
+        userSettingsPath,
+        JSON.stringify({
+          "typespec.initTemplatesUrls": [
+            {
+              name: "Azure",
+              url: "https://aka.ms/typespec/azure-init",
+            },
+          ],
+        })
+      )
+      // spawn("code", [
+      //   "--install-extension",
+      //   path.resolve(__dirname, "../../extension.vsix"),
+      //   "--extensions-dir",
+      //   path.resolve(tempDir, "extensions"),
+      // ])
+      return { page, extensionDir: path.join(tempDir, "extensions") }
     })
 
     for (const teardown of teardowns) await teardown()
@@ -101,8 +120,9 @@ async function retry(
     }
     count--
   }
-  // await screenShot.screenShot("error.png")
-  // screenShot.save()
+  await screenShot.screenShot("error.png")
+  screenShot.save()
+  await closeVscode()
   throw new Error(errMessage)
 }
 
@@ -117,8 +137,6 @@ async function retry(
  * @method setCreateType - Set the screenshot type. Different types correspond to different folders.
  * @method setDir - Set the directory where the screenshots are saved. Each case has its own directory.
  * @method screenShot - Screenshot method
- * @method save - Save Screenshot
- * @method setIsLocalSave: - If you need to save the screenshot locally, you need to call this method
  */
 class Screenshot {
   private createType: "create" | "emit" | "import" | "preview" = "create"
@@ -132,12 +150,7 @@ class Screenshot {
     create: "CreateTypeSpecProject",
     emit: "EmitFromTypeSpec",
     import: "ImportTypeSpecFromOpenAPI3",
-    preview: "PreviewTypeSpec",
-  }
-  private isLocalSave = process.env.CI || false
-
-  setIsLocalSave(isLocalSave: boolean) {
-    this.isLocalSave = isLocalSave
+    preview: "PreviewAPIDocument",
   }
 
   setCreateType(createType: "create" | "emit" | "import" | "preview") {
@@ -145,15 +158,16 @@ class Screenshot {
   }
 
   save() {
-    if (this.fileList.length === 0 || !this.isLocalSave) {
+    if (this.fileList.length === 0) {
       return
     }
-
+    // Smaller dates are placed first to keep the files in order
     this.fileList.sort((a, b) => a.date - b.date)
     for (let i = 0; i < this.fileList.length; i++) {
       const fullPathItem = this.fileList[i].fullPath.split("\\")
-      fullPathItem[fullPathItem.length - 1] =
-        `${i}_${fullPathItem[fullPathItem.length - 1]}`
+      fullPathItem[fullPathItem.length - 1] = `${i}_${
+        fullPathItem[fullPathItem.length - 1]
+      }`
       fs.mkdirSync(path.dirname(path.join(...fullPathItem)), {
         recursive: true,
       })
@@ -162,15 +176,12 @@ class Screenshot {
   }
 
   async screenShot(fileName: string) {
-    return
     await sleep(3)
     let img = await screenshot()
     let buffer = Buffer.from(img)
     let rootDir =
       process.env.BUILD_ARTIFACT_STAGING_DIRECTORY ||
       path.resolve(__dirname, "../..")
-    console.log(rootDir)
-
     let fullPath = path.join(
       rootDir,
       "/images",

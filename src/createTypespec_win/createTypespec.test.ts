@@ -2,7 +2,7 @@ import { beforeAll, beforeEach, describe } from "vitest"
 import {
   contrastResult,
   startWithCommandPalette,
-  selectFolder,
+  selectFolder_win,
   preContrastResult,
   closeVscode,
   installExtensionForCommand,
@@ -80,7 +80,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
       await startWithClick(page)
     }
 
-    await selectFolder(
+    await selectFolder_win(
       triggerType === CreateProjectTriggerType.Command ? "" : workspacePath
     )
 

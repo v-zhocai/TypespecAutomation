@@ -57,7 +57,9 @@ async function startWithCommandPalette(
   page: Page,
   { folderName, command }: { folderName: string; command: string }
 ) {
+  await sleep(2)
   await page.locator("li").filter({ hasText: folderName }).first().click()
+  await sleep(2)
   await screenShot.screenShot("open_top_panel.png")
   await page
     .getByRole("textbox", { name: "Search files by name (append" })
@@ -117,7 +119,7 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
  * In vscode, when you need to select a folder or a file, call this method
  * @param file When selecting a file, just pass it in. If you need to select a folder, you do not need to pass this parameter in.
  */
-async function selectFolder(file: string = "") {
+async function selectFolder_win(file: string = "") {
   await sleep(10)
   if (file) {
     if (!process.env.CI) {
@@ -131,6 +133,17 @@ async function selectFolder(file: string = "") {
   }
   await screenShot.screenShot("select_folder.png")
   await keyboard.pressKey(Key.Enter)
+}
+
+/**
+ * In vscode, when you need to select a folder or a file, call this method
+ * @param file When selecting a file, just pass it in. If you need to select a folder, you do not need to pass this parameter in.
+ */
+async function selectFolder_linux(file: string = "") {
+  await sleep(10)
+  await screenShot.screenShot("select_folder.png")
+  await keyboard.pressKey(Key.Enter)
+  await keyboard.releaseKey(Key.Enter)
 }
 
 /**
@@ -192,7 +205,7 @@ async function installExtension(page: Page) {
  * @param page vscode object
  * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
  */
-async function installExtensionForFile(page: Page, fullFilePath: string) {
+async function installExtensionForFile_win(page: Page, fullFilePath: string) {
   await screenShot.screenShot("open_vscode.png")
   await page
     .getByRole("tab", { name: /Extensions/ })
@@ -222,7 +235,7 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
     1
   )
   await fromInstall!.click()
-  await selectFolder(fullFilePath)
+  await selectFolder_win(fullFilePath)
   await retry(
     30,
     async () => {
@@ -239,6 +252,47 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
     .locator("a")
     .click()
   await screenShot.screenShot("change_explorer.png")
+}
+
+/**
+ * Install plugins directly from a local file
+ * @param page vscode object
+ * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
+ * @param workspacePath The workspace path of the given test case
+ */
+async function installExtensionForFile_linux(page: Page, fullFilePath: string, workspacePath: string) {
+
+  await fs.promises.copyFile(fullFilePath, path.resolve(workspacePath, "extension.vsix"))
+  await sleep(8)
+  await retry(
+    10,
+    async () => {
+      await page.getByRole('heading', { name: 'Explorer', exact: true }).click()
+      await sleep(5)
+      await page.getByRole("treeitem", { name : "extension.vsix" }).locator('a').click({button: "right"})
+      let locator = page.getByRole('menuitem', { name: 'Install Extension VSIX'})
+      return await locator.count() > 0
+    },
+    `Failed to locate "Install Extension VSIX"`,
+    1
+  )
+
+  await sleep(3)
+  await page.getByRole('menuitem', { name: 'Install Extension VSIX'})
+    .click()
+
+  await retry(
+    10,
+    async () => {
+      let completeLocator = page.getByText("Completed installing")
+      return await completeLocator.count() > 0
+    },
+    "Fail to install the extension.",
+    1
+  )
+  await sleep(3)
+  await fs.promises.rm(path.resolve(workspacePath, "extension.vsix"))
+  await screenShot.screenShot("install_extension_file.png")
 }
 
 /**
@@ -312,11 +366,13 @@ export {
   startWithRightClick,
   startWithCommandPalette,
   contrastResult,
-  selectFolder,
+  selectFolder_win,
+  selectFolder_linux,
   preContrastResult,
   notEmptyFolderContinue,
   installExtension,
-  installExtensionForFile,
+  installExtensionForFile_win,
+  installExtensionForFile_linux,
   installExtensionForCommand,
   closeVscode,
   createTestFile,

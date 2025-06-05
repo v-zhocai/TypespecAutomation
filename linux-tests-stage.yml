@@ -37,7 +37,7 @@ jobs:
         ./screen.sh &
         echo ">>> end screen"
         sudo snap install code --classic
-        npm run test:linux
+        npm run test:all_linux
       displayName: "Run Playwright Electron UI Tests"
       env:
         CI: true

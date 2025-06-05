@@ -1,22 +1,22 @@
 import { beforeAll, beforeEach } from "vitest"
 import {
   contrastResult,
-  start,
+  startWithCommandPalette,
   selectFolder_linux,
   preContrastResult,
-  installExtensionForFile,
+  installExtensionForFile_linux,
   installExtensionForCommand,
   closeVscode,
   installExtension,
-} from "./common/commonSteps"
-import { screenShot, sleep, test } from "./common/utils"
+} from "../common/commonSteps"
+import { screenShot, sleep, test } from "../common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
   inputProjectName,
   selectEmitters,
   selectTemplate,
-} from "./common/createSteps"
+} from "../common/createSteps_linux"
 import { afterEach } from "node:test"
 
 beforeAll(() => {
@@ -44,7 +44,7 @@ test("CreateTypespec-Generic REST API", async ({ launch }) => {
 
   await installExtensionForCommand(page, extensionDir)
   console.log("installed extension")
-  await start(page, {
+  await startWithCommandPalette(page, {
     folderName: "CreateTypespecProject",
     command: "Create Typespec Project",
   })

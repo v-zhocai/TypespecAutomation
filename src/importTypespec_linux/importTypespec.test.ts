@@ -1,18 +1,18 @@
 import { afterEach, beforeAll, beforeEach } from "vitest"
-import { screenShot, sleep, test } from "./common/utils"
+import { screenShot, sleep, test } from "../common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
   closeVscode,
   contrastResult,
   installExtension,
-  installExtensionForFile,
+  installExtensionForFile_linux,
   installExtensionForCommand,
   notEmptyFolderContinue,
   preContrastResult,
   selectFolder_linux,
-  start,
-} from "./common/commonSteps"
+  startWithCommandPalette,
+} from "../common/commonSteps"
 
 beforeAll(() => {
   screenShot.setCreateType("import")
@@ -59,7 +59,7 @@ test("ImportTypespecFromOpenApi3", async ({ launch }) => {
   await installExtensionForCommand(page, extensionDir)
   console.log("install extension")
 
-  await start(page, {
+  await startWithCommandPalette(page, {
     folderName: "importTypespecProjectOpenApi3",
     command: "Import TypeSpec from OpenAPI 3",
   })

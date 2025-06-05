@@ -158,16 +158,30 @@ class Screenshot {
   }
 
   save() {
+    console.log("Saving screenshots...")
     if (this.fileList.length === 0) {
       return
     }
     // Smaller dates are placed first to keep the files in order
     this.fileList.sort((a, b) => a.date - b.date)
     for (let i = 0; i < this.fileList.length; i++) {
+      console.log("into file:", this.fileList[i].fullPath)
       const fullPathItem = this.fileList[i].fullPath.split("\\")
-      fullPathItem[fullPathItem.length - 1] = `${i}_${
-        fullPathItem[fullPathItem.length - 1]
-      }`
+      if (os.platform() === "win32") {
+        fullPathItem[fullPathItem.length - 1] = `${i}_${
+          fullPathItem[fullPathItem.length - 1]
+        }`
+      } else {
+        const lastslashIdx = fullPathItem[fullPathItem.length - 1].lastIndexOf("/")
+        const fileName = fullPathItem[fullPathItem.length - 1];
+        if (lastslashIdx !== -1) {
+          const prefix = fileName.substring(0, lastslashIdx + 1);
+          const suffix = fileName.substring(lastslashIdx + 1);
+          fullPathItem[fullPathItem.length - 1] = `${prefix}${i}_${suffix}`;
+        } else {
+          fullPathItem[fullPathItem.length - 1] = `${i}_${fileName}`;
+        }
+      }
       fs.mkdirSync(path.dirname(path.join(...fullPathItem)), {
         recursive: true,
       })
