@@ -158,14 +158,12 @@ class Screenshot {
   }
 
   save() {
-    console.log("Saving screenshots...")
     if (this.fileList.length === 0) {
       return
     }
     // Smaller dates are placed first to keep the files in order
     this.fileList.sort((a, b) => a.date - b.date)
     for (let i = 0; i < this.fileList.length; i++) {
-      console.log("into file:", this.fileList[i].fullPath)
       const fullPathItem = this.fileList[i].fullPath.split("\\")
       if (os.platform() === "win32") {
         fullPathItem[fullPathItem.length - 1] = `${i}_${
