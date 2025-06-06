@@ -10,7 +10,7 @@
     "test:emit": "vitest --root ./src/emitTypespec",
     "test:import": "vitest --root ./src/importTypespec",
     "test:preview": "vitest --root ./src/previewTypespec",
-    "test:linux": "vitest --root src_linux"
+    "test:all": "npm run test:create && npm run test:emit && npm run test:import && npm run test:preview"
   },
   "dependencies": {
     "@nut-tree-fork/nut-js": "^4.2.6",

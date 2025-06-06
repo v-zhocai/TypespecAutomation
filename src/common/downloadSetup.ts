@@ -6,13 +6,19 @@ import type { GlobalSetupContext } from "vitest/node"
  * Subsequent cases will be executed in this vscode.
  */
 export default async function downloadVscode({ provide }: GlobalSetupContext) {
-  const version = "1.100.2";
-  const platform = "win32-x64-archive";
+  if (process.platform.includes("win")){
+    const version = "1.100.2";
+    const platform = "win32-x64-archive";
 
-  if (process.env.VSCODE_E2E_DOWNLOAD_PATH) {
-    provide("executablePath", process.env.VSCODE_E2E_DOWNLOAD_PATH);
+    if (process.env.VSCODE_E2E_DOWNLOAD_PATH) {
+      provide("executablePath", process.env.VSCODE_E2E_DOWNLOAD_PATH);
+    } else {
+      provide("executablePath", await download({ version, platform }));
+    }
   } else {
-    provide("executablePath", await download({ version, platform }));
+    if (process.env.VSCODE_E2E_DOWNLOAD_PATH)
+      provide("executablePath", process.env.VSCODE_E2E_DOWNLOAD_PATH)
+    else provide("executablePath", await download())
   }
 }
 

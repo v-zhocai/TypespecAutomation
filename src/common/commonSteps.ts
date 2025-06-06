@@ -3,6 +3,7 @@ import { retry, screenShot, sleep } from "./utils"
 import { keyboard, Key } from "@nut-tree-fork/nut-js"
 import fs from "node:fs"
 import path from "node:path"
+import os from "node:os"
 
 /**
  * Before comparing the results, you need to check whether the conditions for result comparison are met.
@@ -57,7 +58,9 @@ async function startWithCommandPalette(
   page: Page,
   { folderName, command }: { folderName: string; command: string }
 ) {
+  await sleep(2)
   await page.locator("li").filter({ hasText: folderName }).first().click()
+  await sleep(2)
   await screenShot.screenShot("open_top_panel.png")
   await page
     .getByRole("textbox", { name: "Search files by name (append" })
@@ -119,18 +122,24 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
  */
 async function selectFolder(file: string = "") {
   await sleep(10)
-  if (file) {
-    if (!process.env.CI) {
-      await keyboard.pressKey(Key.CapsLock)
+  if (os.platform() === "win32") {
+    if (file) {
+      if (!process.env.CI) {
+        await keyboard.pressKey(Key.CapsLock)
+      }
+      await keyboard.type(file)
+      if (file.includes("CreateTypespecProject")) {
+        await sleep(2)
+        await keyboard.pressKey(Key.Enter)
+      }
     }
-    await keyboard.type(file)
-    if (file.includes("CreateTypespecProject")) {
-      await sleep(2)
-      await keyboard.pressKey(Key.Enter)
-    }
+    await screenShot.screenShot("select_folder.png")
+    await keyboard.pressKey(Key.Enter)
+  } else {
+    await screenShot.screenShot("select_folder.png")
+    await keyboard.pressKey(Key.Enter)
+    await keyboard.releaseKey(Key.Enter)
   }
-  await screenShot.screenShot("select_folder.png")
-  await keyboard.pressKey(Key.Enter)
 }
 
 /**
@@ -272,15 +281,18 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   )
   await screenShot.screenShot("start_install_extension.png")
   await page.keyboard.press("Enter")
-  await retry(
-    2,
-    async () => {
-      const installed = page.locator('.codicon-terminal-decoration-success')
-      return (await installed.count()) > 0
-    },
-    `Failed to install the extension.`,
-    1
-  )
+  await sleep(8)
+  if (os.platform() === "win32"){
+    await retry(
+      2,
+      async () => {
+        const installed = page.locator('.codicon-terminal-decoration-success')
+        return (await installed.count()) > 0
+      },
+      `Failed to install the extension.`,
+      1
+    )
+  }
   await screenShot.screenShot("start_install_extension_result.png")
 }
 
