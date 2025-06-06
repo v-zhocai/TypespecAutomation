@@ -14,7 +14,7 @@ jobs:
 
       - script: |
           echo "Running Create Test Cases"
-          npm run test:create_win
+          npm run test:create
         displayName: "Run Create Test Cases"
         env:
           BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
@@ -59,7 +59,7 @@ jobs:
           set JAVA_HOME=%JAVA_HOME_21_X64%
           set PATH=%JAVA_HOME%\bin;%PATH%
           echo "Running Emit Test Cases"
-          npm run test:emit_win
+          npm run test:emit
         displayName: "Run Emit Test Cases"
         env:
           BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
@@ -89,7 +89,7 @@ jobs:
 
       - script: |
           echo "Running Import Test Cases"
-          npm run test:import_win
+          npm run test:import
         displayName: "Run Import Test Cases"
         env:
           BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
@@ -119,7 +119,7 @@ jobs:
 
       - script: |
           echo "Running Preview Test Cases"
-          npm run test:preview_win
+          npm run test:preview
         displayName: "Run Preview Test Cases"
         env:
           BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
