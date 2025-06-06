@@ -3,6 +3,7 @@ import {
   contrastResult,
   startWithCommandPalette,
   selectFolder_win,
+  selectFolder_linux,
   preContrastResult,
   closeVscode,
   installExtensionForCommand,
@@ -12,6 +13,7 @@ import {
 } from "../common/commonSteps"
 import { screenShot, test } from "../common/utils"
 import fs from "node:fs"
+import os from "node:os"
 import path from "node:path"
 import {
   inputServiceNameSpace,
@@ -79,10 +81,13 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
     } else {
       await startWithClick(page)
     }
-
-    await selectFolder_win(
-      triggerType === CreateProjectTriggerType.Command ? "" : workspacePath
-    )
+    if (os.platform() === "win32") {
+      await selectFolder_win(
+        triggerType === CreateProjectTriggerType.Command ? "" : workspacePath
+      )
+    } else {
+      await selectFolder_linux()
+    }
 
     if (!isEmptyFolder) {
       await notEmptyFolderContinue(page)
