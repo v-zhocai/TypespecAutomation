@@ -201,7 +201,7 @@ async function installExtension(page: Page) {
  * @param page vscode object
  * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
  */
-async function installExtensionForFile_win(page: Page, fullFilePath: string) {
+async function installExtensionForFile(page: Page, fullFilePath: string) {
   await screenShot.screenShot("open_vscode.png")
   await page
     .getByRole("tab", { name: /Extensions/ })
@@ -248,47 +248,6 @@ async function installExtensionForFile_win(page: Page, fullFilePath: string) {
     .locator("a")
     .click()
   await screenShot.screenShot("change_explorer.png")
-}
-
-/**
- * Install plugins directly from a local file
- * @param page vscode object
- * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
- * @param workspacePath The workspace path of the given test case
- */
-async function installExtensionForFile_linux(page: Page, fullFilePath: string, workspacePath: string) {
-
-  await fs.promises.copyFile(fullFilePath, path.resolve(workspacePath, "extension.vsix"))
-  await sleep(8)
-  await retry(
-    10,
-    async () => {
-      await page.getByRole('heading', { name: 'Explorer', exact: true }).click()
-      await sleep(5)
-      await page.getByRole("treeitem", { name : "extension.vsix" }).locator('a').click({button: "right"})
-      let locator = page.getByRole('menuitem', { name: 'Install Extension VSIX'})
-      return await locator.count() > 0
-    },
-    `Failed to locate "Install Extension VSIX"`,
-    1
-  )
-
-  await sleep(3)
-  await page.getByRole('menuitem', { name: 'Install Extension VSIX'})
-    .click()
-
-  await retry(
-    10,
-    async () => {
-      let completeLocator = page.getByText("Completed installing")
-      return await completeLocator.count() > 0
-    },
-    "Fail to install the extension.",
-    1
-  )
-  await sleep(3)
-  await fs.promises.rm(path.resolve(workspacePath, "extension.vsix"))
-  await screenShot.screenShot("install_extension_file.png")
 }
 
 /**
@@ -369,8 +328,7 @@ export {
   preContrastResult,
   notEmptyFolderContinue,
   installExtension,
-  installExtensionForFile_win,
-  installExtensionForFile_linux,
+  installExtensionForFile,
   installExtensionForCommand,
   closeVscode,
   createTestFile,
