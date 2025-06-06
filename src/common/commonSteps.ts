@@ -120,31 +120,26 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
  * In vscode, when you need to select a folder or a file, call this method
  * @param file When selecting a file, just pass it in. If you need to select a folder, you do not need to pass this parameter in.
  */
-async function selectFolder_win(file: string = "") {
+async function selectFolder(file: string = "") {
   await sleep(10)
-  if (file) {
-    if (!process.env.CI) {
-      await keyboard.pressKey(Key.CapsLock)
+  if (os.platform() === "win32") {
+    if (file) {
+      if (!process.env.CI) {
+        await keyboard.pressKey(Key.CapsLock)
+      }
+      await keyboard.type(file)
+      if (file.includes("CreateTypespecProject")) {
+        await sleep(2)
+        await keyboard.pressKey(Key.Enter)
+      }
     }
-    await keyboard.type(file)
-    if (file.includes("CreateTypespecProject")) {
-      await sleep(2)
-      await keyboard.pressKey(Key.Enter)
-    }
+    await screenShot.screenShot("select_folder.png")
+    await keyboard.pressKey(Key.Enter)
+  } else {
+    await screenShot.screenShot("select_folder.png")
+    await keyboard.pressKey(Key.Enter)
+    await keyboard.releaseKey(Key.Enter)
   }
-  await screenShot.screenShot("select_folder.png")
-  await keyboard.pressKey(Key.Enter)
-}
-
-/**
- * In vscode, when you need to select a folder or a file, call this method
- * @param file When selecting a file, just pass it in. If you need to select a folder, you do not need to pass this parameter in.
- */
-async function selectFolder_linux(file: string = "") {
-  await sleep(10)
-  await screenShot.screenShot("select_folder.png")
-  await keyboard.pressKey(Key.Enter)
-  await keyboard.releaseKey(Key.Enter)
 }
 
 /**
@@ -236,7 +231,7 @@ async function installExtensionForFile_win(page: Page, fullFilePath: string) {
     1
   )
   await fromInstall!.click()
-  await selectFolder_win(fullFilePath)
+  await selectFolder(fullFilePath)
   await retry(
     30,
     async () => {
@@ -370,8 +365,7 @@ export {
   startWithRightClick,
   startWithCommandPalette,
   contrastResult,
-  selectFolder_win,
-  selectFolder_linux,
+  selectFolder,
   preContrastResult,
   notEmptyFolderContinue,
   installExtension,
