@@ -33,9 +33,6 @@ jobs:
     - script: |
         export DISPLAY=:99
         export VSCODE_E2E_DOWNLOAD_PATH=$(VSCODE_E2E_DOWNLOAD_PATH)
-        chmod +x screen.sh
-        ./screen.sh &
-        echo ">>> end screen"
         npm run test:create
       displayName: "Run Playwright Electron UI Tests"
       env:
@@ -54,7 +51,7 @@ jobs:
         path: "$(Build.ArtifactStagingDirectory)"
         artifact: "screenshots"
         publishLocation: "Container"
-        includePatterns: "*.png"
+        includePatterns: "images/**/*.png"
       displayName: "Publish Screenshots"
 
 - job: RunElectronUITestsOnLinux_2_EmitTypespecProject
@@ -91,9 +88,6 @@ jobs:
     - script: |
         export DISPLAY=:99
         export VSCODE_E2E_DOWNLOAD_PATH=$(VSCODE_E2E_DOWNLOAD_PATH)
-        chmod +x screen.sh
-        ./screen.sh &
-        echo ">>> end screen"
         npm run test:emit
       displayName: "Run Playwright Electron UI Tests"
       env:
@@ -112,7 +106,7 @@ jobs:
         path: "$(Build.ArtifactStagingDirectory)"
         artifact: "screenshots"
         publishLocation: "Container"
-        includePatterns: "*.png"
+        includePatterns: "images/**/*.png"
       displayName: "Publish Screenshots"
 
 - job: RunElectronUITestsOnLinux_3_ImportTypespecProject
@@ -149,9 +143,6 @@ jobs:
     - script: |
         export DISPLAY=:99
         export VSCODE_E2E_DOWNLOAD_PATH=$(VSCODE_E2E_DOWNLOAD_PATH)
-        chmod +x screen.sh
-        ./screen.sh &
-        echo ">>> end screen"
         npm run test:import
       displayName: "Run Playwright Electron UI Tests"
       env:
@@ -170,7 +161,7 @@ jobs:
         path: "$(Build.ArtifactStagingDirectory)"
         artifact: "screenshots"
         publishLocation: "Container"
-        includePatterns: "*.png"
+        includePatterns: "images/**/*.png"
       displayName: "Publish Screenshots"
 
 - job: RunElectronUITestsOnLinux_4_PreviewTypespecProject
@@ -207,9 +198,6 @@ jobs:
     - script: |
         export DISPLAY=:99
         export VSCODE_E2E_DOWNLOAD_PATH=$(VSCODE_E2E_DOWNLOAD_PATH)
-        chmod +x screen.sh
-        ./screen.sh &
-        echo ">>> end screen"
         npm run test:preview
       displayName: "Run Playwright Electron UI Tests"
       env:
@@ -228,5 +216,5 @@ jobs:
         path: "$(Build.ArtifactStagingDirectory)"
         artifact: "screenshots"
         publishLocation: "Container"
-        includePatterns: "*.png"
+        includePatterns: "images/**/*.png"
       displayName: "Publish Screenshots"
