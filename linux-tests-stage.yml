@@ -56,3 +56,11 @@ jobs:
         publishLocation: "Container"
         includePatterns: "images-linux/**/*.png"
       displayName: "Publish Screenshots"
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        path: "$(Build.ArtifactStagingDirectory)"
+        artifact: "screenshots"
+        publishLocation: "Container"
+        includePatterns: "*.png"
+      displayName: "Publish Screenshots"
