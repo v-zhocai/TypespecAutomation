@@ -143,6 +143,19 @@ async function selectFolder(file: string = "") {
       await keyboard.pressKey(Key.Down)
       await sleep(3)
     }
+    if (file && file.includes("CreateTypespecProject")) {
+      const keySequence = [
+        Key.Down,
+        Key.Enter,
+        Key.Down,
+        Key.Up,
+        Key.Enter,
+      ];
+      for (const key of keySequence) {
+        await keyboard.pressKey(key);
+        await sleep(2);
+      }
+    }
     await screenShot.screenShot("select_folder.png")
     await keyboard.pressKey(Key.Enter)
     await keyboard.releaseKey(Key.Enter)
