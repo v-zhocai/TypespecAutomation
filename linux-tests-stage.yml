@@ -51,7 +51,7 @@ jobs:
         path: "$(Build.ArtifactStagingDirectory)"
         artifact: "screenshots"
         publishLocation: "Container"
-        includePatterns: "images/**/*.png"
+        includePatterns: "images-linux/**/*.png"
       displayName: "Publish Screenshots"
 
 - job: RunElectronUITestsOnLinux_2_EmitTypespecProject
@@ -106,7 +106,7 @@ jobs:
         path: "$(Build.ArtifactStagingDirectory)"
         artifact: "screenshots"
         publishLocation: "Container"
-        includePatterns: "images/**/*.png"
+        includePatterns: "images-linux/**/*.png"
       displayName: "Publish Screenshots"
 
 - job: RunElectronUITestsOnLinux_3_ImportTypespecProject
@@ -161,7 +161,7 @@ jobs:
         path: "$(Build.ArtifactStagingDirectory)"
         artifact: "screenshots"
         publishLocation: "Container"
-        includePatterns: "images/**/*.png"
+        includePatterns: "images-linux/**/*.png"
       displayName: "Publish Screenshots"
 
 - job: RunElectronUITestsOnLinux_4_PreviewTypespecProject
@@ -216,5 +216,5 @@ jobs:
         path: "$(Build.ArtifactStagingDirectory)"
         artifact: "screenshots"
         publishLocation: "Container"
-        includePatterns: "images/**/*.png"
+        includePatterns: "images-linux/**/*.png"
       displayName: "Publish Screenshots"

@@ -26,7 +26,7 @@ jobs:
           path: "$(Build.ArtifactStagingDirectory)"
           artifact: "screenshots"
           publishLocation: "Container"
-          includePatterns: "images/**/*.png"
+          includePatterns: "images-windows/**/*.png"
         displayName: "Publish screenshots to Artifacts"
 
   - job: RunWindowsTests_2_EmitTypespecProject
@@ -71,7 +71,7 @@ jobs:
           path: "$(Build.ArtifactStagingDirectory)"
           artifact: "screenshots"
           publishLocation: "Container"
-          includePatterns: "images/**/*.png"
+          includePatterns: "images-windows/**/*.png"
         displayName: "Publish screenshots to Artifacts"
 
   - job: RunWindowsTests_3_ImportTypespecProject
@@ -101,7 +101,7 @@ jobs:
           path: "$(Build.ArtifactStagingDirectory)"
           artifact: "screenshots"
           publishLocation: "Container"
-          includePatterns: "images/**/*.png"
+          includePatterns: "images-windows/**/*.png"
         displayName: "Publish screenshots to Artifacts"
 
   - job: RunWindowsTests_4_PreviewTypespecProject
@@ -131,5 +131,5 @@ jobs:
           path: "$(Build.ArtifactStagingDirectory)"
           artifact: "screenshots"
           publishLocation: "Container"
-          includePatterns: "images/**/*.png"
+          includePatterns: "images-windows/**/*.png"
         displayName: "Publish screenshots to Artifacts"
