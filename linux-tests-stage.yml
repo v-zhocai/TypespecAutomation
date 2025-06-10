@@ -19,6 +19,10 @@ jobs:
       displayName: "Install Linux Dependencies"
 
     - script: |
+        ls -l ~
+        ls -l ~/work/
+        ls -l ~/work/1
+        ls -l ~/work/1/s
         export DISPLAY=:99
         /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
         echo ">>> Started xvfb"
