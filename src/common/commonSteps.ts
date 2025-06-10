@@ -109,6 +109,9 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
     const target = page.getByRole("treeitem", { name: targetName }).locator("a")
     await target.click({ button: "right" })
     await screenShot.screenShot("openapi.3.0.png")
+    if (os.platform() == "linux"){
+      await sleep(3)
+    }
     await page
       .getByRole("menuitem", { name: "Import TypeSpec from OpenAPI" })
       .click()
@@ -136,6 +139,10 @@ async function selectFolder(file: string = "") {
     await screenShot.screenShot("select_folder.png")
     await keyboard.pressKey(Key.Enter)
   } else {
+    if (file == "openapi.3.0.yaml" || file == "ImportTypespecProjectEmptyFolder") {
+      await keyboard.pressKey(Key.Down)
+      await sleep(3)
+    }
     await screenShot.screenShot("select_folder.png")
     await keyboard.pressKey(Key.Enter)
     await keyboard.releaseKey(Key.Enter)
@@ -202,6 +209,7 @@ async function installExtension(page: Page) {
  * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
  */
 async function installExtensionForFile(page: Page, fullFilePath: string) {
+  await sleep(5)
   await screenShot.screenShot("open_vscode.png")
   await page
     .getByRole("tab", { name: /Extensions/ })

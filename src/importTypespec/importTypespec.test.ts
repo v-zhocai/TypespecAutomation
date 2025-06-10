@@ -65,7 +65,7 @@ describe.each(ImportCasesConfigList) ("ImportTypespecFromOpenApi3", async ( item
     console.log(caseName)
     const workspacePath = path.resolve(
       __dirname,
-      "../../importTypespecProjectOpenApi3"
+      "../../ImportTypespecProjectOpenApi3"
     )
     const { page, extensionDir } = await launch({
       workspacePath,
@@ -74,7 +74,7 @@ describe.each(ImportCasesConfigList) ("ImportTypespecFromOpenApi3", async ( item
 
     if (triggerType === "CommandPalette") {
       await startWithCommandPalette(page, {
-        folderName: "importTypespecProjectOpenApi3",
+        folderName: "ImportTypespecProjectOpenApi3",
         command: "Import TypeSpec from Openapi 3",
       })
     } else if (triggerType === "RightClickonFile") {
