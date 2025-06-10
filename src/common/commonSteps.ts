@@ -139,7 +139,6 @@ async function selectFolder(file: string = "") {
     await screenShot.screenShot("select_folder.png")
     await keyboard.pressKey(Key.Enter)
   } else {
-    console.log("selectFolder_file", file)
     if (file == "openapi.3.0.yaml" || file == "ImportTypespecProjectEmptyFolder") {
       await keyboard.pressKey(Key.Down)
       await sleep(3)
