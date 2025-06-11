@@ -279,17 +279,16 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   await screenShot.screenShot("start_install_extension.png")
   await page.keyboard.press("Enter")
   await sleep(8)
-  if (os.platform() === "win32"){
-    await retry(
-      2,
-      async () => {
-        const installed = page.locator('.codicon-terminal-decoration-success')
-        return (await installed.count()) > 0
-      },
-      `Failed to install the extension.`,
-      1
-    )
-  }
+  await retry(
+    8,
+    async () => {
+      const installed = page.locator('.codicon-terminal-decoration-success')
+      return (await installed.count()) > 0
+    },
+    `Failed to install the extension.`,
+    1
+  )
+
   await screenShot.screenShot("start_install_extension_result.png")
 }
 
