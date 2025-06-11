@@ -9,16 +9,9 @@ export default async function downloadVscode({ provide }: GlobalSetupContext) {
   if (process.platform.includes("win")){
     const version = "1.100.2";
     const platform = "win32-x64-archive";
-
-    if (process.env.VSCODE_E2E_DOWNLOAD_PATH) {
-      provide("executablePath", process.env.VSCODE_E2E_DOWNLOAD_PATH);
-    } else {
-      provide("executablePath", await download({ version, platform }));
-    }
+    provide("executablePath", await download({ version, platform }));
   } else {
-    if (process.env.VSCODE_E2E_DOWNLOAD_PATH)
-      provide("executablePath", process.env.VSCODE_E2E_DOWNLOAD_PATH)
-    else provide("executablePath", await download())
+    provide("executablePath", await download())
   }
 }
 
