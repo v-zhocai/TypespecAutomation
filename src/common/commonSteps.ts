@@ -109,6 +109,9 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
     const target = page.getByRole("treeitem", { name: targetName }).locator("a")
     await target.click({ button: "right" })
     await screenShot.screenShot("openapi.3.0.png")
+    if (os.platform() == "linux"){
+      await sleep(3)
+    }
     await page
       .getByRole("menuitem", { name: "Import TypeSpec from OpenAPI" })
       .click()
@@ -136,6 +139,11 @@ async function selectFolder(file: string = "") {
     await screenShot.screenShot("select_folder.png")
     await keyboard.pressKey(Key.Enter)
   } else {
+    if (file == "openapi.3.0.yaml" || file == "ImportTypespecProjectEmptyFolder") {
+      await keyboard.pressKey(Key.Down)
+      await sleep(3)
+    }
+    await keyboard.type(file)
     await screenShot.screenShot("select_folder.png")
     await keyboard.pressKey(Key.Enter)
     await keyboard.releaseKey(Key.Enter)

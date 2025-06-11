@@ -194,9 +194,10 @@ class Screenshot {
     let rootDir =
       process.env.BUILD_ARTIFACT_STAGING_DIRECTORY ||
       path.resolve(__dirname, "../..")
-    let fullPath = path.join(
+    const platformDir = os.platform() === "win32" ? "/images-windows" : "/images-linux"
+    const fullPath = path.join(
       rootDir,
-      "/images",
+      platformDir,
       this.typeMenu[this.createType],
       this.currentDir,
       fileName
