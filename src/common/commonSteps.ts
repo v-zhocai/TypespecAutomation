@@ -210,7 +210,6 @@ async function installExtension(page: Page) {
  * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
  */
 async function installExtensionForFile(page: Page, fullFilePath: string) {
-  await sleep(5)
   await screenShot.screenShot("open_vscode.png")
   await page
     .getByRole("tab", { name: /Extensions/ })

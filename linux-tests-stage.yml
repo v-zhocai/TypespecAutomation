@@ -32,7 +32,7 @@ jobs:
 
     - script: |
         export DISPLAY=:99
-        export VSCODE_E2E_DOWNLOAD_PATH=$(VSCODE_E2E_DOWNLOAD_PATH)       
+        export VSCODE_E2E_DOWNLOAD_PATH=$(VSCODE_E2E_DOWNLOAD_PATH)
         npm run test:create
       displayName: "Run Playwright Electron UI Tests"
       env:

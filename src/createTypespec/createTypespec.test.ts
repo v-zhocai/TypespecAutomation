@@ -55,7 +55,6 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
   } = item
 
   test(caseName, async ({ launch }) => {
-    console.log(caseName)
     screenShot.setDir(caseName)
     const workspacePath = path.resolve(__dirname, "../../CreateTypespecProject")
 
