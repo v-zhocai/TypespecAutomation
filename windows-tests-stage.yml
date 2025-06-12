@@ -56,14 +56,14 @@ jobs:
         displayName: "Install dependencies"
 
       - script: |
+          set JAVA_HOME=%JAVA_HOME_21_X64%
+          set PATH=%JAVA_HOME%\bin;%PATH%
           echo "Running Emit Test Cases"
           npm run test:emit
         displayName: "Run Emit Test Cases"
         env:
           BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
           CI: true
-          JAVA_HOME: $(JAVA_HOME_21_X64)
-          PATH: $(JAVA_HOME_21_X64)\bin;$(PATH)
         continueOnError: true
 
       - task: PublishBuildArtifacts@1
