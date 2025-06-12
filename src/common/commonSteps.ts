@@ -280,7 +280,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   await page.keyboard.press("Enter")
   await sleep(8)
   await retry(
-    8,
+    20,
     async () => {
       const installed = page.locator('.codicon-terminal-decoration-success')
       return (await installed.count()) > 0
