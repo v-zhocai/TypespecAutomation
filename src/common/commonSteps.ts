@@ -137,6 +137,7 @@ async function selectFolder(file: string = "") {
   if (os.platform() !== "win32") {
     await keyboard.releaseKey(Key.Enter)
   }
+  await sleep(3)
 }
 
 /**
