@@ -125,29 +125,19 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
  */
 async function selectFolder(file: string = "") {
   await sleep(10)
-  if (os.platform() === "win32") {
-    if (file) {
-      if (!process.env.CI) {
-        await keyboard.pressKey(Key.CapsLock)
-      }
-      await keyboard.type(file)
-      if (file.includes("CreateTypespecProject")) {
-        await sleep(2)
-        await keyboard.pressKey(Key.Enter)
-      }
-    }
-    await screenShot.screenShot("select_folder.png")
+  await keyboard.type(file)
+  if (os.platform() === "win32" 
+    && file.includes("CreateTypespecProject")
+  ) {
+    await sleep(2)
     await keyboard.pressKey(Key.Enter)
-  } else {
-    if (file == "openapi.3.0.yaml" || file == "ImportTypespecProjectEmptyFolder") {
-      await keyboard.pressKey(Key.Down)
-      await sleep(3)
-    }
-    await keyboard.type(file)
-    await screenShot.screenShot("select_folder.png")
-    await keyboard.pressKey(Key.Enter)
+  }
+  await screenShot.screenShot("select_folder.png")
+  await keyboard.pressKey(Key.Enter)
+  if (os.platform() !== "win32") {
     await keyboard.releaseKey(Key.Enter)
   }
+  await sleep(3)
 }
 
 /**
@@ -301,6 +291,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
       1
     )
   }
+
   await screenShot.screenShot("start_install_extension_result.png")
 }
 
