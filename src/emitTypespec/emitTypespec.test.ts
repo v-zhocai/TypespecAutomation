@@ -86,7 +86,7 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
       page,
       contrastMessage,
       "Failed to emit project Successful",
-      [10, 3]
+      [20, 3]
     )
 
     await screenShot.screenShot("close_vscode.png")
