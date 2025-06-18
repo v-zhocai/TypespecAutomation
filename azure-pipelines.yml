@@ -16,7 +16,7 @@ parameters:
   - name: runLinux
     displayName: 'Run Linux UI Tests'
     type: boolean
-    default: false
+    default: true
 
 stages:
   - stage: WindowsTests
