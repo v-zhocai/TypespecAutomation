@@ -248,7 +248,7 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
  */
 async function installExtensionForCommand(page: Page, extensionDir: string) {
   const vsixPath =
-    process.env.VSIX_PATH || "extension.vsix"
+    process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix")
   await sleep(5)
   await page.keyboard.press("Control+Backquote")
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/open_terminal.png") })
