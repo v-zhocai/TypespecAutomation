@@ -22,6 +22,10 @@ jobs:
       displayName: "Start xvfb and Set DISPLAY"
 
     - script: |
+        mkdir -p images-linux
+      displayName: "Ensure images-linux directory exists"
+      
+    - script: |
         npm install
         node -e "require('@vscode/test-electron').download().then(p => console.log('##vso[task.setvariable variable=VSCODE_E2E_DOWNLOAD_PATH]' + p))"
         sudo snap install code --classic

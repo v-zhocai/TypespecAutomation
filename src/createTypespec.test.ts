@@ -50,10 +50,10 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
 
   test(caseName, async ({ launch }) => {
     const imagesLinuxPath = path.resolve(__dirname, "../images-linux")
-    console.log("imagesLinuxPath", imagesLinuxPath)
     if (!fs.existsSync(imagesLinuxPath)) {
       fs.mkdirSync(imagesLinuxPath, { recursive: true });
     }
+
     const workspacePath = path.resolve(__dirname, "./CreateTypespecProject")
     const { page, extensionDir } = await launch({
       workspacePath:
