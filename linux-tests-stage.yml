@@ -40,12 +40,12 @@ jobs:
         BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
       continueOnError: true
     - script: |
-        ls /home/vsts/work/1/a
+        ls /home/vsts/work/1/s/images-linux
       displayName: "List artifacts"
 
     - task: PublishBuildArtifacts@1
       inputs:
-        path: "$(Build.ArtifactStagingDirectory)"
+        path: "/home/vsts/work/1/s/"
         artifact: "screenshots"
         publishLocation: "Container"
         includePatterns: "images-linux/**/*.png"
