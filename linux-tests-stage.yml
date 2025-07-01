@@ -43,10 +43,8 @@ jobs:
         ls /home/vsts/work/1/s/images-linux
       displayName: "List artifacts"
 
-    - task: PublishBuildArtifacts@1
+    - task: PublishPipelineArtifact@1
       inputs:
-        path: "/home/vsts/work/1/s/images-linux"
-        artifact: "screenshots"
-        publishLocation: "Container"
-        includePatterns: "**/*.png"
-      displayName: "Publish Screenshots"
+        targetPath: '/home/vsts/work/1/s/images-linux'
+        artifact: 'screenshots'
+      displayName: 'Publish Screenshots'
