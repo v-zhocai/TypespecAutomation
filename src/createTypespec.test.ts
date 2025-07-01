@@ -9,8 +9,8 @@ import {
   createTestFile,
   deleteTestFile,
   notEmptyFolderContinue,
-} from "../common/commonSteps"
-import { screenShot, test } from "../common/utils"
+} from "./common/commonSteps"
+import { test } from "./common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
@@ -20,20 +20,14 @@ import {
   selectEmitters,
   selectTemplate,
   startWithClick,
-} from "../common/createSteps"
+} from "./common/createSteps"
 import {
   CreateCasesConfigList,
   CreateProjectTriggerType,
-  DataPlaneAPIProviderNameTemplates,
-  ARMAPIProviderNameTemplates
 } from "./config"
 
-beforeAll(() => {
-  screenShot.setCreateType("create")
-})
-
 beforeEach(() => {
-  const dir = path.resolve(__dirname, "../../CreateTypespecProject")
+  const dir = path.resolve(__dirname, "./CreateTypespecProject")
   if (fs.existsSync(dir)) {
     for (const file of fs.readdirSync(dir)) {
       const filePath = path.resolve(dir, file)
@@ -55,9 +49,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
   } = item
 
   test(caseName, async ({ launch }) => {
-    screenShot.setDir(caseName)
-    const workspacePath = path.resolve(__dirname, "../../CreateTypespecProject")
-
+    const workspacePath = path.resolve(__dirname, "./CreateTypespecProject")
     const { page, extensionDir } = await launch({
       workspacePath:
         triggerType === CreateProjectTriggerType.Command
@@ -80,7 +72,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
       await startWithClick(page)
     }
 
-    await selectFolder(
+    await selectFolder(page, 
       triggerType === CreateProjectTriggerType.Command ? "" : workspacePath
     )
 
@@ -88,17 +80,13 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
       await notEmptyFolderContinue(page)
       deleteTestFile(workspacePath)
     }
-  
+
     await selectTemplate(page, templateName, templateNameDesctiption)
 
     await inputProjectName(page)
 
     if (templateName === "Generic Rest API") {
       await selectEmitters(page)
-    } else if (DataPlaneAPIProviderNameTemplates.includes(templateName)) {
-      await inputServiceNameSpace(page)
-    } else if (ARMAPIProviderNameTemplates.includes(templateName)) {
-      await inputARMResourceProviderName(page)
     }
 
     await preContrastResult(
@@ -108,6 +96,6 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
       [10, 15]
     )
     await closeVscode()
-    await contrastResult(expectedResults, workspacePath)
+    await contrastResult(page, expectedResults, workspacePath)
   })
 })

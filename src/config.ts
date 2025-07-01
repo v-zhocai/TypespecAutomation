@@ -1,4 +1,4 @@
-export enum CreateProjectTriggerType {
+enum CreateProjectTriggerType {
   Click = "RightClick",
   Command = "CommandPalette",
 }
@@ -26,8 +26,8 @@ let expectedResults = [
 
 const CreateCasesConfigList: CreateConfigType[] = [
   {
-    triggerType: CreateProjectTriggerType.Click,
-    caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-EmptyFolder`,
+    triggerType: CreateProjectTriggerType.Command,
+    caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-EmptyFolder`,
     templateName,
     templateNameDesctiption,
     isEmptyFolder: true,
@@ -35,14 +35,4 @@ const CreateCasesConfigList: CreateConfigType[] = [
   },
 ]
 
-const DataPlaneAPIProviderNameTemplates = [
-  "(rest-api-spec repo) Azure Data Plane Service Project",
-  "(stand alone) Azure Data Plane Service Project",
-]
-
-const ARMAPIProviderNameTemplates = [
-  "(rest-api-spec repo) Azure Resource Manager Service Project",
-  "(stand alone) Azure Resource Manager Service Project"
-]
-
-export { CreateCasesConfigList, DataPlaneAPIProviderNameTemplates, ARMAPIProviderNameTemplates }
+export { CreateCasesConfigList, CreateProjectTriggerType}
