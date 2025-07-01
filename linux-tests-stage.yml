@@ -51,3 +51,4 @@ jobs:
         targetPath: 'images-linux'
         artifact: 'screenshots'
       displayName: 'Publish Screenshots'
+      condition: exists('$(Build.SourcesDirectory)/images-linux')
