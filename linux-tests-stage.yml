@@ -39,12 +39,15 @@ jobs:
         ELECTRON_DISABLE_SANDBOX: "1"
         BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
       continueOnError: true
+    
     - script: |
-        ls /home/vsts/work/1/s/images-linux
-      displayName: "List artifacts"
+        pwd
+        ls -al
+        ls -al images-linux || true
+      displayName: "Debug: List workspace and images-linux"
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '/home/vsts/work/1/s/images-linux'
+        targetPath: 'images-linux'
         artifact: 'screenshots'
       displayName: 'Publish Screenshots'
