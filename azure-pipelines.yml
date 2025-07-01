@@ -9,21 +9,12 @@ pr:
       - master
 
 parameters:
-  - name: runWindows
-    displayName: 'Run Windows Tests'
-    type: boolean
-    default: true
   - name: runLinux
     displayName: 'Run Linux UI Tests'
     type: boolean
     default: true
 
 stages:
-  - stage: WindowsTests
-    condition: eq('${{ parameters.runWindows }}', true)
-    jobs:
-      - template: windows-tests-stage.yml
-
   - stage: LinuxTests
     condition: eq('${{ parameters.runLinux }}', true)
     jobs:
