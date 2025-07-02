@@ -142,8 +142,10 @@ async function notEmptyFolderContinue(page: Page) {
     page,
     5,
     async () => {
-      yesBtn = page.locator("a").filter({ hasText: "Yes" }).first()
-      let noBtn = page.locator("a").filter({ hasText: "No" }).first() 
+      yesBtn = page.getByRole("option", { name: "Yes" }).locator('label')
+        .filter({ hasText: "Yes" }).first()
+      let noBtn = page.getByRole("option", { name: "No" }).locator('label')
+        .filter({ hasText: "No" }).first() 
       return (await yesBtn.count() > 0) && (await noBtn.count() > 0) 
     },
     "Failed to find yes/no button",

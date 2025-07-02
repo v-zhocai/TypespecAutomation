@@ -24,7 +24,7 @@ async function selectEmitters(page: Page, emitters?: string[]) {
     async () => {
       checks = await Promise.all(
         emittersConfig.map(async (emitter, index) => {
-          const nameLocator = page.locator("a").filter({ hasText: emitter.name });
+          const nameLocator = page.getByRole('checkbox', { name: emitter.name }).locator("a").filter({ hasText: emitter.name });
           const nameExists = await nameLocator.count() > 0;
 
           const nameBoxLocator = page.getByRole("checkbox", { name: `${emitter.name}, @`})
@@ -68,7 +68,7 @@ async function selectTemplate(page: Page, templateName: string, templateNameDesc
     page,
     3,
     async () => {
-      templateListName = page.locator("a").filter({ hasText: templateName })
+      templateListName = page.getByRole('option', { name: templateName }).filter({ hasText: templateName })
       return (await templateListName.count() > 0)
     },
     `Failed to find the following template: "${templateName}".`
