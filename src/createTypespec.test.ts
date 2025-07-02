@@ -23,13 +23,14 @@ import {
   startWithClick,
 } from "./common/createSteps"
 import {
+  CreateTypespecProjectFolder,
   CreateCasesConfigList,
   CreateProjectTriggerType,
 } from "./config"
 
 beforeEach(() => {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const dir = path.resolve(__dirname, "./create-case")
+  const dir = path.resolve(__dirname, CreateTypespecProjectFolder)
   if (fs.existsSync(dir)) {
     for (const file of fs.readdirSync(dir)) {
       const filePath = path.resolve(dir, file)
@@ -40,7 +41,7 @@ beforeEach(() => {
   }
 })
 
-describe.each(CreateCasesConfigList)("create-case", async (item) => {
+describe.each(CreateCasesConfigList)("CreateTypespecProject-cases", async (item) => {
   const {
     caseName,
     triggerType,
@@ -57,7 +58,7 @@ describe.each(CreateCasesConfigList)("create-case", async (item) => {
       fs.mkdirSync(imagesLinuxPath, { recursive: true });
     }
 
-    const workspacePath = path.resolve(__dirname, "./create-case")
+    const workspacePath = path.resolve(__dirname, CreateTypespecProjectFolder)
     const { page, extensionDir } = await launch({
       workspacePath:
         triggerType === CreateProjectTriggerType.Command
@@ -73,7 +74,7 @@ describe.each(CreateCasesConfigList)("create-case", async (item) => {
 
     if (triggerType === CreateProjectTriggerType.Command) {
       await startWithCommandPalette(page, {
-        folderName: "create-case",
+        folderName: CreateTypespecProjectFolder,
         command: "Create Typespec Project",
       })
     } else {
