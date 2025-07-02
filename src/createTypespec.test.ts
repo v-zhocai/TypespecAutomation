@@ -11,6 +11,7 @@ import {
   notEmptyFolderContinue,
 } from "./common/commonSteps"
 import { test } from "./common/utils"
+import { fileURLToPath } from "node:url";
 import fs from "node:fs"
 import path from "node:path"
 import {
@@ -27,7 +28,8 @@ import {
 } from "./config"
 
 beforeEach(() => {
-  const dir = path.resolve(__dirname, "./CreateTypespecProject")
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const dir = path.resolve(__dirname, "./create-case")
   if (fs.existsSync(dir)) {
     for (const file of fs.readdirSync(dir)) {
       const filePath = path.resolve(dir, file)
@@ -38,7 +40,7 @@ beforeEach(() => {
   }
 })
 
-describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
+describe.each(CreateCasesConfigList)("create-case", async (item) => {
   const {
     caseName,
     triggerType,
@@ -49,12 +51,13 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
   } = item
 
   test(caseName, async ({ launch }) => {
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
     const imagesLinuxPath = path.resolve(__dirname, "../images-linux")
     if (!fs.existsSync(imagesLinuxPath)) {
       fs.mkdirSync(imagesLinuxPath, { recursive: true });
     }
 
-    const workspacePath = path.resolve(__dirname, "./CreateTypespecProject")
+    const workspacePath = path.resolve(__dirname, "./create-case")
     const { page, extensionDir } = await launch({
       workspacePath:
         triggerType === CreateProjectTriggerType.Command
@@ -70,7 +73,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
 
     if (triggerType === CreateProjectTriggerType.Command) {
       await startWithCommandPalette(page, {
-        folderName: "CreateTypespecProject",
+        folderName: "create-case",
         command: "Create Typespec Project",
       })
     } else {
