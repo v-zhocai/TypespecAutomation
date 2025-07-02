@@ -265,7 +265,6 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   const cmd = page.getByRole("textbox", { name: /Terminal/ }).first()
   await cmd.click()
   await sleep(5)
-  console.log(`Installing extension from ${vsixPath} to ${extensionDir}`)
   await cmd.fill(
     `code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`
   )
