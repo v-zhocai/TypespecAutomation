@@ -23,13 +23,13 @@ import { test } from "./common/utils";
 import {
   CreateCasesConfigList,
   CreateProjectTriggerType,
-  CreateTypespecProjectFolder,
+  CreateTypespecProjectFolderPath,
 } from "./config";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 beforeEach(() => {
-  const dir = path.resolve(__dirname, CreateTypespecProjectFolder);
+  const dir = path.resolve(__dirname, CreateTypespecProjectFolderPath);
   if (fs.existsSync(dir)) {
     for (const file of fs.readdirSync(dir)) {
       const filePath = path.resolve(dir, file);
@@ -51,7 +51,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject-cases", async (item)
   } = item;
 
   test(caseName, async ({ launch }) => {
-    const workspacePath = path.resolve(__dirname, CreateTypespecProjectFolder);
+    const workspacePath = path.resolve(__dirname, CreateTypespecProjectFolderPath);
     const { page, extensionDir } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",
     });
@@ -64,7 +64,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject-cases", async (item)
 
     if (triggerType === CreateProjectTriggerType.Command) {
       await startWithCommandPalette(page, {
-        folderName: CreateTypespecProjectFolder,
+        folderName: path.basename(CreateTypespecProjectFolderPath),
         command: "Create Typespec Project",
       });
     } else {

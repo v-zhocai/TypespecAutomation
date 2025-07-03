@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Locator, Page } from "playwright";
 import { retry, sleep } from "./utils";
+import { screenshot } from "./utils";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -41,8 +42,6 @@ async function contrastResult(page: Page, res: string[], dir: string) {
   let resLength = 0;
   if (fs.existsSync(dir)) {
     resLength = fs.readdirSync(dir).length;
-    fs.rmSync(path.resolve(__dirname, "../../images-linux"), { recursive: true, force: true });
-    fs.rmSync(dir, { recursive: true, force: true });
   }
   if (resLength !== res.length) {
     await screenshot(page, "linux", "error");
