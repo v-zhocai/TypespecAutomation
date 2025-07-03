@@ -164,7 +164,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   const cmd = page.getByRole("textbox", { name: /Terminal/ }).first();
   await cmd.click();
   await sleep(5);
-  await cmd.fill(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
+  await cmd.fill(`code11 --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
   await screenshot(page, "linux", "start_install_extension");
   await page.keyboard.press("Enter");
   await sleep(8);
