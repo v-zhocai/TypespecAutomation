@@ -6,6 +6,8 @@ import path, { resolve } from "node:path"
 import { test as baseTest, inject } from "vitest"
 import { closeVscode } from "./commonSteps"
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 interface Context {
   page: Page
   extensionDir: string
@@ -114,7 +116,6 @@ async function retry(
     }
     count--
   }
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/error.png") })
   await closeVscode()
   throw new Error(errMessage)

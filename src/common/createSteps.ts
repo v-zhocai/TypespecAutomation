@@ -3,6 +3,8 @@ import { retry } from "./utils"
 import { fileURLToPath } from "node:url";
 import path from "node:path"
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 /**
  * When creating, select emitters
  * @param page vscode project
@@ -49,7 +51,6 @@ async function selectEmitters(page: Page, emitters?: string[]) {
     "Failed to find the selectEmitter box."
   );
   await page.getByRole("checkbox", { name: "Toggle all checkboxes" }).check()
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/select_emitter.png") })
   await page.keyboard.press("Enter")
 }
@@ -114,7 +115,6 @@ async function inputProjectName(page: Page) {
     },
     "Failed to find the project name input box."
   )
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/input_project_name.png") })
   await page.keyboard.press("Enter")
 }
@@ -142,7 +142,6 @@ async function inputServiceNameSpace(page: Page) {
     },
     "Failed to find the service namespace input box."
   )
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/input_service_namespace.png") })
   await page.keyboard.press("Enter")
 }
@@ -170,7 +169,6 @@ async function inputARMResourceProviderName(page: Page) {
     },
     "Failed to find the ARM Resource Provider name input box."
   )
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/input_ARM_Resource_name.png") })
   await page.keyboard.press("Enter")
 }
@@ -180,7 +178,6 @@ async function inputARMResourceProviderName(page: Page) {
  */
 
 async function startWithClick(page: Page) {
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/start_with_click.png") })
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/open_tabs.png") })
   await page.getByRole("button", { name: "Create TypeSpec Project" }).click()

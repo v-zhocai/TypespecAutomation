@@ -5,6 +5,8 @@ import { fileURLToPath } from "node:url";
 import fs from "node:fs"
 import path from "node:path"
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 /**
  * Before comparing the results, you need to check whether the conditions for result comparison are met.
  * @param page vscode object
@@ -37,7 +39,6 @@ async function preContrastResult(
  */
 async function contrastResult(page: Page, res: string[], dir: string) {
   let resLength = 0
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   if (fs.existsSync(dir)) {
     resLength = fs.readdirSync(dir).length
     fs.rmSync(path.resolve(__dirname, "../../images-linux"), { recursive: true, force: true })
@@ -62,7 +63,6 @@ async function startWithCommandPalette(
   await sleep(2)
   await page.locator("li").filter({ hasText: folderName }).first().click()
   await sleep(2)
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/open_top_panel.png") })
   await page
     .getByRole("textbox", { name: "Search files by name (append" })
@@ -99,7 +99,6 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
   ) {
     const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a")
     await target.click({ button: "right" })
-    const __dirname = path.dirname(fileURLToPath(import.meta.url));
     await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/click_main.png") })
     await page.getByRole("menuitem", { name: command }).click()
     await page.screenshot({ path: path.resolve(__dirname, `../../images-linux/` +
@@ -112,7 +111,6 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
         : "openapi.3.0.yaml"
     const target = page.getByRole("treeitem", { name: targetName }).locator("a")
     await target.click({ button: "right" })
-    const __dirname = path.dirname(fileURLToPath(import.meta.url));
     await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/openapi.3.0.png") })
     await sleep(3)
     await page
@@ -129,7 +127,6 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
 async function selectFolder(page: Page, file: string = "") {
   await sleep(10)
   await keyboard.type(file)
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/select_folder.png") })
   await keyboard.pressKey(Key.Enter)
   await keyboard.releaseKey(Key.Enter)
@@ -168,7 +165,6 @@ async function notEmptyFolderContinue(page: Page) {
     "Failed to match the description for the non-empty folder cases",
     1
   )
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));  
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/not_empty_folder_continue.png") })
   await yesBtn!.click()
 }
@@ -201,7 +197,6 @@ async function installExtension(page: Page) {
  * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
  */
 async function installExtensionForFile(page: Page, fullFilePath: string) {
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/open_vscode.png") })
   await page
     .getByRole("tab", { name: /Extensions/ })
@@ -257,7 +252,6 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
  * Install plugins using the command
  */
 async function installExtensionForCommand(page: Page, extensionDir: string) {
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const vsixPath =
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix")
   await sleep(5)

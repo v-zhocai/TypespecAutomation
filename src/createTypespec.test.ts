@@ -28,8 +28,9 @@ import {
   CreateProjectTriggerType,
 } from "./config"
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 beforeEach(() => {
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const dir = path.resolve(__dirname, CreateTypespecProjectFolder)
   if (fs.existsSync(dir)) {
     for (const file of fs.readdirSync(dir)) {
@@ -52,7 +53,6 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject-cases", async (item)
   } = item
 
   test(caseName, async ({ launch }) => {
-    const __dirname = path.dirname(fileURLToPath(import.meta.url));
     const imagesLinuxPath = path.resolve(__dirname, "../images-linux")
     if (!fs.existsSync(imagesLinuxPath)) {
       fs.mkdirSync(imagesLinuxPath, { recursive: true });
