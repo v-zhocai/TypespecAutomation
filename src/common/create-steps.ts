@@ -1,6 +1,5 @@
 import { Page } from "playwright";
-import { retry } from "./utils";
-import { screenshot } from "./utils";
+import { retry, screenshot } from "./utils";
 
 /**
  * When creating, select emitters
@@ -35,14 +34,12 @@ async function selectEmitters(page: Page, emitters?: string[]) {
           const nameDescription = nameBoxLocatorText?.slice(emitter.name.length);
 
           if (!nameExists) {
-            console.error(`Failed to find the following emitter name: "${emitter.name}".`);
+            // Failed to find the following emitter name: "${emitter.name}".
             return false;
           }
 
           if (nameDescription?.includes(emitter.description) === false) {
-            console.error(
-              `Description mismatched, expected "${emitter.description}", got "${nameDescription}".`,
-            );
+            // Description mismatched, expected "${emitter.description}", got "${nameDescription}".
             return false;
           }
           return true;
@@ -87,9 +84,7 @@ async function selectTemplate(page: Page, templateName: string, templateNameDesc
       if (templateNameDescription === templateListDescription) {
         return true;
       } else {
-        console.error(
-          `Description mismatched, expected "${templateNameDescription}", got "${templateListDescription}".`,
-        );
+        // `Description mismatched, expected "${templateNameDescription}", got "${templateListDescription}".`
         return false;
       }
     },
@@ -119,9 +114,7 @@ async function inputProjectName(page: Page) {
       if (titleBoxText === titleInfoDescription) {
         return true;
       } else {
-        console.error(
-          `Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`,
-        );
+        // Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".
         return false;
       }
     },
@@ -139,9 +132,4 @@ async function startWithClick(page: Page) {
   await page.getByRole("button", { name: "Create TypeSpec Project" }).click();
 }
 
-export {
-  inputProjectName,
-  selectEmitters,
-  selectTemplate,
-  startWithClick,
-};
+export { inputProjectName, selectEmitters, selectTemplate, startWithClick };
