@@ -1,6 +1,6 @@
-import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { mkdir, rm } from "fs/promises";
 import { beforeEach, describe } from "vitest";
 import {
   closeVscode,
@@ -24,20 +24,16 @@ import {
   CreateCasesConfigList,
   CreateProjectTriggerType,
   CreateTypespecProjectFolderPath,
-} from "./config";
+} from "./create-typespec.config";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-beforeEach(() => {
+beforeEach(async () => {
   const dir = path.resolve(__dirname, CreateTypespecProjectFolderPath);
-  if (fs.existsSync(dir)) {
-    for (const file of fs.readdirSync(dir)) {
-      const filePath = path.resolve(dir, file);
-      fs.rmSync(filePath, { recursive: true, force: true });
-    }
-  } else {
-    fs.mkdirSync(dir, { recursive: true });
-  }
+  try {
+    await rm(dir, { recursive: true});
+  } catch {}
+    await mkdir(dir, { recursive: true });
 });
 
 describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
