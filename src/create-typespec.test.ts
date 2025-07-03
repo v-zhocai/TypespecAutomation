@@ -40,7 +40,7 @@ beforeEach(() => {
   }
 });
 
-describe.each(CreateCasesConfigList)("CreateTypespecProject-cases", async (item) => {
+describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
   const {
     caseName,
     triggerType,

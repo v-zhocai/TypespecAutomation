@@ -85,35 +85,6 @@ async function startWithCommandPalette(
   await listForCreate!.click()
 }
 
-/**
- * Start the Project with Right click on the file
- * @param page vscode object
- * @param command create, emit or import
- * @param type specify whether the click is on file, folder or empty folder
- * command: specify which command to execute to the project
- */
-async function startWithRightClick(page: Page, command: string, type?: string) {
-  if (command === "Emit from TypeSpec" || command === "Preview API Documentation") {
-    const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a");
-    await target.click({ button: "right" });
-    await screenshot(page, "linux", "click_main");
-    await page.getByRole("menuitem", { name: command }).click();
-    await screenshot(page, "linux", `${command == "Emit from TypeSpec" ? "emit" : "preview"}_typespec`);
-  } else if (command == "Import TypeSpec from Openapi 3") {
-    const targetName =
-      type === "emptyfolder"
-        ? "ImportTypespecProjectEmptyFolder"
-        : "openapi.3.0.yaml"
-    const target = page.getByRole("treeitem", { name: targetName }).locator("a");
-    await target.click({ button: "right" });
-    await screenshot(page, "linux", "openapi.3.0");
-    await sleep(3);
-    await page
-      .getByRole("menuitem", { name: "Import TypeSpec from OpenAPI" })
-      .click()
-    await screenshot(page, "linux", "import_typespec");
-  }
-}
 
 /**
  * In vscode, when you need to select a folder or a file, call this method
@@ -166,71 +137,8 @@ async function notEmptyFolderContinue(page: Page) {
     "Failed to match the description for the non-empty folder cases",
     1,
   );
-  await page.screenshot({
-    path: path.resolve(__dirname, "../../images-linux/not_empty_folder_continue.png"),
-  });
+  await screenshot(page, "linux", "not_empty_folder_continue");
   await yesBtn!.click();
-}
-
-/**
- * Install plugins directly from a local file
- * @param page vscode object
- * @param fullFilePath The absolute address of the plugin `vsix` needs to be obtained using the path.resolve method
- */
-async function installExtensionForFile(page: Page, fullFilePath: string) {
-  await screenshot(page, "linux", "open_vscode");
-  await page
-    .getByRole("tab", { name: /Extensions/ })
-    .locator("a")
-    .click();
-  await screenshot(page, "linux", "change_extension");
-  let moreItem: Locator;
-  await retry(
-    page,
-    10,
-    async () => {
-      moreItem = page.getByLabel(/Views and More Actions/).first();
-      return (await moreItem.count()) > 0;
-    },
-    "Failed to find more item",
-    1,
-  );
-  await moreItem!.click();
-  await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/more_item.png") });
-  let fromInstall: Locator;
-  await retry(
-    page,
-    10,
-    async () => {
-      fromInstall = page.getByLabel(/Install from VSIX/).first();
-      return (await fromInstall.count()) > 0;
-    },
-    "Failed to find install from VSIX item",
-    1,
-  );
-  await fromInstall!.click();
-  await selectFolder(page, fullFilePath);
-  await retry(
-    page,
-    30,
-    async () => {
-      const installed = page.getByText(/Completed installing/).first();
-      return (await installed.count()) > 0;
-    },
-    "Failed to find installed status",
-    1,
-  );
-  await page.screenshot({
-    path: path.resolve(__dirname, "../../images-linux/extension_installed.png"),
-  });
-  await sleep(5);
-  await page
-    .getByRole("tab", { name: /Explorer/ })
-    .locator("a")
-    .click();
-  await page.screenshot({
-    path: path.resolve(__dirname, "../../images-linux/change_explorer.png"),
-  });
 }
 
 /**
@@ -241,7 +149,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix")
   await sleep(5);
   await page.keyboard.press("Control+Backquote");
-  await page.screenshot({ path: path.resolve(__dirname, "../../images-linux/open_terminal.png") });
+  await screenshot(page, "linux", "open_terminal");
   await retry(
     page,
     10,
@@ -256,9 +164,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   await cmd.click();
   await sleep(5);
   await cmd.fill(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
-  await page.screenshot({
-    path: path.resolve(__dirname, "../../images-linux/start_install_extension.png"),
-  });
+  await screenshot(page, "linux", "start_install_extension");
   await page.keyboard.press("Enter");
   await sleep(8);
   await page
@@ -287,9 +193,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
     1,
   );
   await page.getByLabel("Explorer").first().click();
-  await page.screenshot({
-    path: path.resolve(__dirname, "../../images-linux/start_install_extension_result.png"),
-  });
+  await screenshot(page, "linux", "install_extension_result");
 }
 
 async function closeVscode() {
@@ -322,10 +226,8 @@ export {
   createTestFile,
   deleteTestFile,
   installExtensionForCommand,
-  installExtensionForFile,
   notEmptyFolderContinue,
   preContrastResult,
   selectFolder,
   startWithCommandPalette,
-  startWithRightClick,
 };
