@@ -146,7 +146,7 @@ async function notEmptyFolderContinue(page: Page) {
  */
 async function installExtensionForCommand(page: Page, extensionDir: string) {
   const vsixPath =
-    process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix")
+    process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix");
   await sleep(5);
   await page.keyboard.press("Control+Backquote");
   await screenshot(page, "linux", "open_terminal");

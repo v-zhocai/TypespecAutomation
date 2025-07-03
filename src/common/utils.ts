@@ -109,8 +109,8 @@ async function retry(
     count--;
   }
   await screenshot(page, "linux", "error");
-  await closeVscode()
-  throw new Error(errMessage)
+  await closeVscode();
+  throw new Error(errMessage);
 }
 
 /**
