@@ -49,3 +49,10 @@ jobs:
         ls -al
         ls -al images-linux || true
       displayName: "Debug: List workspace and images-linux"
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: 'images-linux'
+        artifactName: 'screenshots'
+        publishLocation: 'Container'
+      displayName: 'Publish Screenshots'
