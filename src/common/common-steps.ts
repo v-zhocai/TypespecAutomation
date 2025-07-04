@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { Locator, Page } from "playwright";
 import { retry, screenshot, sleep } from "./utils";
+const ks = require('node-key-sender');
 
 const __dirname = import.meta.dirname;
 const projectRoot = path.resolve(__dirname, "../../");
@@ -93,10 +94,13 @@ async function startWithCommandPalette(
  */
 async function selectFolder(page: Page, file: string = "") {
   await sleep(10);
-  await keyboard.type(file);
+  ks.sendText(file);
+  await sleep(2);
+  ks.sendKey('enter');
+  // await keyboard.type(file);
   await screenshot(page, "linux", "select_folder");
-  await keyboard.pressKey(Key.Enter);
-  await keyboard.releaseKey(Key.Enter);
+  // await keyboard.pressKey(Key.Enter);
+  // await keyboard.releaseKey(Key.Enter);
   await sleep(3);
 }
 
