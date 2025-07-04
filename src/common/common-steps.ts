@@ -2,12 +2,12 @@ import { Key, keyboard } from "@nut-tree-fork/nut-js";
 import { rm } from "fs/promises";
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { Locator, Page } from "playwright";
 import { retry, screenshot, sleep } from "./utils";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const imagesPath = path.resolve(__dirname, "../../images-linux");
+const __dirname = import.meta.dirname;
+const projectRoot = path.resolve(__dirname, "../../");
+const imagesPath = path.resolve(projectRoot, "images-linux");
 
 /**
  * Before comparing the results, you need to check whether the conditions for result comparison are met.
@@ -164,7 +164,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   const cmd = page.getByRole("textbox", { name: /Terminal/ }).first();
   await cmd.click();
   await sleep(5);
-  await cmd.fill(`code11 --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
+  await cmd.fill(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
   await screenshot(page, "linux", "start_install_extension");
   await page.keyboard.press("Enter");
   await sleep(8);
