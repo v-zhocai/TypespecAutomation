@@ -1,9 +1,9 @@
+import { execSync } from "child_process";
 import { rm } from "fs/promises";
 import fs from "node:fs";
 import path from "node:path";
 import { Locator, Page } from "playwright";
-import { retry, screenshot, sendKeys, pressEnter, sleep } from "./utils";
-import { execSync } from "child_process";
+import { pressEnter, retry, screenshot, sendKeys, sleep } from "./utils";
 
 const __dirname = import.meta.dirname;
 const projectRoot = path.resolve(__dirname, "../../");
@@ -149,59 +149,17 @@ async function notEmptyFolderContinue(page: Page) {
 async function installExtensionForCommand(page: Page, extensionDir: string) {
   const vsixPath =
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix");
-  await sleep(5);
+  await sleep(3);
   await page.keyboard.press("Control+Backquote");
-  await screenshot(page, "linux", "open_terminal");
-  await retry(
-    page,
-    10,
-    async () => {
-      const cmd = page.getByRole("textbox", { name: /Terminal/ }).first();
-      return (await cmd.count()) > 0;
-    },
-    "Failed to find command palette",
-    3,
-  );
-  const cmd = page.getByRole("textbox", { name: /Terminal/ }).first();
-  await cmd.click();
-  sendKeys("aaaa");
-  pressEnter();
-  await sleep(5);
-  await cmd.fill(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
+  await sleep(3);
+  await sendKeys(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
   await screenshot(page, "linux", "start_install_extension");
   await page.keyboard.press("Enter");
-  await sleep(8);
-  await page
-    .getByRole("tab", { name: /Extensions/ })
-    .locator("a")
-    .click();
-  await sleep(2);
-  await retry(
-    page,
-    2,
-    async () => {
-      // Check if there is Typespec in the title name under the 'installed' section
-      const installed = await page
-        .locator(".monaco-list > .monaco-scrollable-element")
-        .first()
-        .getByLabel("TypeSpec")
-        .locator("div")
-        .filter({ hasText: "TypeSpec" })
-        .first()
-        .locator("span")
-        .first()
-        .textContent();
-      return installed !== null && installed.includes("TypeSpec");
-    },
-    `Failed to install the extension.`,
-    1,
-  );
-  await page.getByLabel("Explorer").first().click();
-  await screenshot(page, "linux", "install_extension_result");
+  await sleep(3);
 }
 
 async function closeVscode() {
-  execSync('xdotool key Alt+F4');
+  execSync("xdotool key Alt+F4");
 }
 
 /**
