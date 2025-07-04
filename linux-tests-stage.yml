@@ -42,6 +42,8 @@ jobs:
         VSCODE_E2E_DOWNLOAD_PATH: $(VSCODE_E2E_DOWNLOAD_PATH)
         ELECTRON_DISABLE_SANDBOX: "1"
         BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
+        JAVA_HOME: $(JAVA_HOME_8_X64)
+        PATH: $(JAVA_HOME_8_X64)\bin;$(PATH)
       continueOnError: true
     
     - script: |
