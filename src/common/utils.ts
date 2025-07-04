@@ -127,15 +127,15 @@ async function screenshot(page: Page, os: "linux", name: string) {
 }
 
 /**
- * 模拟全局键盘输入
- * @param {string} text 要输入的文本
+ * Simulate global keyboard input
+ * @param {string} text The text to input
  */
 export function sendKeys(text:string) {
   execSync(`xdotool type --delay 100 "${text}"`);
 }
 
 /**
- * 模拟按下回车键
+ * Simulate pressing the Enter key
  */
 export function pressEnter() {
   execSync(`xdotool key Return`);
