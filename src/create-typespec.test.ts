@@ -86,7 +86,6 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
     const { page, extensionDir } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",
     });
-    await page.pause()
     if (!isEmptyFolder) {
       createTestFile(workspacePath);
     }
