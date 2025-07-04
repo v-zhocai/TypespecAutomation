@@ -1,10 +1,9 @@
-import { Key, keyboard } from "@nut-tree-fork/nut-js";
 import { rm } from "fs/promises";
 import fs from "node:fs";
 import path from "node:path";
 import { Locator, Page } from "playwright";
 import { retry, screenshot, sendKeys, pressEnter, sleep } from "./utils";
-const ks = require('node-key-sender');
+import { execSync } from "child_process";
 
 const __dirname = import.meta.dirname;
 const projectRoot = path.resolve(__dirname, "../../");
@@ -98,11 +97,7 @@ async function selectFolder(page: Page, file: string = "") {
   await screenshot(page, "linux", "select_folder_text");
   await sleep(2);
   pressEnter();
-  // ks.sendKey('enter');
-  // await keyboard.type(file);
   await screenshot(page, "linux", "select_folder");
-  // await keyboard.pressKey(Key.Enter);
-  // await keyboard.releaseKey(Key.Enter);
   await sleep(3);
 }
 
@@ -204,8 +199,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
 }
 
 async function closeVscode() {
-  await keyboard.pressKey(Key.LeftAlt, Key.F4);
-  await keyboard.releaseKey(Key.LeftAlt, Key.F4);
+  execSync('xdotool key Alt+F4');
 }
 
 /**

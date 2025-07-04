@@ -32,7 +32,6 @@ jobs:
       displayName: "Install deps and download VSCode"
 
     - script: |
-        java --version
         export DISPLAY=:99
         export VSCODE_E2E_DOWNLOAD_PATH=$(VSCODE_E2E_DOWNLOAD_PATH)
         npm run test:create

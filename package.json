@@ -12,7 +12,6 @@
     "test:preview": "vitest --root ./src/previewTypespec"
   },
   "dependencies": {
-    "@nut-tree-fork/nut-js": "^4.2.6",
     "@types/node": "^20.12.8",
     "@types/screenshot-desktop": "^1.12.3",
     "@typespec/compiler": "1.1.0",
@@ -24,7 +23,6 @@
     "@typespec/http-server-js": "0.58.0-alpha.15",
     "@vscode/test-electron": "^2.3.9",
     "moment": "^2.30.1",
-    "node-key-sender": "^1.0.11",
     "playwright": "^1.51.1",
     "screenshot-desktop": "^1.15.1",
     "typescript": "^5.6.2",
