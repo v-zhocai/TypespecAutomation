@@ -12,7 +12,7 @@ jobs:
     - script: |
         sudo apt-get update
         sudo apt-get install -y \
-          imagemagick x11-xserver-utils
+          imagemagick x11-xserver-utils xdotool
       displayName: "Install Linux Dependencies"
 
     - script: |
@@ -43,12 +43,17 @@ jobs:
         VSCODE_E2E_DOWNLOAD_PATH: $(VSCODE_E2E_DOWNLOAD_PATH)
         ELECTRON_DISABLE_SANDBOX: "1"
         BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
-        JAVA_HOME: $(JAVA_HOME_11_X64)
-        PATH: $(JAVA_HOME_11_X64)/bin:$(PATH) 
-      continueOnError: true
+        continueOnError: true
     
     - script: |
         pwd
         ls -al
         ls -al images-linux || true
       displayName: "Debug: List workspace and images-linux"
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: 'images-linux'
+        artifactName: 'screenshots'
+        publishLocation: 'Container'
+      displayName: 'Publish Screenshots'

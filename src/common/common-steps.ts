@@ -3,7 +3,7 @@ import { rm } from "fs/promises";
 import fs from "node:fs";
 import path from "node:path";
 import { Locator, Page } from "playwright";
-import { retry, screenshot, sleep } from "./utils";
+import { retry, screenshot, sendKeys, pressEnter, sleep } from "./utils";
 const ks = require('node-key-sender');
 
 const __dirname = import.meta.dirname;
@@ -44,7 +44,7 @@ async function contrastResult(page: Page, res: string[], dir: string) {
   let resLength = 0;
   if (fs.existsSync(dir)) {
     resLength = fs.readdirSync(dir).length;
-    await rm(imagesPath, { recursive: true });
+    // await rm(imagesPath, { recursive: true });
   }
   if (resLength !== res.length) {
     await screenshot(page, "linux", "error");
@@ -94,9 +94,11 @@ async function startWithCommandPalette(
  */
 async function selectFolder(page: Page, file: string = "") {
   await sleep(10);
-  ks.sendText(file);
+  sendKeys(file);
+  await screenshot(page, "linux", "select_folder_text");
   await sleep(2);
-  ks.sendKey('enter');
+  pressEnter();
+  // ks.sendKey('enter');
   // await keyboard.type(file);
   await screenshot(page, "linux", "select_folder");
   // await keyboard.pressKey(Key.Enter);

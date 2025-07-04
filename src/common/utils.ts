@@ -4,6 +4,7 @@ import path, { resolve } from "node:path";
 import { Page, _electron } from "playwright";
 import { test as baseTest, inject } from "vitest";
 import { closeVscode } from "./common-steps";
+import { execSync } from "child_process";
 
 const __dirname = import.meta.dirname;
 const projectRoot = path.resolve(__dirname, "../../");
@@ -123,6 +124,21 @@ async function retry(
 async function screenshot(page: Page, os: "linux", name: string) {
   const filePath = path.join(imagesPath, `${name}.png`);
   await page.screenshot({ path: filePath });
+}
+
+/**
+ * 模拟全局键盘输入
+ * @param {string} text 要输入的文本
+ */
+export function sendKeys(text:string) {
+  execSync(`xdotool type --delay 100 "${text}"`);
+}
+
+/**
+ * 模拟按下回车键
+ */
+export function pressEnter() {
+  execSync(`xdotool key Return`);
 }
 
 export { retry, screenshot, sleep, test };
