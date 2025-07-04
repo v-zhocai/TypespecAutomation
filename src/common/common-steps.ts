@@ -152,21 +152,8 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   await sleep(5);
   await page.keyboard.press("Control+Backquote");
   await screenshot(page, "linux", "open_terminal");
-  await retry(
-    page,
-    10,
-    async () => {
-      const cmd = page.getByRole("textbox", { name: /Terminal/ }).first();
-      return (await cmd.count()) > 0;
-    },
-    "Failed to find command palette",
-    3,
-  );
   const cmd = page.getByRole("textbox", { name: /Terminal/ }).first();
   await cmd.click();
-  sendKeys("aaaa");
-  pressEnter();
-  await sleep(5);
   await cmd.fill(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
   await screenshot(page, "linux", "start_install_extension");
   await page.keyboard.press("Enter");
