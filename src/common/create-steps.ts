@@ -184,8 +184,8 @@ async function inputARMResourceProviderName(page: Page) {
 async function startWithClick(page: Page) {
   await page.getByLabel("Explorer (Ctrl+Shift+E) - 1").nth(2).click();
   await sleep(3);
-  await page.getByRole("button", { name: "Create TypeSpec Project" }).click();
   await screenShot.screenshot(page, "linux", "start_with_click");
+  await page.getByRole("button", { name: "Create TypeSpec Project" }).click();
 }
 
 export { inputProjectName, selectEmitters, selectTemplate, inputServiceNameSpace, inputARMResourceProviderName, startWithClick };
