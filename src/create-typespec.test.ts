@@ -18,7 +18,7 @@ import {
   selectTemplate,
   startWithClick,
 } from "./common/create-steps";
-import { test } from "./common/utils";
+import { test, screenShot } from "./common/utils";
 
 const __dirname = import.meta.dirname;
 const projectRoot = path.resolve(__dirname, "../");
@@ -108,6 +108,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
   } = item;
 
   test(caseName, async ({ launch }) => {
+    screenShot.setCaseName("caseName");
     const workspacePath = CreateTypespecProjectFolderPath;
     const { page, extensionDir } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",

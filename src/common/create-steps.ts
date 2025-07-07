@@ -1,5 +1,5 @@
 import { Page } from "playwright";
-import { retry, screenshot } from "./utils";
+import { retry, screenShot } from "./utils";
 
 /**
  * When creating, select emitters
@@ -50,7 +50,7 @@ async function selectEmitters(page: Page, emitters?: string[]) {
     "Failed to find the selectEmitter box.",
   );
   await page.getByRole("checkbox", { name: "Toggle all checkboxes" }).check();
-  await screenshot(page, "linux", "select_emitter");
+  await screenShot.screenshot(page, "linux", "select_emitter");
   await page.keyboard.press("Enter");
 }
 
@@ -90,7 +90,7 @@ async function selectTemplate(page: Page, templateName: string, templateNameDesc
     },
     "Failed to find the selectTemplate box.",
   );
-  await screenshot(page, "linux", "select_template");
+  await screenShot.screenshot(page, "linux", "select_template");
   await templateListName!.first().click();
 }
 
@@ -120,7 +120,7 @@ async function inputProjectName(page: Page) {
     },
     "Failed to find the project name input box.",
   );
-  await screenshot(page, "linux", "input_project_name");
+  await screenShot.screenshot(page, "linux", "input_project_name");
   await page.keyboard.press("Enter");
 }
 
@@ -128,7 +128,7 @@ async function inputProjectName(page: Page) {
  * When creating, start with click
  */
 async function startWithClick(page: Page) {
-  await screenshot(page, "linux", "start_with_click");
+  await screenShot.screenshot(page, "linux", "start_with_click");
   await page.getByLabel("Explorer (Ctrl+Shift+E) - 1").nth(2).click()
   await page.getByRole("button", { name: "Create TypeSpec Project" }).click();
 }

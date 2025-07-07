@@ -3,7 +3,7 @@ import { rm } from "fs/promises";
 import fs from "node:fs";
 import path from "node:path";
 import { Locator, Page } from "playwright";
-import { pressEnter, retry, screenshot, sendKeys, sleep } from "./utils";
+import { pressEnter, retry, screenShot, sendKeys, sleep } from "./utils";
 
 const __dirname = import.meta.dirname;
 const projectRoot = path.resolve(__dirname, "../../");
@@ -46,7 +46,7 @@ async function contrastResult(page: Page, res: string[], dir: string) {
     // await rm(imagesPath, { recursive: true });
   }
   if (resLength !== res.length) {
-    await screenshot(page, "linux", "error");
+    await screenShot.screenshot(page, "linux", "error");
     throw new Error("Failed to matches all files");
   }
 }
@@ -65,7 +65,7 @@ async function startWithCommandPalette(
   await sleep(2);
   await page.locator("li").filter({ hasText: folderName }).first().click();
   await sleep(2);
-  await screenshot(page, "linux", "open_top_panel");
+  await screenShot.screenshot(page, "linux", "open_top_panel");
   await page
     .getByRole("textbox", { name: "Search files by name (append" })
     .first()
@@ -83,7 +83,7 @@ async function startWithCommandPalette(
     },
     "Failed to find the specified option",
   );
-  await screenshot(page, "linux", "input_command");
+  await screenShot.screenshot(page, "linux", "input_command");
   await listForCreate!.click();
 }
 
@@ -94,10 +94,10 @@ async function startWithCommandPalette(
 async function selectFolder(page: Page, file: string = "") {
   await sleep(10);
   sendKeys(file);
-  await screenshot(page, "linux", "select_folder_text");
+  await screenShot.screenshot(page, "linux", "select_folder_text");
   await sleep(2);
   pressEnter();
-  await screenshot(page, "linux", "select_folder");
+  await screenShot.screenshot(page, "linux", "select_folder");
   await sleep(3);
 }
 
@@ -139,7 +139,7 @@ async function notEmptyFolderContinue(page: Page) {
     "Failed to match the description for the non-empty folder cases",
     1,
   );
-  await screenshot(page, "linux", "not_empty_folder_continue");
+  await screenShot.screenshot(page, "linux", "not_empty_folder_continue");
   await yesBtn!.click();
 }
 
@@ -155,7 +155,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   await cmd.click();
   await cmd.fill(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
   await page.keyboard.press("Enter");
-  await screenshot(page, "linux", "start_install_extension");
+  await screenShot.screenshot(page, "linux", "start_install_extension");
 }
 
 async function closeVscode() {

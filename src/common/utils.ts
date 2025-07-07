@@ -110,21 +110,40 @@ async function retry(
     }
     count--;
   }
-  await screenshot(page, "linux", "error");
+  await screenShot.screenshot(page, "linux", "error");
   await closeVscode();
   throw new Error(errMessage);
 }
 
 /**
- * Take a screenshot with a consistent path pattern.
- * @param page playwright page
- * @param os operating system, e.g. "linux"
- * @param name screenshot name, without extension
+ * ScreenshotHelper is a utility class for managing and taking screenshots during tests.
+ * It allows you to set a case name, and generates screenshot files with a consistent naming pattern
+ * that includes the case name and a custom step name.
  */
-async function screenshot(page: Page, os: "linux", name: string) {
-  const filePath = path.join(imagesPath, `${name}.png`);
-  await page.screenshot({ path: filePath });
+class ScreenshotHelper {
+  caseName: string;
+
+  constructor(caseName: string) {
+    this.caseName = caseName;
+  }
+
+  async setCaseName(caseName: string) {
+    this.caseName = caseName;
+  }
+
+  /**
+   * Take a screenshot with a consistent path pattern.
+   * @param page playwright page
+   * @param os operating system, e.g. "linux"
+   * @param name screenshot name, without extension
+   */
+  async screenshot(page: Page, os: "linux", name: string) {
+    const filePath = path.join(imagesPath, `${this.caseName}_${name}.png`);
+    await page.screenshot({ path: filePath });
+  }
 }
+
+const screenShot = new ScreenshotHelper("default");
 
 /**
  * Simulate global keyboard input
@@ -141,4 +160,4 @@ export function pressEnter() {
   execSync(`xdotool key Return`);
 }
 
-export { retry, screenshot, sleep, test };
+export { retry, screenShot, sleep, test };
