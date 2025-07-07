@@ -10,6 +10,6 @@ export default defineConfig({
       VSCODE_E2E_TRACE: "on",
     },
     globalSetup: ["./common/download-setup.ts"],
-    retry: 1,
+    retry: 0,
   },
 });

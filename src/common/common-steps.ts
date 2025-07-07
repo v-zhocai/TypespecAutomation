@@ -44,6 +44,7 @@ async function contrastResult(page: Page, res: string[], dir: string) {
   let resLength = 0;
   if (fs.existsSync(dir)) {
     resLength = fs.readdirSync(dir).length;
+    console.log("dir", dir)
     // await rm(imagesPath, { recursive: true });
   }
   if (resLength !== res.length) {
@@ -148,6 +149,7 @@ async function notEmptyFolderContinue(page: Page) {
  * Install Typespec extension using the command line in VSCode's terminal.
  */
 async function installExtensionForCommand(page: Page, extensionDir: string) {
+  console.log("into installextension, extensionDir", extensionDir);
   const vsixPath =
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix");
   await sleep(5);

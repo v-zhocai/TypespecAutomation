@@ -158,6 +158,54 @@ CreateCasesConfigList.push(
   },
 );
 
+templateName = "(stand alone) Azure Data Plane Service Project";
+templateNameDescription = "Create a stand alone project representing an Azure service Data Plane API";
+expectedResults = [
+  "examples",
+  "node_modules",
+  ".gitignore",
+  "client.tsp",
+  "main.tsp",
+  "package.json",
+  "package-lock.json",
+  "tspconfig.yaml",
+];
+
+CreateCasesConfigList.push(
+  {
+    triggerType: CreateProjectTriggerType.Command,
+    caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Command} EmptyFolder`,
+    templateName,
+    templateNameDescription,
+    isEmptyFolder: true,
+    expectedResults,
+  },
+);
+
+templateName = "(stand alone) Azure Resource Manager Service Project";
+templateNameDescription = "Create a stand alone project representing an Azure service ARM API";
+expectedResults = [
+  "examples",
+  "node_modules",
+  ".gitignore",
+  "employee.tsp",
+  "main.tsp",
+  "package.json",
+  "package-lock.json",
+  "tspconfig.yaml",
+];
+
+CreateCasesConfigList.push(
+  {
+    triggerType: CreateProjectTriggerType.Command,
+    caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Command} NonEmptyFolder`,
+    templateName,
+    templateNameDescription,
+    isEmptyFolder: false,
+    expectedResults,
+  }
+);
+
 const DataPlaneAPIProviderNameTemplates = [
   "(rest-api-spec repo) Azure Data Plane Service Project",
   "(stand alone) Azure Data Plane Service Project",
@@ -189,6 +237,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
   test(caseName, async ({ launch }) => {
     screenShot.setCaseName(caseName);
     const workspacePath = CreateTypespecProjectFolderPath;
+    console.log("workspacePath", workspacePath);
     const { page, extensionDir } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",
     });
