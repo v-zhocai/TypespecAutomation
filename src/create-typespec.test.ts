@@ -41,9 +41,9 @@ type CreateConfigType = {
 const CreateTypespecProjectFolderPath = path.resolve(tempDir, "CreateTypespecProject");
 
 const createCase = "CreateTypespecProject";
-const templateName = "Generic Rest API";
-const templateNameDescription = "Create a project representing a generic REST API service.";
-const expectedResults = [
+let templateName = "Generic Rest API";
+let templateNameDescription = "Create a project representing a generic REST API service.";
+let expectedResults = [
   ".gitignore",
   "main.tsp",
   "node_modules",
@@ -62,6 +62,32 @@ const CreateCasesConfigList: CreateConfigType[] = [
     expectedResults,
   },
 ];
+
+templateName = "Typespec library"
+templateNameDescription = "Build your own TypeSpec library with custom types, decorators or linters."
+expectedResults = [
+  "lib",
+  "node_modules",
+  "src",
+  "test",
+  ".gitignore",
+  "eslint.config.js",
+  "package.json",
+  "package-lock.json",
+  "prettierrc.yaml",
+  "tsconfig.json",
+]
+
+CreateCasesConfigList.push(
+  {
+    triggerType: CreateProjectTriggerType.Click,
+    caseName: `${createCase}-${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Click} EmptyFolder`,
+    templateName,
+    templateNameDescription,
+    isEmptyFolder: true,
+    expectedResults,
+  },
+);
 
 beforeEach(async () => {
   const dir = CreateTypespecProjectFolderPath;

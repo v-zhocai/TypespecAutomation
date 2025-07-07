@@ -129,6 +129,7 @@ async function inputProjectName(page: Page) {
  */
 async function startWithClick(page: Page) {
   await screenshot(page, "linux", "start_with_click");
+  await page.getByLabel("Explorer (Ctrl+Shift+E) - 1").nth(2).click()
   await page.getByRole("button", { name: "Create TypeSpec Project" }).click();
 }
 
