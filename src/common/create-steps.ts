@@ -141,7 +141,7 @@ async function inputServiceNameSpace(page: Page) {
       if (titleBoxText === titleInfoDescription){
         return true
       } else {
-        console.error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
+        // `Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".
         return false
       }
     },
@@ -168,7 +168,7 @@ async function inputARMResourceProviderName(page: Page) {
       if (titleBoxText === titleInfoDescription){
         return true
       } else {
-        console.error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
+        // `Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".
         return false
       }
     },

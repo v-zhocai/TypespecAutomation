@@ -149,13 +149,19 @@ async function notEmptyFolderContinue(page: Page) {
  * Install Typespec extension using the command line in VSCode's terminal.
  */
 async function installExtensionForCommand(page: Page, extensionDir: string) {
-  console.log("into installextension, extensionDir", extensionDir);
+  console.log("extensionDir", extensionDir);
   const vsixPath =
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix");
+  console.log("vsixPath", vsixPath);
+  await screenShot.screenshot(page, "linux", "before_open_terminal");
   await sleep(5);
   await page.keyboard.press("Control+Backquote");
+  await sleep(5);
   const cmd = page.getByRole("textbox", { name: /Terminal/ }).first();
+  await sleep(5);
   await cmd.click();
+  await screenShot.screenshot(page, "linux", "open_terminal");
+  await sleep(5);
   await cmd.fill(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
   await page.keyboard.press("Enter");
   await sleep(5);

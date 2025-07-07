@@ -244,7 +244,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
     if (!isEmptyFolder) {
       createTestFile(workspacePath);
     }
-
+    console.log("into install extension")
     await installExtensionForCommand(page, extensionDir);
 
     if (triggerType === CreateProjectTriggerType.Command) {
