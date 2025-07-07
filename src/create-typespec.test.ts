@@ -81,7 +81,7 @@ expectedResults = [
 CreateCasesConfigList.push(
   {
     triggerType: CreateProjectTriggerType.Click,
-    caseName: `${createCase}-${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Click} EmptyFolder`,
+    caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Click} EmptyFolder`,
     templateName,
     templateNameDescription,
     isEmptyFolder: true,
@@ -108,7 +108,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
   } = item;
 
   test(caseName, async ({ launch }) => {
-    screenShot.setCaseName("caseName");
+    screenShot.setCaseName(caseName);
     const workspacePath = CreateTypespecProjectFolderPath;
     const { page, extensionDir } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",
