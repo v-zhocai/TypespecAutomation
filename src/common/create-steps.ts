@@ -125,6 +125,60 @@ async function inputProjectName(page: Page) {
 }
 
 /**
+ * When creating, verify the description below, then input service namespace
+ * @param page vscode project
+ */
+async function inputServiceNameSpace(page: Page) {
+  let titleInfoDescription = "Please provide service namespace in Pascal case: (Press 'Enter' to confirm or 'Escape' to cancel)" 
+  await retry(
+    page,
+    3,
+    async () => {
+      let titleBox = page.locator('div').filter({ hasText: '0 Results0 SelectedPlease' }).nth(2)
+      let titleBoxText = await titleBox.textContent()
+      // Remove the known prefix and suffix noise in the captured lines.
+      titleBoxText = titleBoxText ? titleBoxText.replace(/^0 Results0 Selected/, "").replace(/OK$/, "") : null;
+      if (titleBoxText === titleInfoDescription){
+        return true
+      } else {
+        console.error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
+        return false
+      }
+    },
+    "Failed to find the service namespace input box."
+  )
+  await screenShot.screenshot(page, "linux", "input_service_namespace.png")
+  await page.keyboard.press("Enter")
+}
+
+/**
+ * When creating, verify the description below, then input ARM Resource Provider name
+ * @param page vscode project
+ */
+async function inputARMResourceProviderName(page: Page) {
+  let titleInfoDescription = "Please provide ARM Resource Provider Name in Pascal case, excluding the 'Microsoft.' prefix: (Press 'Enter' to confirm or 'Escape' to cancel)" 
+  await retry(
+    page,
+    3,
+    async () => {
+      let titleBox = page.locator('div').filter({ hasText: '0 Results0 SelectedPlease' }).nth(2)
+      let titleBoxText = await titleBox.textContent()
+      // Remove the known prefix and suffix noise in the captured lines.
+      titleBoxText = titleBoxText ? titleBoxText.replace(/^0 Results0 Selected/, "").replace(/OK$/, "") : null;
+      if (titleBoxText === titleInfoDescription){
+        return true
+      } else {
+        console.error(`Description mismatched, expected "${titleInfoDescription}", got "${titleBoxText}".`)
+        return false
+      }
+    },
+    "Failed to find the ARM Resource Provider name input box."
+  )
+  await screenShot.screenshot(page, "linux", "input_ARM_Resource_name.png")
+  await page.keyboard.press("Enter")
+}
+
+/**
  * When creating, start with click
  */
 async function startWithClick(page: Page) {
@@ -133,4 +187,4 @@ async function startWithClick(page: Page) {
   await screenShot.screenshot(page, "linux", "start_with_click");
 }
 
-export { inputProjectName, selectEmitters, selectTemplate, startWithClick };
+export { inputProjectName, selectEmitters, selectTemplate, inputServiceNameSpace, inputARMResourceProviderName, startWithClick };

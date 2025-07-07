@@ -16,6 +16,8 @@ import {
   inputProjectName,
   selectEmitters,
   selectTemplate,
+  inputServiceNameSpace,
+  inputARMResourceProviderName,
   startWithClick,
 } from "./common/create-steps";
 import { test, screenShot } from "./common/utils";
@@ -156,6 +158,16 @@ CreateCasesConfigList.push(
   },
 );
 
+const DataPlaneAPIProviderNameTemplates = [
+  "(rest-api-spec repo) Azure Data Plane Service Project",
+  "(stand alone) Azure Data Plane Service Project",
+];
+
+const ARMAPIProviderNameTemplates = [
+  "(rest-api-spec repo) Azure Resource Manager Service Project",
+  "(stand alone) Azure Resource Manager Service Project"
+];
+
 beforeEach(async () => {
   const dir = CreateTypespecProjectFolderPath;
   try {
@@ -208,6 +220,10 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
 
     if (templateName === "Generic Rest API") {
       await selectEmitters(page);
+    } else if (DataPlaneAPIProviderNameTemplates.includes(templateName)) {
+      await inputServiceNameSpace(page)
+    } else if (ARMAPIProviderNameTemplates.includes(templateName)) {
+      await inputARMResourceProviderName(page)
     }
 
     await preContrastResult(
