@@ -106,13 +106,55 @@ expectedResults = [
 CreateCasesConfigList.push(
   {
     triggerType: CreateProjectTriggerType.Command,
-    caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-NonEmptyFolder`,
+    caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Command} NonEmptyFolder`,
     templateName,
     templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
-  }
-)
+  },
+);
+
+templateName = "(rest-api-spec repo) Azure Data Plane Service Project";
+templateNameDescription = "Create a project in rest-api-spec repo, representing an Azure service Data Plane API";
+expectedResults = [
+  "examples",
+  ".gitignore",
+  "client.tsp",
+  "main.tsp",
+  "tspconfig.yaml",
+];
+
+CreateCasesConfigList.push(
+  {
+    triggerType: CreateProjectTriggerType.Click,
+    caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Click} EmptyFolder`,
+    templateName,
+    templateNameDescription,
+    isEmptyFolder: true,
+    expectedResults,
+  },
+);
+
+templateName = "(rest-api-spec repo) Azure Resource Manager Service Project";
+templateNameDescription = "Create a project in rest-api-spec repo, representing an Azure service ARM API";
+expectedResults = [
+  "examples",
+  ".gitignore",
+  "employee.tsp",
+  "main.tsp",
+  "tspconfig.yaml",
+];
+
+CreateCasesConfigList.push(
+  {
+    triggerType: CreateProjectTriggerType.Click,
+    caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Click} NonEmptyFolder`,
+    templateName,
+    templateNameDescription,
+    isEmptyFolder: false,
+    expectedResults,
+  },
+);
 
 beforeEach(async () => {
   const dir = CreateTypespecProjectFolderPath;
