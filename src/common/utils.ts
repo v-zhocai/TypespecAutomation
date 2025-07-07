@@ -122,6 +122,7 @@ async function retry(
  */
 class ScreenshotHelper {
   caseName: string;
+  counter: number = 1;
 
   constructor(caseName: string) {
     this.caseName = caseName;
@@ -129,6 +130,7 @@ class ScreenshotHelper {
 
   async setCaseName(caseName: string) {
     this.caseName = caseName;
+    this.counter = 1;
   }
 
   /**
@@ -138,7 +140,11 @@ class ScreenshotHelper {
    * @param name screenshot name, without extension
    */
   async screenshot(page: Page, os: "linux", name: string) {
-    const filePath = path.join(imagesPath, `${this.caseName}_${name}.png`);
+    const dirPath = path.join(imagesPath, this.caseName);
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+    const filePath = path.join(dirPath, `${this.counter ++}_${name}.png`);
     await page.screenshot({ path: filePath });
   }
 }
