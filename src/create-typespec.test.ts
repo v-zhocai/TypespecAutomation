@@ -63,8 +63,8 @@ const CreateCasesConfigList: CreateConfigType[] = [
   },
 ];
 
-templateName = "Typespec library"
-templateNameDescription = "Build your own TypeSpec library with custom types, decorators or linters."
+templateName = "Typespec library";
+templateNameDescription = "Build your own TypeSpec library with custom types, decorators or linters.";
 expectedResults = [
   "lib",
   "node_modules",
@@ -76,7 +76,7 @@ expectedResults = [
   "package-lock.json",
   "prettierrc.yaml",
   "tsconfig.json",
-]
+];
 
 CreateCasesConfigList.push(
   {
@@ -88,6 +88,31 @@ CreateCasesConfigList.push(
     expectedResults,
   },
 );
+
+templateName = "Typespec emitter";
+templateNameDescription = "Create a new package that emits artifacts from TypeSpec.";
+expectedResults = [
+  "node_modules",
+  "src",
+  "test",
+  ".gitignore",
+  "eslint.config.js",
+  "package.json",
+  "package-lock.json",
+  "prettierrc.yaml",
+  "tsconfig.json",
+];
+
+CreateCasesConfigList.push(
+  {
+    triggerType: CreateProjectTriggerType.Command,
+    caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-NonEmptyFolder`,
+    templateName,
+    templateNameDescription,
+    isEmptyFolder: false,
+    expectedResults,
+  }
+)
 
 beforeEach(async () => {
   const dir = CreateTypespecProjectFolderPath;
