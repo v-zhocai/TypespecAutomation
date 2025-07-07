@@ -1,5 +1,5 @@
 import { Page } from "playwright";
-import { retry, screenShot } from "./utils";
+import { retry, screenShot, sleep } from "./utils";
 
 /**
  * When creating, select emitters
@@ -182,7 +182,8 @@ async function inputARMResourceProviderName(page: Page) {
  * When creating, start with click
  */
 async function startWithClick(page: Page) {
-  await page.getByLabel("Explorer (Ctrl+Shift+E) - 1").nth(2).click()
+  await page.getByLabel("Explorer (Ctrl+Shift+E) - 1").nth(2).click();
+  await sleep(3);
   await page.getByRole("button", { name: "Create TypeSpec Project" }).click();
   await screenShot.screenshot(page, "linux", "start_with_click");
 }

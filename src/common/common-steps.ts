@@ -156,6 +156,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   await cmd.click();
   await cmd.fill(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
   await page.keyboard.press("Enter");
+  await sleep(5);
   await screenShot.screenshot(page, "linux", "start_install_extension");
 }
 
