@@ -151,12 +151,11 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix");
   await sleep(5);
   await page.keyboard.press("Control+Backquote");
-  await screenshot(page, "linux", "open_terminal");
   const cmd = page.getByRole("textbox", { name: /Terminal/ }).first();
   await cmd.click();
   await cmd.fill(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
-  await screenshot(page, "linux", "start_install_extension");
   await page.keyboard.press("Enter");
+  await screenshot(page, "linux", "start_install_extension");
 }
 
 async function closeVscode() {
