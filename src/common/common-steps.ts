@@ -32,6 +32,7 @@ async function preContrastResult(
     errorMessage,
     sleep,
   );
+  await screenShot.screenshot(page, "linux", "pre_contrast_result");
 }
 
 /**
