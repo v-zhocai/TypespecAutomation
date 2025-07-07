@@ -42,7 +42,7 @@ jobs:
         VSCODE_E2E_DOWNLOAD_PATH: $(VSCODE_E2E_DOWNLOAD_PATH)
         ELECTRON_DISABLE_SANDBOX: "1"
         BUILD_ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
-        continueOnError: true
+      continueOnError: true
     
     - script: |
         pwd
@@ -52,7 +52,8 @@ jobs:
 
     - task: PublishBuildArtifacts@1
       inputs:
-        pathToPublish: 'images-linux'
-        artifactName: 'screenshots'
-        publishLocation: 'Container'
-      displayName: 'Publish Screenshots'
+        path: "$(Build.ArtifactStagingDirectory)"
+        artifact: "screenshots"
+        publishLocation: "Container"
+        includePatterns: "images-linux/**/*.png"
+      displayName: "Publish Screenshots"
