@@ -169,7 +169,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
 }
 
 async function closeVscode(page: Page) {
-  await page.getByText("File", { exact: true }).click();
+  await page.getByRole("menuitem", { name: "File" }).click();
   await sleep(2);
   await page.getByRole("menuitem", { name: "Exit" }).click();
 }
