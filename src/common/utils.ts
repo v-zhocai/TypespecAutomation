@@ -63,7 +63,7 @@ const test = baseTest.extend<{
       const tracePath = join(projectRoot, "test-results", task.name, "trace.zip");
       const artifactsDir = join(tempDir, "playwright-artifacts");
       await fs.promises.mkdir(artifactsDir, { recursive: true }); // make sure the directory exists
-      process.env.TMPDIR = artifactsDir;
+      // process.env.TMPDIR = artifactsDir;
       await page.waitForLoadState("load");      
       await page
         .context()
