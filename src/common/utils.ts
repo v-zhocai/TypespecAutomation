@@ -64,7 +64,8 @@ const test = baseTest.extend<{
       const artifactsDir = join(tempDir, "playwright-artifacts");
       await fs.promises.mkdir(artifactsDir, { recursive: true }); // make sure the directory exists
       // process.env.TMPDIR = artifactsDir;
-      await page.waitForLoadState("load");      
+      await page.waitForLoadState("load");
+      await page.waitForTimeout(3000);
       await page
         .context()
         .tracing.start({ screenshots: true, snapshots: true, title: task.name });
