@@ -64,7 +64,8 @@ const test = baseTest.extend<{
       const artifactsDir = join(tempDir, "playwright-artifacts");
       await fs.promises.mkdir(artifactsDir, { recursive: true }); // make sure the directory exists
       process.env.TMPDIR = artifactsDir;
-      const resourcesDir = path.join(tempDir, "playwright-artifacts/resources");  
+      const resourcesDir = path.join(tempDir, "playwright-artifacts/resources");
+      await fs.promises.mkdir(resourcesDir, { recursive: true }); // 确保资源目录存在 
       console.log("Resources directory:", resourcesDir); 
       // 列出目录内容
       try { 
@@ -78,6 +79,12 @@ const test = baseTest.extend<{
       await page
         .context()
         .tracing.start({ screenshots: true, snapshots: true, title: task.name });
+      try {  
+        await page.screenshot({ path: path.join(tempDir, "debug-screenshot.png") });  
+        console.log("Screenshot successfully captured.");  
+      } catch (error) {  
+        console.error("Failed to capture screenshot:", error);  
+      }  
       teardowns.push(async () => {
         try {
           await page.context().tracing.stop({ path: tracePath });
