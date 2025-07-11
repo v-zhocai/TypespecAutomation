@@ -63,9 +63,18 @@ const test = baseTest.extend<{
       const tracePath = join(projectRoot, "test-results", task.name, "trace.zip");
       const artifactsDir = join(tempDir, "playwright-artifacts");
       await fs.promises.mkdir(artifactsDir, { recursive: true }); // make sure the directory exists
-      // process.env.TMPDIR = artifactsDir;
+      process.env.TMPDIR = artifactsDir;
+      const resourcesDir = path.join(tempDir, "playwright-artifacts/resources");  
+      console.log("Resources directory:", resourcesDir); 
+      // 列出目录内容
+      try { 
+        const files = await fs.promises.readdir(resourcesDir);  
+        console.log("Files in resources directory:", files);  
+      } catch (error) {  
+        console.error("Failed to read resources directory:", error);  
+      }  
       await page.waitForLoadState("load");
-      await page.waitForTimeout(3000);
+      await page.waitForTimeout(5000);
       await page
         .context()
         .tracing.start({ screenshots: true, snapshots: true, title: task.name });
