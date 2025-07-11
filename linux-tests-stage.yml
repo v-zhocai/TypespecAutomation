@@ -56,3 +56,10 @@ jobs:
         artifactName: 'screenshots'
         publishLocation: 'Container'
       displayName: 'Publish Screenshots'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: 'test-results'
+        artifactName: 'test-results'
+        publishLocation: 'Container'
+      displayName: 'Publish test results'

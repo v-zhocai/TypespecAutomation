@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import os from "node:os";
-import path from "node:path";
+import path, { join } from "node:path";
 import { ElectronApplication, Page, _electron } from "playwright";
 import { test as baseTest, inject } from "vitest";
 import { closeVscode } from "./common-steps";
@@ -8,6 +8,7 @@ import { closeVscode } from "./common-steps";
 const __dirname = import.meta.dirname;
 const projectRoot = path.resolve(__dirname, "../../");
 const imagesPath = path.resolve(projectRoot, "images-linux");
+export const tempDir = path.resolve(projectRoot, "temp");
 
 interface Context {
   page: Page;
@@ -39,7 +40,6 @@ const test = baseTest.extend<{
       envOverrides = {
         PATH: `${codePath}${path.delimiter}${process.env.PATH}`,
       };
-      const tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "typespec-automation"));
 
       const app = await _electron.launch({
         executablePath,
@@ -60,6 +60,25 @@ const test = baseTest.extend<{
         ].filter((v): v is string => !!v),
       });
       const page = await app.firstWindow();
+      const tracePath = join(projectRoot, "test-results", task.name, "trace.zip");
+      console.log("Trace path:", tracePath);
+      const artifactsDir = join(tempDir, "playwright-artifacts");
+      await fs.promises.mkdir(artifactsDir, { recursive: true }); // make sure the directory exists
+      process.env.TMPDIR = artifactsDir;
+      console.log("Artifacts directory set to:", artifactsDir);
+      await page
+        .context()
+        .tracing.start({ screenshots: false, snapshots: false, title: task.name });
+      console.log("Tracing started...");
+      teardowns.push(async () => {
+        console.log("Stopping tracing...");
+        try {
+          await page.context().tracing.stop({ path: tracePath });
+        } catch (error) {
+          console.error("Failed to stop tracing:", error);
+        }
+        console.log("Tracing stopped.");
+      });
       return { page, app , extensionDir: path.resolve(tempDir, "extensions")};
     });
 
