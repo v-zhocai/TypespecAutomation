@@ -68,7 +68,7 @@ const test = baseTest.extend<{
       console.log("Artifacts directory set to:", artifactsDir);
       await page
         .context()
-        .tracing.start({ screenshots: false, snapshots: true, title: task.name });
+        .tracing.start({ screenshots: true, snapshots: true, title: task.name });
       console.log("Tracing started...");
       teardowns.push(async () => {
         console.log("Stopping tracing...");
