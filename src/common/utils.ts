@@ -12,6 +12,7 @@ const imagesPath = path.resolve(projectRoot, "images-linux");
 interface Context {
   page: Page;
   app: ElectronApplication;
+  extensionDir: string;
 }
 
 type LaunchFixture = (options: {
@@ -77,7 +78,7 @@ const test = baseTest.extend<{
           ],
         }),
       );
-      return { page, app };
+      return { page, app , extensionDir: path.resolve(tempDir, "extensions")};
     });
 
     for (const teardown of teardowns) await teardown();

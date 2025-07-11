@@ -85,12 +85,14 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
     screenShot.setCaseName(caseName);
     const workspacePath = CreateTypespecProjectFolderPath;
     console.log("workspacePath", workspacePath);
-    const { page, app } = await launch({
+    const { page, app, extensionDir } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",
     });
     if (!isEmptyFolder) {
       createTestFile(workspacePath);
     }
+
+    await installExtensionForCommand(page, extensionDir);
 
     mockShowOpenDialog(app, [workspacePath])
     if (triggerType === CreateProjectTriggerType.Command) {
