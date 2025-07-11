@@ -3,7 +3,7 @@ import { rm } from "fs/promises";
 import fs from "node:fs";
 import path from "node:path";
 import { Locator, Page } from "playwright";
-import { pressEnter, retry, screenShot, sendKeys, sleep } from "./utils";
+import { retry, screenShot, sleep } from "./utils";
 
 const __dirname = import.meta.dirname;
 const projectRoot = path.resolve(__dirname, "../../");
@@ -87,20 +87,6 @@ async function startWithCommandPalette(
   );
   await screenShot.screenshot(page, "linux", "input_command");
   await listForCreate!.click();
-}
-
-/**
- * In vscode, when you need to select a folder or a file, call this method
- * @param file When selecting a file, just pass it in. If you need to select a folder, you do not need to pass this parameter in.
- */
-async function selectFolder(page: Page, file: string = "") {
-  await sleep(10);
-  sendKeys(file);
-  await screenShot.screenshot(page, "linux", "select_folder_text");
-  await sleep(2);
-  pressEnter();
-  await screenShot.screenshot(page, "linux", "select_folder");
-  await sleep(3);
 }
 
 /**
@@ -201,6 +187,5 @@ export {
   installExtensionForCommand,
   notEmptyFolderContinue,
   preContrastResult,
-  selectFolder,
   startWithCommandPalette,
 };

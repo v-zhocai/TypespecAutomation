@@ -9,7 +9,6 @@ import {
   installExtensionForCommand,
   notEmptyFolderContinue,
   preContrastResult,
-  selectFolder,
   startWithCommandPalette,
 } from "./common/common-steps";
 import {
@@ -18,6 +17,7 @@ import {
   selectTemplate,
   startWithClick,
 } from "./common/create-steps";
+import { mockShowOpenDialog } from "./common/mock-dialogs";
 import { test, screenShot } from "./common/utils";
 
 const __dirname = import.meta.dirname;
@@ -85,15 +85,14 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
     screenShot.setCaseName(caseName);
     const workspacePath = CreateTypespecProjectFolderPath;
     console.log("workspacePath", workspacePath);
-    const { page, extensionDir } = await launch({
+    const { page, app } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",
     });
     if (!isEmptyFolder) {
       createTestFile(workspacePath);
     }
-    console.log("into install extension")
-    await installExtensionForCommand(page, extensionDir);
 
+    mockShowOpenDialog(app, [workspacePath])
     if (triggerType === CreateProjectTriggerType.Command) {
       await startWithCommandPalette(page, {
         folderName: path.basename(CreateTypespecProjectFolderPath),
@@ -102,8 +101,6 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
     } else {
       await startWithClick(page);
     }
-
-    await selectFolder(page, triggerType === CreateProjectTriggerType.Command ? "" : workspacePath);
 
     if (!isEmptyFolder) {
       await notEmptyFolderContinue(page);

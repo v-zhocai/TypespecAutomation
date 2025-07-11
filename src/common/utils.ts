@@ -1,10 +1,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path, { resolve } from "node:path";
-import { Page, _electron } from "playwright";
+import { ElectronApplication, Page, _electron } from "playwright";
 import { test as baseTest, inject } from "vitest";
 import { closeVscode } from "./common-steps";
-import { execSync } from "child_process";
 
 const __dirname = import.meta.dirname;
 const projectRoot = path.resolve(__dirname, "../../");
@@ -12,7 +11,7 @@ const imagesPath = path.resolve(projectRoot, "images-linux");
 
 interface Context {
   page: Page;
-  extensionDir: string;
+  app: ElectronApplication;
 }
 
 type LaunchFixture = (options: {
@@ -78,7 +77,7 @@ const test = baseTest.extend<{
           ],
         }),
       );
-      return { page, extensionDir: path.join(tempDir, "extensions") };
+      return { page, app };
     });
 
     for (const teardown of teardowns) await teardown();
@@ -111,7 +110,7 @@ async function retry(
     count--;
   }
   await screenShot.screenshot(page, "linux", "error");
-  await closeVscode();
+  await closeVscode(page);
   throw new Error(errMessage);
 }
 
@@ -150,20 +149,5 @@ class ScreenshotHelper {
 }
 
 const screenShot = new ScreenshotHelper("default");
-
-/**
- * Simulate global keyboard input
- * @param {string} text The text to input
- */
-export function sendKeys(text:string) {
-  execSync(`xdotool type --delay 100 "${text}"`);
-}
-
-/**
- * Simulate pressing the Enter key
- */
-export function pressEnter() {
-  execSync(`xdotool key Return`);
-}
 
 export { retry, screenShot, sleep, test };
