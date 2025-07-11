@@ -124,7 +124,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
       "Failed to create project Successful",
       [10, 15],
     );
-    await closeVscode();
+    await closeVscode(page);
     await contrastResult(page, expectedResults, workspacePath);
   });
 });

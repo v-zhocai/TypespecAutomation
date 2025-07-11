@@ -168,8 +168,10 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   await screenShot.screenshot(page, "linux", "start_install_extension");
 }
 
-async function closeVscode() {
-  execSync("xdotool key Alt+F4");
+async function closeVscode(page: Page) {
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await sleep(2);
+  await page.getByRole("menuitem", { name: "Exit" }).click();
 }
 
 /**
