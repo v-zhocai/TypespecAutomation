@@ -72,6 +72,7 @@ const test = baseTest.extend<{
         try {
           await page.context().tracing.stop({ path: tracePath });
         } catch (error) {
+          console.error("Failed to stop tracing:", error);
         }
       });
       return { page, app , extensionDir: path.resolve(tempDir, "extensions")};
