@@ -66,6 +66,7 @@ const test = baseTest.extend<{
       await fs.promises.mkdir(artifactsDir, { recursive: true }); // make sure the directory exists
       process.env.TMPDIR = artifactsDir;
       console.log("Artifacts directory set to:", artifactsDir);
+      await page.waitForLoadState("load");      
       await page
         .context()
         .tracing.start({ screenshots: true, snapshots: true, title: task.name });
