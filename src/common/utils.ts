@@ -67,7 +67,7 @@ const test = baseTest.extend<{
       await page.waitForLoadState("load");      
       await page
         .context()
-        .tracing.start({ screenshots: false, snapshots: true, title: task.name });
+        .tracing.start({ screenshots: true, snapshots: true, title: task.name });
       teardowns.push(async () => {
         try {
           await page.context().tracing.stop({ path: tracePath });
