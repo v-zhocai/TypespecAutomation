@@ -59,9 +59,7 @@ async function contrastResult(page: Page, res: string[], dir: string) {
  * @param command After the top input box pops up, the command to be executed
  */
 async function startWithCommandPalette(page: Page, command: string) {
-  await sleep(2);
   page.keyboard.press("ControlOrMeta+Shift+P");
-  await sleep(2);
   await screenShot.screenshot(page, "linux", "open_top_panel");
   await page
     .getByRole("textbox", { name: "Type the name of a command to run." })
@@ -151,7 +149,6 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
 
 async function closeVscode(page: Page) {
   await page.getByRole("menuitem", { name: "File" }).click();
-  await sleep(2);
   await page.getByRole("menuitem", { name: "Exit" }).click();
 }
 
