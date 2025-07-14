@@ -94,7 +94,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
 
     await installExtensionForCommand(page, extensionDir);
 
-    mockShowOpenDialog(app, [workspacePath])
+    await mockShowOpenDialog(app, [workspacePath])
     if (triggerType === CreateProjectTriggerType.Command) {
       await startWithCommandPalette(page, "Create Typespec Project");
     } else {
