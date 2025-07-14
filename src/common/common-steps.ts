@@ -59,7 +59,7 @@ async function contrastResult(page: Page, res: string[], dir: string) {
  * @param command After the top input box pops up, the command to be executed
  */
 async function startWithCommandPalette(page: Page, command: string) {
-  page.keyboard.press("ControlOrMeta+Shift+P");
+  await page.keyboard.press("ControlOrMeta+Shift+P");
   await screenShot.screenshot(page, "linux", "open_top_panel");
   await page
     .getByRole("textbox", { name: "Type the name of a command to run." })
