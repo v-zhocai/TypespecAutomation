@@ -78,7 +78,7 @@ const test = baseTest.extend<{
       await page.waitForTimeout(5000);
       await page
         .context()
-        .tracing.start({ screenshots: true, snapshots: true, title: task.name });
+        .tracing.start({ screenshots: false, snapshots: true, title: task.name });
       try {  
         await page.screenshot({ path: path.join(tempDir, "debug-screenshot.png") });  
         console.log("Screenshot successfully captured.");  

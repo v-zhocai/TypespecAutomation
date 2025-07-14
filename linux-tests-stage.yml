@@ -12,7 +12,7 @@ jobs:
     - script: |
         sudo apt-get update
         sudo apt-get install -y \
-          x11-xserver-utils libgtk-3-dev libgbm-dev 
+          x11-xserver-utils 
       displayName: "Install Linux Dependencies"
 
     - script: |
