@@ -60,6 +60,7 @@ async function contrastResult(page: Page, res: string[], dir: string) {
  */
 async function startWithCommandPalette(page: Page, command: string) {
   await page.keyboard.press("ControlOrMeta+Shift+P");
+  await page.waitForSelector('input[aria-label="Type the name of a command to run."]', { state: 'visible' });  
   await screenShot.screenshot(page, "linux", "open_top_panel");
   await page
     .getByRole("textbox", { name: "Type the name of a command to run." })
