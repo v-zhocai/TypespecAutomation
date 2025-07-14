@@ -1,5 +1,5 @@
 jobs:
-- job: RunElectronUITestsOnLinux_1_CreateTypespecProject
+- job: RunElectronUITestsOnLinux_1
   pool:
     vmImage: "ubuntu-latest"
 
@@ -34,7 +34,7 @@ jobs:
     - script: |
         export DISPLAY=:99
         export VSCODE_E2E_DOWNLOAD_PATH=$(VSCODE_E2E_DOWNLOAD_PATH)
-        npm run test:create
+        npm run test
       displayName: "Run Playwright Electron UI Tests"
       env:
         CI: true

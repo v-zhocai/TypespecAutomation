@@ -18,11 +18,7 @@ import {
   startWithClick,
 } from "./common/create-steps";
 import { mockShowOpenDialog } from "./common/mock-dialogs";
-import { test, screenShot } from "./common/utils";
-
-const __dirname = import.meta.dirname;
-const projectRoot = path.resolve(__dirname, "../");
-const tempDir = path.resolve(projectRoot, "./temp");
+import { test, screenShot, projectRoot, tempDir } from "./common/utils";
 
 enum CreateProjectTriggerType {
   Click = "RightClick",

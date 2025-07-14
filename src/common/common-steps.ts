@@ -16,7 +16,7 @@ const imagesPath = path.resolve(projectRoot, "images-linux");
  * @param errorMessage Error message when element does not appear
  * @param [count, sleep] count: Retry times, sleep: Sleep time between retries
  */
-async function preContrastResult(
+export async function preContrastResult(
   page: Page,
   text: string,
   errorMessage: string,
@@ -40,7 +40,7 @@ async function preContrastResult(
  * @param res List of expected files
  * @param dir The directory to be compared needs to be converted into an absolute path using path.resolve
  */
-async function contrastResult(page: Page, res: string[], dir: string) {
+export async function contrastResult(page: Page, res: string[], dir: string) {
   let resLength = 0;
   if (fs.existsSync(dir)) {
     resLength = fs.readdirSync(dir).length;
@@ -58,7 +58,7 @@ async function contrastResult(page: Page, res: string[], dir: string) {
  * @param page vscode object
  * @param command After the top input box pops up, the command to be executed
  */
-async function startWithCommandPalette(page: Page, command: string) {
+export async function startWithCommandPalette(page: Page, command: string) {
   await page.keyboard.press("ControlOrMeta+Shift+P");
   await page.waitForSelector('input[aria-label="Type the name of a command to run."]', { state: 'visible' });
   await screenShot.screenshot(page, "linux", "open_top_panel");
@@ -84,12 +84,47 @@ async function startWithCommandPalette(page: Page, command: string) {
 }
 
 /**
+ * Start the Project with Right click on the file
+ * @param page vscode object
+ * @param command create, emit or import
+ * @param type specify whether the click is on file, folder or empty folder
+ * command: specify which command to execute to the project
+ */
+export async function startWithRightClick(page: Page, command: string, type?: string) {
+  if (
+    command == "Emit from TypeSpec" ||
+    command == "Preview API Documentation"
+  ) {
+    const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a")
+    await target.click({ button: "right" })
+    await screenShot.screenshot(page, "linux", "click_main")
+    await page.getByRole("menuitem", { name: command }).click()
+    await screenShot.screenshot(page, "linux",
+      `${command == "Emit from TypeSpec" ? "emit" : "preview"}_typespec.png`
+    )
+  } else if (command == "Import TypeSpec from Openapi 3") {
+    const targetName =
+      type === "emptyfolder"
+        ? "ImportTypespecProjectEmptyFolder"
+        : "openapi.3.0.yaml"
+    const target = page.getByRole("treeitem", { name: targetName }).locator("a")
+    await target.click({ button: "right" })
+    await screenShot.screenshot(page, "linux", "openapi.3.0")
+    await sleep(3)
+    await page
+      .getByRole("menuitem", { name: "Import TypeSpec from OpenAPI" })
+      .click()
+    await screenShot.screenshot(page, "linux", "import_typespec")
+  }
+}
+
+/**
  * If the current folder is not empty, sometimes a pop-up will appear
  * asking "Do you want to continue selecting the current folder as the root directory?".
  * In this method, select "yes" because selecting "no" does not make sense.
  * @param page vscode object
  */
-async function notEmptyFolderContinue(page: Page) {
+export async function notEmptyFolderContinue(page: Page) {
   let yesBtn: Locator;
   await retry(
     page,
@@ -128,7 +163,7 @@ async function notEmptyFolderContinue(page: Page) {
 /**
  * Install Typespec extension using the command line in VSCode's terminal.
  */
-async function installExtensionForCommand(page: Page, extensionDir: string) {
+export async function installExtensionForCommand(page: Page, extensionDir: string) {
   console.log("extensionDir", extensionDir);
   const vsixPath =
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix");
@@ -148,7 +183,7 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   await screenShot.screenshot(page, "linux", "start_install_extension");
 }
 
-async function closeVscode(page: Page) {
+export async function closeVscode(page: Page) {
   await page.getByRole("menuitem", { name: "File" }).click();
   await page.getByRole("menuitem", { name: "Exit" }).click();
 }
@@ -158,7 +193,7 @@ async function closeVscode(page: Page) {
  * @param page vscode project
  * @param folderName The name of the folder that needs to be selected.
  */
-function createTestFile(folderName: string) {
+export function createTestFile(folderName: string) {
   const filePath = path.join(folderName, "test.txt");
   fs.writeFileSync(filePath, "test");
 }
@@ -167,18 +202,7 @@ function createTestFile(folderName: string) {
  * Placeholder file, need to be deleted
  * @param folderName The name of the folder that needs to be selected.
  */
-function deleteTestFile(folderName: string) {
+export function deleteTestFile(folderName: string) {
   const filePath = path.join(folderName, "test.txt");
   fs.rmSync(filePath);
 }
-
-export {
-  closeVscode,
-  contrastResult,
-  createTestFile,
-  deleteTestFile,
-  installExtensionForCommand,
-  notEmptyFolderContinue,
-  preContrastResult,
-  startWithCommandPalette,
-};

@@ -6,8 +6,8 @@ import { test as baseTest, inject } from "vitest";
 import { closeVscode } from "./common-steps";
 
 const __dirname = import.meta.dirname;
-const projectRoot = path.resolve(__dirname, "../../");
-const imagesPath = path.resolve(projectRoot, "images-linux");
+export const projectRoot = path.resolve(__dirname, "../../");
+export const imagesPath = path.resolve(projectRoot, "images-linux");
 export const tempDir = path.resolve(projectRoot, "temp");
 
 interface Context {
