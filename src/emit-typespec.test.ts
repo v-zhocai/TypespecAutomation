@@ -17,8 +17,34 @@ import { screenShot, sleep, test, tempDir } from "./common/utils"
 import path from "node:path"
 import fs from "node:fs"
 
+enum EmitProjectTriggerType {
+  Command = "Command",
+  Click = "Click",
+}
+
+type EmitConfigType = {
+  caseName: string
+  selectType: string
+  selectTypeLanguage: string
+  triggerType: EmitProjectTriggerType
+  expectedResults: string[]
+}
+
 const EmitTypespecProjectFolderPath = path.resolve(tempDir, "EmitTypespecProject");
 const EmitTypespecProjectFolderPathStubJs = path.resolve(tempDir, "EmitTypespecProjectStubJs");
+
+const EmitcaseName = "EmitTypespecProject";
+const EmitCasesConfigList: EmitConfigType[] = []
+
+EmitCasesConfigList.push(
+  {   
+    caseName: "EmitTypespecProject-ClientCode-Python-CommandPallette",
+    selectType: "Client Code",
+    selectTypeLanguage: "Python",
+    triggerType: EmitProjectTriggerType.Command,
+    expectedResults: ["http-client-python"],
+  },
+)
 
 beforeEach(() => {
   let dir = path.resolve(EmitTypespecProjectFolderPath, "tsp-output")

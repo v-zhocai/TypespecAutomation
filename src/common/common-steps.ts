@@ -185,6 +185,7 @@ export async function installExtensionForCommand(page: Page, extensionDir: strin
 
 export async function closeVscode(page: Page) {
   await page.getByRole("menuitem", { name: "File" }).click();
+  await sleep(1);
   await page.getByRole("menuitem", { name: "Exit" }).click();
 }
 
