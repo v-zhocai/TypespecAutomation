@@ -17,23 +17,18 @@ const imagesPath = path.resolve(projectRoot, "images-linux");
  * @param [count, sleep] count: Retry times, sleep: Sleep time between retries
  */
 async function preContrastResult(
-  page: Page,
-  text: string,
-  errorMessage: string,
-  [count, sleep]: number[] = [10, 5],
+  page: Page,  
+  text: string,  
+  errorMessage: string,  
+  timeout: number = 10000 // 默认超时时间为 10 秒  
 ) {
-  await retry(
-    page,
-    count,
-    async () => {
-      const contrastResult = page.getByText(new RegExp(text)).first();
-      return (await contrastResult.count()) > 0;
-    },
-    errorMessage,
-    sleep,
-  );
-  await screenShot.screenshot(page, "linux", "pre_contrast_result");
-}
+  try {  
+    // 等待页面上出现指定的文本  
+    await page.waitForSelector(`:text("${text}")`, { timeout });  
+  } catch (e) {
+    throw new Error(errorMessage); // 如果超时，抛出自定义错误信息  
+  }
+}  
 
 /**
  * Results comparison
