@@ -84,6 +84,13 @@ const EmitCasesConfigList: EmitConfigType[] = [
     triggerType: EmitProjectTriggerType.Command,
     expectedResults: ["http-server-csharp"],
   },
+  {
+    caseName: "EmitTypespecProject-ServerStub-Js-RightClick",
+    selectType: "Server Stub",
+    selectTypeLanguage: "JavaScript",
+    triggerType: EmitProjectTriggerType.Click,
+    expectedResults: ["http-server-js"],
+  },
 ]
 
 beforeEach(() => {
@@ -115,8 +122,7 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
     screenShot.setCaseName(caseName);
     const isServerStubJS =
       selectType === "Server Stub" && selectTypeLanguage === "JavaScript"
-    const workspacePath = EmitTypespecProjectFolderPath;
-
+    const workspacePath = !isServerStubJS ? EmitTypespecProjectFolderPath : EmitTypespecProjectFolderPathStubJs;  
     const { page, app, extensionDir } = await launch({
       workspacePath,
     });
