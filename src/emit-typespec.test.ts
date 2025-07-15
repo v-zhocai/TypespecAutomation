@@ -151,7 +151,7 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
       150000,
     );
 
-    await closeVscode(page);
+    app.close();
 
     const resultFilePath = path.resolve(workspacePath, "./tsp-output/@typespec");
     await contrastResult(page, expectedResults, resultFilePath);
