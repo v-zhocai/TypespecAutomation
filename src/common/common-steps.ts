@@ -95,6 +95,7 @@ export async function startWithRightClick(page: Page, command: string, type?: st
     command == "Emit from TypeSpec" ||
     command == "Preview API Documentation"
   ) {
+    await sleep(3);
     const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a")
     await target.click({ button: "right" })
     await screenShot.screenshot(page, "linux", "click_main")
@@ -181,6 +182,9 @@ export async function installExtensionForCommand(page: Page, extensionDir: strin
   await page.keyboard.press("Enter");
   await sleep(5);
   await screenShot.screenshot(page, "linux", "start_install_extension");
+  await page.getByRole('tab', { name: 'Extensions (Ctrl+Shift+X)' }).locator('a').click();
+  await sleep(5);
+  await page.getByRole('tab', { name: 'Explorer (Ctrl+Shift+E)' }).locator('a').click();
 }
 
 export async function closeVscode(page: Page) {
