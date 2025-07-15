@@ -26,7 +26,7 @@ type LaunchFixture = (options: {
  * The core method of the test, this method is encapsulated.
  * With the help of the `_electron` object, you can open a vscode and get the page object
  */
-const test = baseTest.extend<{
+export const test = baseTest.extend<{
   launch: LaunchFixture;
 }>({
   launch: async ({ task }, use) => {
@@ -68,8 +68,7 @@ const test = baseTest.extend<{
       teardowns.push(async () => {
         try {
           await page.context().tracing.stop({ path: tracePath });
-        } catch (error) {
-        }
+        } catch (error) {}
       });
       return { page, app , extensionDir: path.resolve(tempDir, "extensions")};
     });
@@ -78,7 +77,7 @@ const test = baseTest.extend<{
   },
 });
 
-async function sleep(s: number) {
+export async function sleep(s: number) {
   return new Promise((resolve) => setTimeout(resolve, s * 1000));
 }
 
@@ -89,7 +88,7 @@ async function sleep(s: number) {
  * @param gap
  * @returns Retry Interval
  */
-async function retry(
+export async function retry(
   page: Page,
   count: number,
   fn: () => Promise<boolean>,
@@ -142,6 +141,5 @@ class ScreenshotHelper {
   }
 }
 
-const screenShot = new ScreenshotHelper("default");
+export const screenShot = new ScreenshotHelper("default");
 
-export { retry, screenShot, sleep, test };

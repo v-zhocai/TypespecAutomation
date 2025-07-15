@@ -1,38 +1,27 @@
-import { execSync } from "child_process";
 import { rm } from "fs/promises";
 import fs from "node:fs";
 import path from "node:path";
 import { Locator, Page } from "playwright";
 import { retry, screenShot, sleep } from "./utils";
 
-const __dirname = import.meta.dirname;
-const projectRoot = path.resolve(__dirname, "../../");
-const imagesPath = path.resolve(projectRoot, "images-linux");
-
 /**
- * Before comparing the results, you need to check whether the conditions for result comparison are met.
- * @param page vscode object
- * @param text The text in which the element appears
- * @param errorMessage Error message when element does not appear
- * @param [count, sleep] count: Retry times, sleep: Sleep time between retries
+ * Waits for the specified text to appear on the page before proceeding.
+ * @param page The Playwright Page object representing the current browser page.
+ * @param text The text content to wait for on the page.
+ * @param errorMessage The error message to throw if the text does not appear within the timeout.
+ * @param timeout The maximum time (in milliseconds) to wait for the text to appear. Default is 10 seconds.
  */
 export async function preContrastResult(
   page: Page,
   text: string,
   errorMessage: string,
-  [count, sleep]: number[] = [10, 5],
+  timeout: number = 10000,
 ) {
-  await retry(
-    page,
-    count,
-    async () => {
-      const contrastResult = page.getByText(new RegExp(text)).first();
-      return (await contrastResult.count()) > 0;
-    },
-    errorMessage,
-    sleep,
-  );
-  await screenShot.screenshot(page, "linux", "pre_contrast_result");
+  try {
+    await page.waitForSelector(`:text("${text}")`, { timeout });
+  } catch (e) {
+    throw new Error(errorMessage);
+  }
 }
 
 /**
@@ -44,7 +33,6 @@ export async function contrastResult(page: Page, res: string[], dir: string) {
   let resLength = 0;
   if (fs.existsSync(dir)) {
     resLength = fs.readdirSync(dir).length;
-    console.log("dir", dir)
     // await rm(imagesPath, { recursive: true });
   }
   if (resLength !== res.length) {
@@ -60,7 +48,9 @@ export async function contrastResult(page: Page, res: string[], dir: string) {
  */
 export async function startWithCommandPalette(page: Page, command: string) {
   await page.keyboard.press("ControlOrMeta+Shift+P");
-  await page.waitForSelector('input[aria-label="Type the name of a command to run."]', { state: 'visible' });
+  await page.waitForSelector('input[aria-label="Type the name of a command to run."]', {
+    state: "visible",
+  });
   await screenShot.screenshot(page, "linux", "open_top_panel");
   await page
     .getByRole("textbox", { name: "Type the name of a command to run." })

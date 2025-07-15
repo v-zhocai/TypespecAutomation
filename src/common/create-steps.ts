@@ -1,12 +1,12 @@
 import { Page } from "playwright";
-import { retry, screenShot, sleep } from "./utils";
+import { retry, screenShot } from "./utils";
 
 /**
  * When creating, select emitters
  * @param page vscode project
  * @param emitters The emitters that need to be selected. If you need to select all, just do not transmit them.
  */
-async function selectEmitters(page: Page, emitters?: string[]) {
+export async function selectEmitters(page: Page, emitters?: string[]) {
   const emittersConfig = [
     { name: "OpenAPI 3.1 document", description: "@typespec/openapi3" },
     { name: "C# client", description: "@typespec/http-client-csharp" },
@@ -60,7 +60,11 @@ async function selectEmitters(page: Page, emitters?: string[]) {
  * @param templateName The name of the template that needs to be selected.
  * @param templateNameDescription The description of the template that needs to be selected.
  */
-async function selectTemplate(page: Page, templateName: string, templateNameDescription: string) {
+export async function selectTemplate(
+  page: Page,
+  templateName: string,
+  templateNameDescription: string,
+) {
   let templateListName;
   let templateListDescription;
   await retry(
@@ -98,7 +102,7 @@ async function selectTemplate(page: Page, templateName: string, templateNameDesc
  * When creating, verify the description below, then input project name
  * @param page vscode project
  */
-async function inputProjectName(page: Page) {
+export async function inputProjectName(page: Page) {
   const titleInfoDescription =
     "Please input the project name (Press 'Enter' to confirm or 'Escape' to cancel)";
   await retry(
@@ -128,7 +132,7 @@ async function inputProjectName(page: Page) {
  * When creating, verify the description below, then input service namespace
  * @param page vscode project
  */
-async function inputServiceNameSpace(page: Page) {
+export async function inputServiceNameSpace(page: Page) {
   let titleInfoDescription = "Please provide service namespace in Pascal case: (Press 'Enter' to confirm or 'Escape' to cancel)" 
   await retry(
     page,
@@ -155,7 +159,7 @@ async function inputServiceNameSpace(page: Page) {
  * When creating, verify the description below, then input ARM Resource Provider name
  * @param page vscode project
  */
-async function inputARMResourceProviderName(page: Page) {
+export async function inputARMResourceProviderName(page: Page) {
   let titleInfoDescription = "Please provide ARM Resource Provider Name in Pascal case, excluding the 'Microsoft.' prefix: (Press 'Enter' to confirm or 'Escape' to cancel)" 
   await retry(
     page,
@@ -181,10 +185,8 @@ async function inputARMResourceProviderName(page: Page) {
 /**
  * When creating, start with click
  */
-async function startWithClick(page: Page) {
+export async function startWithClick(page: Page) {
   await page.getByLabel("Explorer (Ctrl+Shift+E) - 1").nth(2).click();
   await screenShot.screenshot(page, "linux", "start_with_click");
   await page.getByRole("button", { name: "Create TypeSpec Project" }).click();
 }
-
-export { inputProjectName, selectEmitters, selectTemplate, inputServiceNameSpace, inputARMResourceProviderName, startWithClick };

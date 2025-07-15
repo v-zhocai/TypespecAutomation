@@ -2,7 +2,6 @@ import { mkdir, rm } from "fs/promises";
 import path from "node:path";
 import { beforeEach, describe } from "vitest";
 import {
-  closeVscode,
   contrastResult,
   createTestFile,
   deleteTestFile,
@@ -18,12 +17,12 @@ import {
   startWithClick,
 } from "./common/create-steps";
 import { mockShowOpenDialog } from "./common/mock-dialogs";
-import { test, screenShot, projectRoot, tempDir } from "./common/utils";
+import { test, screenShot, tempDir } from "./common/utils";
 
 enum CreateProjectTriggerType {
   Click = "RightClick",
   Command = "CommandPalette",
-};
+}
 
 type CreateConfigType = {
   caseName: string;
@@ -80,17 +79,14 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
   test(caseName, async ({ launch }) => {
     screenShot.setCaseName(caseName);
     const workspacePath = CreateTypespecProjectFolderPath;
-    console.log("workspacePath", workspacePath);
     const { page, app, extensionDir } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",
     });
     if (!isEmptyFolder) {
       createTestFile(workspacePath);
     }
-
     await installExtensionForCommand(page, extensionDir);
-
-    await mockShowOpenDialog(app, [workspacePath])
+    await mockShowOpenDialog(app, [workspacePath]);
     if (triggerType === CreateProjectTriggerType.Command) {
       await startWithCommandPalette(page, "Create Typespec Project");
     } else {
@@ -110,13 +106,8 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
       await selectEmitters(page);
     }
 
-    await preContrastResult(
-      page,
-      "Project created",
-      "Failed to create project Successful",
-      [10, 15],
-    );
-    await closeVscode(page);
+    await preContrastResult(page, "Project created", "Failed to create project Successful", 150000);
+    app.close();
     await contrastResult(page, expectedResults, workspacePath);
   });
 });

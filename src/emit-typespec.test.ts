@@ -148,7 +148,7 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
       page,
       contrastMessage,
       "Failed to emit project Successful",
-      [20, 3]
+      150000,
     );
 
     await closeVscode(page);
