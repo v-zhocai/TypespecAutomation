@@ -9,24 +9,23 @@ const __dirname = import.meta.dirname;
 const projectRoot = path.resolve(__dirname, "../../");
 const imagesPath = path.resolve(projectRoot, "images-linux");
 
-/**
- * Before comparing the results, you need to check whether the conditions for result comparison are met.
- * @param page vscode object
- * @param text The text in which the element appears
- * @param errorMessage Error message when element does not appear
- * @param [count, sleep] count: Retry times, sleep: Sleep time between retries
- */
+/**  
+ * Waits for the specified text to appear on the page before proceeding.  
+ * @param page The Playwright Page object representing the current browser page.  
+ * @param text The text content to wait for on the page.  
+ * @param errorMessage The error message to throw if the text does not appear within the timeout.  
+ * @param timeout The maximum time (in milliseconds) to wait for the text to appear. Default is 10 seconds.  
+ */  
 async function preContrastResult(
   page: Page,  
   text: string,  
   errorMessage: string,  
-  timeout: number = 10000 // 默认超时时间为 10 秒  
+  timeout: number = 10000
 ) {
   try {  
-    // 等待页面上出现指定的文本  
-    await page.waitForSelector(`:text("${text}")`, { timeout });  
+    await page.waitForSelector(`:text("${text}")`, { timeout });
   } catch (e) {
-    throw new Error(errorMessage); // 如果超时，抛出自定义错误信息  
+    throw new Error(errorMessage);
   }
 }  
 
