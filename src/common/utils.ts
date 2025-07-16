@@ -43,10 +43,7 @@ export const test = baseTest.extend<{
       const tempDir = await fs.promises.mkdtemp(
         path.join(os.tmpdir(), "typespec-automation")
       )
-      console.log("Temporary directory created:", tempDir);
       const extensionDir = path.resolve(tempDir, "extensions");
-      console.log("tempDir:", tempDir);
-      console.log("Extension directory:", extensionDir);
       const app = await _electron.launch({
         executablePath,
         env: {
@@ -67,10 +64,7 @@ export const test = baseTest.extend<{
       });
       const page = await app.firstWindow();
       const tracePath = join(projectRoot, "test-results", task.name, "trace.zip");
-      console.log("Trace path:", tracePath);
-      console.log("projectRoot:", projectRoot);
       // const artifactsDir = join(tempDir, "playwright-artifacts");
-      console.log("tempDir:", tempDir);
       //console.log("Artifacts directory:", artifactsDir);
       // await fs.promises.mkdir(artifactsDir, { recursive: true }); // make sure the directory exists
       // process.env.TMPDIR = artifactsDir;

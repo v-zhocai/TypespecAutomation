@@ -190,13 +190,11 @@ export async function installExtensionForCommand(page: Page, extensionDir: strin
   await cmd.click();
   await screenShot.screenshot(page, "linux", "open_terminal");
   await sleep(5);
+  console.log(`vsixPath: ${vsixPath}, extensionDir: ${extensionDir}`);
   await cmd.fill(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
   await page.keyboard.press("Enter");
   await sleep(5);
   await screenShot.screenshot(page, "linux", "start_install_extension");
-  // await page.getByRole('tab', { name: 'Extensions (Ctrl+Shift+X)' }).locator('a').click();
-  // await sleep(5);
-  // await page.getByRole('tab', { name: 'Explorer (Ctrl+Shift+E)' }).locator('a').click();
 }
 
 export async function closeVscode(page: Page) {
