@@ -43,6 +43,13 @@ const EmitCasesConfigList: EmitConfigType[] = [
     triggerType: EmitProjectTriggerType.Command,
     expectedResults: ["http-client-python"],
   },
+  {
+    caseName: "EmitTypespecProject-ClientCode-Java-CommandPallette",
+    selectType: "Client Code",
+    selectTypeLanguage: "Java",
+    triggerType: EmitProjectTriggerType.Command,
+    expectedResults: ["http-client-java"],
+  },
 ]
 
 beforeEach(() => {
