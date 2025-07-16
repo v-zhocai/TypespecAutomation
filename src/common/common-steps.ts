@@ -177,7 +177,6 @@ export async function installExtension(page: Page) {
  * Install Typespec extension using the command line in VSCode's terminal.
  */
 export async function installExtensionForCommand(page: Page, extensionDir: string) {
-  console.log("extensionDir", extensionDir);
   const vsixPath =
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix");
   console.log("vsixPath", vsixPath);

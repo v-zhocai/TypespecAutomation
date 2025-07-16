@@ -64,17 +64,12 @@ export const test = baseTest.extend<{
       });
       const page = await app.firstWindow();
       const tracePath = join(projectRoot, "test-results", task.name, "trace.zip");
-      // const artifactsDir = join(tempDir, "playwright-artifacts");
-      //console.log("Artifacts directory:", artifactsDir);
-      // await fs.promises.mkdir(artifactsDir, { recursive: true }); // make sure the directory exists
-      // process.env.TMPDIR = artifactsDir;
       await page.context().tracing.start({ screenshots: false, snapshots: true, title: task.name });
       teardowns.push(async () => {
         try {
           await page.context().tracing.stop({ path: tracePath });
         } catch (error) {}
       });
-      console.log("extensionDir:", extensionDir);
       return { page, app , extensionDir: extensionDir};
     });
 
