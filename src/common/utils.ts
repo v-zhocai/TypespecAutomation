@@ -69,11 +69,11 @@ export const test = baseTest.extend<{
       const tracePath = join(projectRoot, "test-results", task.name, "trace.zip");
       console.log("Trace path:", tracePath);
       console.log("projectRoot:", projectRoot);
-      const artifactsDir = join(tempDir, "playwright-artifacts");
+      // const artifactsDir = join(tempDir, "playwright-artifacts");
       console.log("tempDir:", tempDir);
-      console.log("Artifacts directory:", artifactsDir);
-      await fs.promises.mkdir(artifactsDir, { recursive: true }); // make sure the directory exists
-      process.env.TMPDIR = artifactsDir;
+      //console.log("Artifacts directory:", artifactsDir);
+      // await fs.promises.mkdir(artifactsDir, { recursive: true }); // make sure the directory exists
+      // process.env.TMPDIR = artifactsDir;
       await page.context().tracing.start({ screenshots: false, snapshots: true, title: task.name });
       teardowns.push(async () => {
         try {
