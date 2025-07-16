@@ -165,7 +165,7 @@ export async function installExtension(page: Page) {
     .getByLabel(/TypeSpec/)
     .getByRole("button", { name: "Install" })
     .click()
-  await page.getByRole("button", { name: "Trust Publisher & Install" }).click()
+  //await page.getByRole("button", { name: "Trust Publisher & Install" }).click()
   await sleep(20)
   await page
     .getByRole("tab", { name: /Explorer/ })
