@@ -3,6 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { Locator, Page } from "playwright";
 import { retry, screenShot, sleep } from "./utils";
+import { keyboard, Key } from "@nut-tree-fork/nut-js"
+import os from "node:os"
 
 /**
  * Waits for the specified text to appear on the page before proceeding.
@@ -107,6 +109,26 @@ export async function startWithRightClick(page: Page, command: string, type?: st
       .click()
     await screenShot.screenshot(page, "linux", "import_typespec")
   }
+}
+
+/**
+ * In vscode, when you need to select a folder or a file, call this method
+ * @param file When selecting a file, just pass it in. If you need to select a folder, you do not need to pass this parameter in.
+ */
+export async function selectFolder(file: string = "") {
+  await sleep(10)
+  await keyboard.type(file)
+  if (os.platform() === "win32" 
+    && file.includes("CreateTypespecProject")
+  ) {
+    await sleep(2)
+    await keyboard.pressKey(Key.Enter)
+  }
+  await keyboard.pressKey(Key.Enter)
+  if (os.platform() !== "win32") {
+    await keyboard.releaseKey(Key.Enter)
+  }
+  await sleep(3)
 }
 
 /**
