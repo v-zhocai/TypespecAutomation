@@ -43,7 +43,7 @@ export const test = baseTest.extend<{
       const tempDir = await fs.promises.mkdtemp(
         path.join(os.tmpdir(), "typespec-automation")
       )
-
+      const extensionDir = path.resolve(tempDir, "extensions");
       const app = await _electron.launch({
         executablePath,
         env: {
@@ -57,7 +57,7 @@ export const test = baseTest.extend<{
           "--skip-welcome",
           "--skip-release-notes",
           "--disable-workspace-trust",
-          `--extensions-dir=${path.resolve(tempDir, "extensions")}`,
+          `--extensions-dir=${extensionDir}`,
           `--user-data-dir=${path.resolve(tempDir, "user-data")}`,
           `--folder-uri=file:${path.resolve(workspacePath)}`,
         ].filter((v): v is string => !!v),
@@ -73,7 +73,7 @@ export const test = baseTest.extend<{
           await page.context().tracing.stop({ path: tracePath });
         } catch (error) {}
       });
-      return { page, app , extensionDir: path.resolve(tempDir, "extensions")};
+      return { page, app , extensionDir: extensionDir};
     });
 
     for (const teardown of teardowns) await teardown();
