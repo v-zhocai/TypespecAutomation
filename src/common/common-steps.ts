@@ -152,6 +152,28 @@ export async function notEmptyFolderContinue(page: Page) {
 }
 
 /**
+ * Install plugins directly from vscode
+ * @param page vscode object
+ */
+export async function installExtension(page: Page) {
+  await page
+    .getByRole("tab", { name: /Extensions/ })
+    .locator("a")
+    .click()
+  await page.keyboard.type("Typespec")
+  await page
+    .getByLabel(/TypeSpec/)
+    .getByRole("button", { name: "Install" })
+    .click()
+  await page.getByRole("button", { name: "Trust Publisher & Install" }).click()
+  await sleep(20)
+  await page
+    .getByRole("tab", { name: /Explorer/ })
+    .locator("a")
+    .click()
+}
+
+/**
  * Install Typespec extension using the command line in VSCode's terminal.
  */
 export async function installExtensionForCommand(page: Page, extensionDir: string) {

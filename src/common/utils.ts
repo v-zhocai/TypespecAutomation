@@ -55,7 +55,6 @@ export const test = baseTest.extend<{
           "--skip-release-notes",
           "--disable-workspace-trust",
           `--extensions-dir=${path.resolve(tempDir, "extensions")}`,
-          `--extensionDevelopmentPath=${path.resolve(projectRoot, "typespec-vscode")}`,          
           `--user-data-dir=${path.resolve(tempDir, "user-data")}`,
           `--folder-uri=file:${path.resolve(workspacePath)}`,
         ].filter((v): v is string => !!v),

@@ -3,6 +3,7 @@ import {
   closeVscode,
   contrastResult,
   installExtensionForCommand,
+  installExtension,
   preContrastResult,
   startWithRightClick,
   startWithCommandPalette,
@@ -59,6 +60,13 @@ beforeEach(() => {
       fs.rmSync(filePath, { recursive: true, force: true });
     }
   }
+  const extensionDir = path.resolve(tempDir, "extensions");
+  if (fs.existsSync(extensionDir)) {
+    for (const file of fs.readdirSync(extensionDir)) {
+      const filePath = path.resolve(extensionDir, file);
+      fs.rmSync(filePath, { recursive: true, force: true });
+    }
+  }
 });
 
 describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
@@ -78,7 +86,7 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
       workspacePath,
     });
     await sleep(3);
-//    await installExtensionForCommand(page, extensionDir);
+    await installExtension(page);
     if (triggerType === "Command") {
       await startWithCommandPalette(page, "Emit from Typespec");
     } else if (triggerType === "Click") {
