@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "references": [{ "path": "../tmlanguage-generator/tsconfig.json" }],
+  "compilerOptions": {
+    "incremental": false,
+    "composite": false,
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "sourceMap": false,
+    "resolveJsonModule": true,
+    "noEmitOnError": true,
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "types": ["mocha"],
+    "rootDir": "."
+  },
+  "exclude": ["dist", "templates", "vitest.config.ts"]
+}

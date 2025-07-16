@@ -1,19 +1,16 @@
 import fs from "node:fs";
-import os from "node:os";
 import path, { join } from "node:path";
 import { ElectronApplication, Page, _electron } from "playwright";
 import { test as baseTest, inject } from "vitest";
-import { closeVscode } from "./common-steps";
 
 const __dirname = import.meta.dirname;
-export const projectRoot = path.resolve(__dirname, "../../");
-export const imagesPath = path.resolve(projectRoot, "images-linux");
-export const tempDir = path.resolve(projectRoot, "temp");
+export const projectRoot = path.resolve(__dirname, "../../../");
+export const tempDir = path.resolve(projectRoot, "./temp");
+export const imagesPath = path.resolve(tempDir, "./images-linux");
 
 interface Context {
   page: Page;
   app: ElectronApplication;
-  extensionDir: string;
 }
 
 type LaunchFixture = (options: {
@@ -55,7 +52,7 @@ export const test = baseTest.extend<{
           "--skip-release-notes",
           "--disable-workspace-trust",
           `--extensions-dir=${path.resolve(tempDir, "extensions")}`,
-          `--extensionDevelopmentPath=${path.resolve(projectRoot, "typespec-vscode")}`,          
+          `--extensionDevelopmentPath=${path.resolve(projectRoot)}`,
           `--user-data-dir=${path.resolve(tempDir, "user-data")}`,
           `--folder-uri=file:${path.resolve(workspacePath)}`,
         ].filter((v): v is string => !!v),
@@ -71,7 +68,7 @@ export const test = baseTest.extend<{
           await page.context().tracing.stop({ path: tracePath });
         } catch (error) {}
       });
-      return { page, app , extensionDir: path.resolve(tempDir, "extensions")};
+      return { page, app };
     });
 
     for (const teardown of teardowns) await teardown();
@@ -103,44 +100,17 @@ export async function retry(
     }
     count--;
   }
-  await screenShot.screenshot(page, "linux", "error");
-  await closeVscode(page);
+  await screenshot(page, "linux", "error");
   throw new Error(errMessage);
 }
 
 /**
- * ScreenshotHelper is a utility class for managing and taking screenshots during tests.
- * It allows you to set a case name, and generates screenshot files with a consistent naming pattern
- * that includes the case name and a custom step name.
+ * Take a screenshot with a consistent path pattern.
+ * @param page playwright page
+ * @param os operating system, e.g. "linux"
+ * @param name screenshot name, without extension
  */
-class ScreenshotHelper {
-  caseName: string;
-  counter: number = 1;
-
-  constructor(caseName: string) {
-    this.caseName = caseName;
-  }
-
-  async setCaseName(caseName: string) {
-    this.caseName = caseName;
-    this.counter = 1;
-  }
-
-  /**
-   * Take a screenshot with a consistent path pattern.
-   * @param page playwright page
-   * @param os operating system, e.g. "linux"
-   * @param name screenshot name, without extension
-   */
-  async screenshot(page: Page, os: "linux", name: string) {
-    const dirPath = path.join(imagesPath, this.caseName);
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath, { recursive: true });
-    }
-    const filePath = path.join(dirPath, `${this.counter ++}_${name}.png`);
-    await page.screenshot({ path: filePath });
-  }
+export async function screenshot(page: Page, os: "linux", name: string) {
+  const filePath = path.join(imagesPath, `${name}.png`);
+  await page.screenshot({ path: filePath });
 }
-
-export const screenShot = new ScreenshotHelper("default");
-

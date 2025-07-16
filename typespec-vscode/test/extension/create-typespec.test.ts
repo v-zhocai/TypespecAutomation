@@ -5,7 +5,6 @@ import {
   contrastResult,
   createTestFile,
   deleteTestFile,
-  installExtensionForCommand,
   notEmptyFolderContinue,
   preContrastResult,
   startWithCommandPalette,
@@ -17,7 +16,7 @@ import {
   startWithClick,
 } from "./common/create-steps";
 import { mockShowOpenDialog } from "./common/mock-dialogs";
-import { test, screenShot, tempDir } from "./common/utils";
+import { tempDir, test } from "./common/utils";
 
 enum CreateProjectTriggerType {
   Click = "RightClick",
@@ -36,9 +35,9 @@ type CreateConfigType = {
 const CreateTypespecProjectFolderPath = path.resolve(tempDir, "CreateTypespecProject");
 
 const createCase = "CreateTypespecProject";
-let templateName = "Generic Rest API";
-let templateNameDescription = "Create a project representing a generic REST API service.";
-let expectedResults = [
+const templateName = "Generic Rest API";
+const templateNameDescription = "Create a project representing a generic REST API service.";
+const expectedResults = [
   ".gitignore",
   "main.tsp",
   "node_modules",
@@ -77,15 +76,13 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
   } = item;
 
   test(caseName, async ({ launch }) => {
-    screenShot.setCaseName(caseName);
     const workspacePath = CreateTypespecProjectFolderPath;
-    const { page, app, extensionDir } = await launch({
+    const { page, app } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",
     });
     if (!isEmptyFolder) {
       createTestFile(workspacePath);
     }
-//    await installExtensionForCommand(page, extensionDir);
     await mockShowOpenDialog(app, [workspacePath]);
     if (triggerType === CreateProjectTriggerType.Command) {
       await startWithCommandPalette(page, "Create Typespec Project");
