@@ -93,8 +93,8 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
       workspacePath,
     });
     await sleep(3);
+    await installExtensionForCommand(page, extensionDir);
     //await page.pause();
-    await installExtension(page);
     if (triggerType === "Command") {
       await startWithCommandPalette(page, "Emit from Typespec");
     } else if (triggerType === "Click") {

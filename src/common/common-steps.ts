@@ -194,9 +194,9 @@ export async function installExtensionForCommand(page: Page, extensionDir: strin
   await page.keyboard.press("Enter");
   await sleep(5);
   await screenShot.screenshot(page, "linux", "start_install_extension");
-  await page.getByRole('tab', { name: 'Extensions (Ctrl+Shift+X)' }).locator('a').click();
-  await sleep(5);
-  await page.getByRole('tab', { name: 'Explorer (Ctrl+Shift+E)' }).locator('a').click();
+  // await page.getByRole('tab', { name: 'Extensions (Ctrl+Shift+X)' }).locator('a').click();
+  // await sleep(5);
+  // await page.getByRole('tab', { name: 'Explorer (Ctrl+Shift+E)' }).locator('a').click();
 }
 
 export async function closeVscode(page: Page) {

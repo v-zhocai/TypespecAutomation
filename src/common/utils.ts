@@ -40,6 +40,9 @@ export const test = baseTest.extend<{
       envOverrides = {
         PATH: `${codePath}${path.delimiter}${process.env.PATH}`,
       };
+      const tempDir = await fs.promises.mkdtemp(
+        path.join(os.tmpdir(), "typespec-automation")
+      )
 
       const app = await _electron.launch({
         executablePath,
