@@ -166,7 +166,7 @@ export async function notEmptyFolderContinue(page: Page) {
     throw new Error("Failed to match the description for the non-empty folder cases")
   }
   await screenShot.screenshot(page, "linux", "not_empty_folder_continue");
-  await yesBtn!.click();
+  await page.locator('a').filter({ hasText: 'Yes' }).click();
 }
 
 /**
