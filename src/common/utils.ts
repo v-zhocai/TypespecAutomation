@@ -58,11 +58,13 @@ export const test = baseTest.extend<{
           "--skip-release-notes",
           "--disable-workspace-trust",
           `--extensions-dir=${extensionDir}`,
+          `--extensionDevelopmentPath=${path.resolve(projectRoot, "typespec-vscode")}`,
           `--user-data-dir=${path.resolve(tempDir, "user-data")}`,
           `--folder-uri=file:${path.resolve(workspacePath)}`,
         ].filter((v): v is string => !!v),
       });
       const page = await app.firstWindow();
+      await page.waitForLoadState('load'); // 等待整个页面加载完成  
       const userSettingsPath = path.join(
         tempDir,
         "user-data",

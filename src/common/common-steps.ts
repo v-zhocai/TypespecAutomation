@@ -50,6 +50,7 @@ export async function contrastResult(page: Page, res: string[], dir: string) {
  * @param command After the top input box pops up, the command to be executed
  */
 export async function startWithCommandPalette(page: Page, command: string) {
+  await page.waitForSelector('.explorer-viewlet');
   await page.keyboard.press("ControlOrMeta+Shift+P");
   await page.waitForSelector('input[aria-label="Type the name of a command to run."]', {
     state: "visible",
@@ -84,6 +85,7 @@ export async function startWithCommandPalette(page: Page, command: string) {
  * command: specify which command to execute to the project
  */
 export async function startWithRightClick(page: Page, command: string, type?: string) {
+  await page.waitForSelector('.explorer-viewlet');
   if (
     command == "Emit from TypeSpec" ||
     command == "Preview API Documentation"
@@ -153,7 +155,8 @@ export async function notEmptyFolderContinue(page: Page) {
     throw new Error("Failed to match the description for the non-empty folder cases")
   }
   await screenShot.screenshot(page, "linux", "not_empty_folder_continue");
-  await page.locator('a').filter({ hasText: 'Yes' }).click();
+  await page.waitForSelector('a:has-text("Yes")');  
+  await page.getByRole('option', { name: /Yes/ }).locator('a').filter({ hasText: /Yes/ }).click();  
 }
 
 /**

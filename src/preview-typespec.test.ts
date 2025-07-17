@@ -62,7 +62,7 @@ describe.each(PreviewCasesConfigList)("PreviewAPIDocument", async (item) => {
     const { page, app, extensionDir } = await launch({
       workspacePath,
     })
-    await installExtensionForCommand(page, extensionDir)
+    // await installExtensionForCommand(page, extensionDir)
     if (triggerType === PreviewProjectTriggerType.Command) {
       await page
         .getByRole("treeitem", { name: "main.tsp" })

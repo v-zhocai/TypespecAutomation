@@ -3,7 +3,6 @@ import {
   closeVscode,
   contrastResult,
   installExtensionForCommand,
-  installExtension,
   preContrastResult,
   startWithRightClick,
   startWithCommandPalette,
@@ -135,7 +134,7 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
       workspacePath,
     });
     await sleep(3);
-    await installExtensionForCommand(page, extensionDir);
+    // await installExtensionForCommand(page, extensionDir);
     if (triggerType === "Command") {
       await startWithCommandPalette(page, "Emit from Typespec");
     } else if (triggerType === "Click") {

@@ -1,5 +1,5 @@
 import { beforeEach, describe } from "vitest"
-import { screenShot, test, tempDir } from "./common/utils"
+import { screenShot, test, tempDir, sleep } from "./common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
@@ -95,8 +95,8 @@ describe.each(ImportCasesConfigList) ("ImportTypespecFromOpenApi3", async ( item
     const { page, app, extensionDir } = await launch({
       workspacePath,
     })
-    await installExtensionForCommand(page, extensionDir)
-
+    // await installExtensionForCommand(page, extensionDir)
+    await sleep(3)
     if (triggerType === "CommandPalette") {
       await startWithCommandPalette(page, "Import Typespec from Openapi 3");
     } else if (triggerType === "RightClickonFile") {
