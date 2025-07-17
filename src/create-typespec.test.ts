@@ -19,7 +19,7 @@ import {
   startWithClick,
 } from "./common/create-steps";
 import { mockShowOpenDialog } from "./common/mock-dialogs";
-import { test, screenShot, tempDir } from "./common/utils";
+import { test, screenShot, tempDir, sleep } from "./common/utils";
 
 enum CreateProjectTriggerType {
   Click = "RightClick",
@@ -123,14 +123,14 @@ expectedResults = [
 ];
 
 CreateCasesConfigList.push(
-  // {
-  //   triggerType: CreateProjectTriggerType.Click,
-  //   caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Click} EmptyFolder`,
-  //   templateName,
-  //   templateNameDescription,
-  //   isEmptyFolder: true,
-  //   expectedResults,
-  // },
+  {
+    triggerType: CreateProjectTriggerType.Click,
+    caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Click} EmptyFolder`,
+    templateName,
+    templateNameDescription,
+    isEmptyFolder: true,
+    expectedResults,
+  },
 );
 
 templateName = "(rest-api-spec repo) Azure Resource Manager Service Project";
@@ -144,14 +144,14 @@ expectedResults = [
 ];
 
 CreateCasesConfigList.push(
-  // {
-  //   triggerType: CreateProjectTriggerType.Click,
-  //   caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Click} NonEmptyFolder`,
-  //   templateName,
-  //   templateNameDescription,
-  //   isEmptyFolder: false,
-  //   expectedResults,
-  // },
+  {
+    triggerType: CreateProjectTriggerType.Click,
+    caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Click} NonEmptyFolder`,
+    templateName,
+    templateNameDescription,
+    isEmptyFolder: false,
+    expectedResults,
+  },
 );
 
 templateName = "(stand alone) Azure Data Plane Service Project";
@@ -168,14 +168,14 @@ expectedResults = [
 ];
 
 CreateCasesConfigList.push(
-  // {
-  //   triggerType: CreateProjectTriggerType.Command,
-  //   caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Command} EmptyFolder`,
-  //   templateName,
-  //   templateNameDescription,
-  //   isEmptyFolder: true,
-  //   expectedResults,
-  // },
+  {
+    triggerType: CreateProjectTriggerType.Command,
+    caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Command} EmptyFolder`,
+    templateName,
+    templateNameDescription,
+    isEmptyFolder: true,
+    expectedResults,
+  },
 );
 
 templateName = "(stand alone) Azure Resource Manager Service Project";
@@ -192,14 +192,14 @@ expectedResults = [
 ];
 
 CreateCasesConfigList.push(
-  // {
-  //   triggerType: CreateProjectTriggerType.Command,
-  //   caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Command} NonEmptyFolder`,
-  //   templateName,
-  //   templateNameDescription,
-  //   isEmptyFolder: false,
-  //   expectedResults,
-  // }
+  {
+    triggerType: CreateProjectTriggerType.Command,
+    caseName: `${createCase} ${templateName.replaceAll(" ", "")} Trigger ${CreateProjectTriggerType.Command} NonEmptyFolder`,
+    templateName,
+    templateNameDescription,
+    isEmptyFolder: false,
+    expectedResults,
+  }
 );
 
 const DataPlaneAPIProviderNameTemplates = [
@@ -213,10 +213,18 @@ const ARMAPIProviderNameTemplates = [
 ];
 
 beforeEach(async () => {
+  console.log("before each called")
+  console.log("CreateTypespecProjectFolderPath: ", CreateTypespecProjectFolderPath);
+  // Clean up the directory before each test
   const dir = CreateTypespecProjectFolderPath;
+  await sleep(5);
   try {
+    // Remove the directory if it exists
+    console.log("Removing directory: ", dir);
     await rm(dir, { recursive: true });
-  } catch {}
+  } catch (error) {
+    console.error("Error removing directory: ", error); 
+  }
   await mkdir(dir, { recursive: true });
 });
 
