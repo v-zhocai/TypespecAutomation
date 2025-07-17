@@ -201,7 +201,6 @@ export async function installExtension(page: Page) {
 export async function installExtensionForCommand(page: Page, extensionDir: string) {
   const vsixPath =
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix");
-  console.log("vsixPath", vsixPath);
   await screenShot.screenshot(page, "linux", "before_open_terminal");
   await sleep(5);
   await page.keyboard.press("Control+Backquote");
