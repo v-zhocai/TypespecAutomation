@@ -37,7 +37,6 @@ type CreateConfigType = {
 };
 
 const CreateTypespecProjectFolderPath = path.resolve(tempDir, "CreateTypespecProject");
-let CreateTypespecProjectFolderWorkingPath = CreateTypespecProjectFolderPath;
 
 const createCase = "CreateTypespecProject";
 let templateName = "Generic Rest API";
@@ -215,18 +214,10 @@ const ARMAPIProviderNameTemplates = [
 ];
 
 beforeEach(async () => {
-  // Clean up the directory before each test
-  CreateTypespecProjectFolderWorkingPath = await fs.promises.mkdtemp(  
-    path.join(CreateTypespecProjectFolderPath)  
-  );  
-  const dir = CreateTypespecProjectFolderWorkingPath;
+  const dir = CreateTypespecProjectFolderPath;
   try {
-    // Remove the directory if it exists
-    console.log("Removing directory: ", dir);
     await rm(dir, { recursive: true });
-  } catch (error) {
-    console.error("Error removing directory: ", error); 
-  }
+  } catch (error) {}
   await mkdir(dir, { recursive: true });
 });
 
@@ -242,7 +233,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
 
   test(caseName, async ({ launch }) => {
     screenShot.setCaseName(caseName);
-    const workspacePath = CreateTypespecProjectFolderWorkingPath;
+    const workspacePath = CreateTypespecProjectFolderPath;
     const { page, app, extensionDir } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",
     });

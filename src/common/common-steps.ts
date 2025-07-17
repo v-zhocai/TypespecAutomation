@@ -5,6 +5,7 @@ import { Locator, Page } from "playwright";
 import { retry, screenShot, sleep } from "./utils";
 import { keyboard, Key } from "@nut-tree-fork/nut-js"
 import os from "node:os"
+import { rimraf } from 'rimraf';  
 
 /**
  * Waits for the specified text to appear on the page before proceeding.
@@ -36,7 +37,7 @@ export async function contrastResult(page: Page, res: string[], dir: string) {
   if (fs.existsSync(dir)) {
     resLength = fs.readdirSync(dir).length;
     console.log("resLength: ", resLength);
-    // await rm(imagesPath, { recursive: true });
+    await rimraf(dir);  
   }
   if (resLength !== res.length) {
     await screenShot.screenshot(page, "linux", "error");
@@ -141,25 +142,12 @@ export async function selectFolder(file: string = "") {
 export async function notEmptyFolderContinue(page: Page) {
   let yesBtn: Locator;
   await sleep(3);
-  await retry(
-    page,
-    5,
-    async () => {
-      yesBtn = page
-        .getByRole("option", { name: "Yes" })
-        .locator("label")
-        .filter({ hasText: "Yes" })
-        .first();
-      const noBtn = page
-        .getByRole("option", { name: "No" })
-        .locator("label")
-        .filter({ hasText: "No" })
-        .first();
-      return (await yesBtn.count()) > 0 && (await noBtn.count()) > 0;
-    },
-    "Failed to find yes/no button",
-    1,
-  );
+  try {
+    await page.waitForSelector('role=option[name="No"] >> label:has-text("No")', { timeout:5000 });
+    await page.waitForSelector('role=option >> label:has-text("Yes")', { timeout:5000 });   
+  } catch (e){
+    throw new Error(e as string);
+  }
   try {
     await page.waitForSelector(`:text("YesSelected folder")`, { timeout:5000 });
   } catch (e) {
@@ -167,28 +155,6 @@ export async function notEmptyFolderContinue(page: Page) {
   }
   await screenShot.screenshot(page, "linux", "not_empty_folder_continue");
   await page.locator('a').filter({ hasText: 'Yes' }).click();
-}
-
-/**
- * Install plugins directly from vscode
- * @param page vscode object
- */
-export async function installExtension(page: Page) {
-  await page
-    .getByRole("tab", { name: /Extensions/ })
-    .locator("a")
-    .click()
-  await page.keyboard.type("Typespec")
-  await page
-    .getByLabel(/TypeSpec/)
-    .getByRole("button", { name: "Install" })
-    .click()
-  //await page.getByRole("button", { name: "Trust Publisher & Install" }).click()
-  await sleep(20)
-  await page
-    .getByRole("tab", { name: /Explorer/ })
-    .locator("a")
-    .click()
 }
 
 /**
