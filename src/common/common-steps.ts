@@ -139,6 +139,7 @@ export async function selectFolder(file: string = "") {
  */
 export async function notEmptyFolderContinue(page: Page) {
   let yesBtn: Locator;
+  await sleep(3);
   await retry(
     page,
     5,
