@@ -1,8 +1,7 @@
 import { beforeEach, describe } from "vitest"
-import { retry, screenShot, test, tempDir } from "./common/utils"
+import { screenShot, test, tempDir } from "./common/utils"
 import path from "node:path"
 import {
-  closeVscode,
   installExtensionForCommand,
   startWithCommandPalette,
   startWithRightClick,
@@ -73,22 +72,15 @@ describe.each(PreviewCasesConfigList)("PreviewAPIDocument", async (item) => {
     } else {
       await startWithRightClick(page, "Preview API Documentation")
     }
-    await retry(
-      page,
-      10,
-      async () => {
-        const previewContent = page
-        .locator("iframe")
-        .contentFrame()
-        .locator("html")
-        .first()
-        
-        return (await previewContent.count()) > 0
-      },
-      "Failed to compilation completed successfully",
-      3
-    )
-    await screenShot.screenshot(page, "linux", "preview_api_document.png")
+
+    await page.waitForSelector('iframe', { timeout: 5000 });
+    const iframeElementHandle = await page.$('iframe');
+    const iframe = await iframeElementHandle!.contentFrame();  
+    if (!iframe) {
+      throw new Error('Failed to get iframe content frame');  
+    }
+    await iframe.waitForSelector('html', { timeout: 5000 });
+
     app.close();
   })
 })
