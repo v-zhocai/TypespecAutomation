@@ -1,5 +1,6 @@
 import { mkdir, rm } from "fs/promises";
 import path from "node:path";
+import fs from "node:fs";
 import { beforeEach, describe } from "vitest";
 import {
   contrastResult,
@@ -36,6 +37,7 @@ type CreateConfigType = {
 };
 
 const CreateTypespecProjectFolderPath = path.resolve(tempDir, "CreateTypespecProject");
+let CreateTypespecProjectFolderWorkingPath = CreateTypespecProjectFolderPath;
 
 const createCase = "CreateTypespecProject";
 let templateName = "Generic Rest API";
@@ -213,11 +215,11 @@ const ARMAPIProviderNameTemplates = [
 ];
 
 beforeEach(async () => {
-  console.log("before each called")
-  console.log("CreateTypespecProjectFolderPath: ", CreateTypespecProjectFolderPath);
   // Clean up the directory before each test
-  const dir = CreateTypespecProjectFolderPath;
-  await sleep(5);
+  CreateTypespecProjectFolderWorkingPath = await fs.promises.mkdtemp(  
+    path.join(CreateTypespecProjectFolderPath)  
+  );  
+  const dir = CreateTypespecProjectFolderWorkingPath;
   try {
     // Remove the directory if it exists
     console.log("Removing directory: ", dir);
@@ -240,7 +242,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
 
   test(caseName, async ({ launch }) => {
     screenShot.setCaseName(caseName);
-    const workspacePath = CreateTypespecProjectFolderPath;
+    const workspacePath = CreateTypespecProjectFolderWorkingPath;
     const { page, app, extensionDir } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",
     });

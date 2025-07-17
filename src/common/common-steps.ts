@@ -35,6 +35,7 @@ export async function contrastResult(page: Page, res: string[], dir: string) {
   let resLength = 0;
   if (fs.existsSync(dir)) {
     resLength = fs.readdirSync(dir).length;
+    console.log("resLength: ", resLength);
     // await rm(imagesPath, { recursive: true });
   }
   if (resLength !== res.length) {
@@ -159,17 +160,11 @@ export async function notEmptyFolderContinue(page: Page) {
     "Failed to find yes/no button",
     1,
   );
-  await retry(
-    page,
-    5,
-    async () => {
-      const yesdescriptionBox = page.getByRole("option", { name: "Yes" }).locator("label");
-      const yesdescriptionText = await yesdescriptionBox.textContent();
-      return yesdescriptionText !== null && yesdescriptionText.includes("YesSelected folder");
-    },
-    "Failed to match the description for the non-empty folder cases",
-    1,
-  );
+  try {
+    await page.waitForSelector(`:text("YesSelected folder")`, { timeout:5000 });
+  } catch (e) {
+    throw new Error("Failed to match the description for the non-empty folder cases")
+  }
   await screenShot.screenshot(page, "linux", "not_empty_folder_continue");
   await yesBtn!.click();
 }
