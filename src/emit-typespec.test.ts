@@ -158,6 +158,7 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
       "Failed to emit project Successful",
       150000,
     );
+    await screenShot.screenshot(page, "linux", "emit_result")
 
     app.close();
 

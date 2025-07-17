@@ -6,7 +6,7 @@ import { retry, screenShot } from "./utils"
  * @param page vscode project
  * @param text project name
  */
-async function emitSelectProject(page: Page, text: string) {
+export async function emitSelectProject(page: Page, text: string) {
   await page
     .getByRole("option", { name: new RegExp(text) })
     .locator("a")
@@ -18,7 +18,7 @@ async function emitSelectProject(page: Page, text: string) {
  * @param page vscode project
  * @param type emit type
  */
-async function emitSelectType(page: Page, type: string) {
+export async function emitSelectType(page: Page, type: string) {
   await screenShot.screenshot(page, "linux", "select_emitter_type");
   let expectedDescriptionConfig = [
     { name: 'OpenAPI Document', description: 'Emitting OpenAPI3 Document from TypeSpec files.' },
@@ -58,7 +58,7 @@ async function emitSelectType(page: Page, type: string) {
  * If the emit type is `OpenApiDocument`, the language will be selected next. Call this method to select
  * @param page vscode project
  */
-async function emitSelectLanguageForOpenapi(page: Page) {
+export async function emitSelectLanguageForOpenapi(page: Page) {
   await screenShot.screenshot(page, "linux", "select_language_openapi")
   let expectedName = "OpenAPI3"
   let selectLangName
@@ -99,7 +99,7 @@ async function emitSelectLanguageForOpenapi(page: Page) {
  * @param language language name (OpenAPI3, Python, Java, .NET, JavaScript)
  * @param types emitter types (Client Code, Server Stub, OpenAPI Document)
 **/
-async function emitSelectLanguage(page: Page, language: string = "", types: string = "") {
+export async function emitSelectLanguage(page: Page, language: string = "", types: string = "") {
   await screenShot.screenshot(page, "linux", "select_language_" + language + ".png")
   let selectLangConfig: { name: string; description: string }[] = [];
   if (types == "Client Code") {
@@ -163,7 +163,7 @@ async function emitSelectLanguage(page: Page, language: string = "", types: stri
  * @param emitter emitter name
  * @description If the emitter name is not passed, it will choose "Choose another emitter".
  */
-async function emiChooseEmitter(page: Page, emitter: string = "") {
+export async function emiChooseEmitter(page: Page, emitter: string = "") {
   let chooseEmitterExpectedDescription = "Choose another emitter for code emitting"
   let chooseEmitterExpectedName = "Choose another emitter"
   let chooseEmitterName;
@@ -197,5 +197,3 @@ async function emiChooseEmitter(page: Page, emitter: string = "") {
   )
   await chooseEmitterName!.click()
 }
-
-export { emitSelectProject, emitSelectType, emitSelectLanguageForOpenapi, emitSelectLanguage, emiChooseEmitter }

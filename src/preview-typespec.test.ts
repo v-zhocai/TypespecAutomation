@@ -73,22 +73,22 @@ describe.each(PreviewCasesConfigList)("PreviewAPIDocument", async (item) => {
     } else {
       await startWithRightClick(page, "Preview API Documentation")
     }
-    await screenShot.screenshot(page, "linux", "preview_api_document.png")
     await retry(
       page,
       10,
       async () => {
         const previewContent = page
-          .locator("iframe")
-          .contentFrame()
-          .locator("html")
-          .first()
-
+        .locator("iframe")
+        .contentFrame()
+        .locator("html")
+        .first()
+        
         return (await previewContent.count()) > 0
       },
       "Failed to compilation completed successfully",
       3
     )
+    await screenShot.screenshot(page, "linux", "preview_api_document.png")
     app.close();
   })
 })
