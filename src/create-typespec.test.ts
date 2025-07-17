@@ -21,6 +21,7 @@ import {
 } from "./common/create-steps";
 import { mockShowOpenDialog } from "./common/mock-dialogs";
 import { test, screenShot, tempDir, sleep } from "./common/utils";
+import { rimraf } from 'rimraf';  
 
 enum CreateProjectTriggerType {
   Click = "RightClick",
@@ -216,7 +217,7 @@ const ARMAPIProviderNameTemplates = [
 beforeEach(async () => {
   const dir = CreateTypespecProjectFolderPath;
   try {
-    await rm(dir, { recursive: true });
+    await rimraf(dir);
   } catch (error) {}
   await mkdir(dir, { recursive: true });
 });

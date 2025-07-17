@@ -37,7 +37,6 @@ export async function contrastResult(page: Page, res: string[], dir: string) {
   if (fs.existsSync(dir)) {
     resLength = fs.readdirSync(dir).length;
     console.log("resLength: ", resLength);
-    await rimraf(dir);  
   }
   if (resLength !== res.length) {
     await screenShot.screenshot(page, "linux", "error");
