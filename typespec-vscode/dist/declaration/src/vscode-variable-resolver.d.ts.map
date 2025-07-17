@@ -1,0 +1,1 @@
+{"version":3,"file":"vscode-variable-resolver.d.ts","sourceRoot":"","sources":["../../../src/vscode-variable-resolver.ts"],"names":[],"mappings":"AAAA;;;GAGG;AACH,qBAAa,sBAAsB;IAGd,OAAO,CAAC,SAAS;IAFpC,MAAM,CAAC,QAAQ,CAAC,eAAe,SAAsB;gBAE1B,SAAS,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC;IAErD,OAAO,CAAC,KAAK,EAAE,MAAM,GAAG,MAAM;CAUtC"}
