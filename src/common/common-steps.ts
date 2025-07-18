@@ -88,6 +88,7 @@ export async function startWithRightClick(page: Page, command: string, type?: st
     command == "Emit from TypeSpec" ||
     command == "Preview API Documentation"
   ) {
+    await sleep(3);
     const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a")
     await target.click({ button: "right" })
     await screenShot.screenshot(page, "linux", "click_main")
