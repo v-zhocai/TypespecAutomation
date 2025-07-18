@@ -117,9 +117,7 @@ export async function selectFolder(file: string = "") {
   await sleep(5);
   await keyboard.type(file);
   await keyboard.pressKey(Key.Enter);
-  if (os.platform() !== "win32") {
-    await keyboard.releaseKey(Key.Enter);
-  }
+  await keyboard.releaseKey(Key.Enter);
 }
 
 /**
