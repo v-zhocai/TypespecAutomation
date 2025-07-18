@@ -11,7 +11,7 @@ import {
   emitSelectType,
   emiChooseEmitter
 } from "./common/emit-steps";
-import { screenShot, sleep, test, tempDir } from "./common/utils";
+import { screenShot, test, tempDir } from "./common/utils";
 import path from "node:path";
 import fs from "node:fs";
 
@@ -138,7 +138,6 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
       await startWithRightClick(page, "Emit from TypeSpec", "file");
     }
 
-    await sleep(3);
     await emiChooseEmitter(page);
     await emitSelectType(page, selectType);
     if (selectTypeLanguage === "OpenAPI3") {

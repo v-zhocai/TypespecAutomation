@@ -1,5 +1,5 @@
 import { beforeEach, describe } from "vitest"
-import { screenShot, test, tempDir, sleep } from "./common/utils"
+import { screenShot, test, tempDir } from "./common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
