@@ -2,7 +2,6 @@ import { beforeEach, describe } from "vitest"
 import { screenShot, test, tempDir } from "./common/utils"
 import path from "node:path"
 import {
-  installExtensionForCommand,
   startWithCommandPalette,
   startWithRightClick,
 } from "./common/common-steps"
@@ -59,7 +58,7 @@ describe.each(PreviewCasesConfigList)("PreviewAPIDocument", async (item) => {
   test(caseName, async ({ launch }) => {
     screenShot.setCaseName(caseName);
     const workspacePath = PreviewTypespecProjectFolderPath
-    const { page, app, extensionDir } = await launch({
+    const { page, app } = await launch({
       workspacePath,
     })
     // await installExtensionForCommand(page, extensionDir)

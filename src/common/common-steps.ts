@@ -1,11 +1,9 @@
-import { rm } from "fs/promises";
 import fs from "node:fs";
 import path from "node:path";
 import { Locator, Page } from "playwright";
 import { retry, screenShot, sleep } from "./utils";
 import { keyboard, Key } from "@nut-tree-fork/nut-js"
 import os from "node:os"
-import { rimraf } from 'rimraf';  
 
 /**
  * Waits for the specified text to appear on the page before proceeding.
@@ -119,7 +117,7 @@ export async function startWithRightClick(page: Page, command: string, type?: st
  * @param file When selecting a file, just pass it in. If you need to select a folder, you do not need to pass this parameter in.
  */
 export async function selectFolder(file: string = "") {
-  await sleep(10)
+  await sleep(5)
   await keyboard.type(file)
   if (os.platform() === "win32" 
     && file.includes("CreateTypespecProject")
@@ -142,7 +140,6 @@ export async function selectFolder(file: string = "") {
  */
 export async function notEmptyFolderContinue(page: Page) {
   let yesBtn: Locator;
-  await sleep(3);
   try {
     await page.waitForSelector('role=option[name="No"] >> label:has-text("No")', { timeout:5000 });
     await page.waitForSelector('role=option >> label:has-text("Yes")', { timeout:5000 });   
@@ -157,28 +154,6 @@ export async function notEmptyFolderContinue(page: Page) {
   await screenShot.screenshot(page, "linux", "not_empty_folder_continue");
   await page.waitForSelector('a:has-text("Yes")');  
   await page.getByRole('option', { name: /Yes/ }).locator('a').filter({ hasText: /Yes/ }).click();  
-}
-
-/**
- * Install Typespec extension using the command line in VSCode's terminal.
- */
-export async function installExtensionForCommand(page: Page, extensionDir: string) {
-  const vsixPath =
-    process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix");
-  await screenShot.screenshot(page, "linux", "before_open_terminal");
-  await sleep(5);
-  await page.keyboard.press("Control+Backquote");
-  await sleep(5);
-  const cmd = page.getByRole("textbox", { name: /Terminal/ }).first();
-  await sleep(5);
-  await cmd.click();
-  await screenShot.screenshot(page, "linux", "open_terminal");
-  await sleep(5);
-  console.log(`vsixPath: ${vsixPath}, extensionDir: ${extensionDir}`);
-  await cmd.fill(`code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`);
-  await page.keyboard.press("Enter");
-  await sleep(5);
-  await screenShot.screenshot(page, "linux", "start_install_extension");
 }
 
 export async function closeVscode(page: Page) {

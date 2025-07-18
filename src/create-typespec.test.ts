@@ -1,12 +1,10 @@
 import { mkdir, rm } from "fs/promises";
 import path from "node:path";
-import fs from "node:fs";
 import { beforeEach, describe } from "vitest";
 import {
   contrastResult,
   createTestFile,
   deleteTestFile,
-  installExtensionForCommand,
   notEmptyFolderContinue,
   preContrastResult,
   startWithCommandPalette,
@@ -20,7 +18,7 @@ import {
   startWithClick,
 } from "./common/create-steps";
 import { mockShowOpenDialog } from "./common/mock-dialogs";
-import { test, screenShot, tempDir, sleep } from "./common/utils";
+import { test, screenShot, tempDir } from "./common/utils";
 import { rimraf } from 'rimraf';  
 
 enum CreateProjectTriggerType {
@@ -235,13 +233,12 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
   test(caseName, async ({ launch }) => {
     screenShot.setCaseName(caseName);
     const workspacePath = CreateTypespecProjectFolderPath;
-    const { page, app, extensionDir } = await launch({
+    const { page, app } = await launch({
       workspacePath: triggerType === CreateProjectTriggerType.Command ? workspacePath : "test",
     });
     if (!isEmptyFolder) {
       createTestFile(workspacePath);
     }
-    // await installExtensionForCommand(page, extensionDir);
     await mockShowOpenDialog(app, [workspacePath]);
     if (triggerType === CreateProjectTriggerType.Command) {
       await startWithCommandPalette(page, "Create Typespec Project");

@@ -5,13 +5,12 @@ import path from "node:path"
 import {
   closeVscode,
   contrastResult,
-  installExtensionForCommand,
   selectFolder,
   notEmptyFolderContinue,
   preContrastResult,
   startWithCommandPalette,
   startWithRightClick
-} from "./common/common-steps"
+} from "./common/common-steps";
 
 enum ImportProjectTriggerType {
   CommandPalette = "CommandPalette",
@@ -92,22 +91,18 @@ describe.each(ImportCasesConfigList) ("ImportTypespecFromOpenApi3", async ( item
     screenShot.setCaseName(caseName)
     const workspacePath = ImportTypespecProjectFolderPath;
 
-    const { page, app, extensionDir } = await launch({
+    const { page, app } = await launch({
       workspacePath,
     })
-    // await installExtensionForCommand(page, extensionDir)
     await sleep(3)
+    
     if (triggerType === "CommandPalette") {
       await startWithCommandPalette(page, "Import Typespec from Openapi 3");
     } else if (triggerType === "RightClickonFile") {
       await startWithRightClick(page, "Import TypeSpec from Openapi 3", "file")
     } else if (triggerType === "RightClickonFolder" && selectFolderEmptyOrNonEmpty == "empty") {
       await startWithRightClick(page, "Import TypeSpec from Openapi 3", "emptyfolder")    
-    } else if (triggerType === "RightClickonFolder" && selectFolderEmptyOrNonEmpty == "non-empty") {
-      await startWithRightClick(page, "Import TypeSpec from Openapi 3", "folder")    
     }
-
-    await screenShot.screenshot(page, "linux", "after_start_list.png")
 
     if (selectFolderEmptyOrNonEmpty === "empty" && triggerType != "RightClickonFolder") {
       await selectFolder("ImportTypespecProjectEmptyFolder")
@@ -116,7 +111,7 @@ describe.each(ImportCasesConfigList) ("ImportTypespecFromOpenApi3", async ( item
       await selectFolder()
       await notEmptyFolderContinue(page)  
     }
-    
+
     await selectFolder("openapi.3.0.yaml")
     await screenShot.screenshot(page, "linux", "result_list.png")
 

@@ -1,8 +1,6 @@
 import { beforeEach, describe } from "vitest";
 import {
-  closeVscode,
   contrastResult,
-  installExtensionForCommand,
   preContrastResult,
   startWithRightClick,
   startWithCommandPalette,
@@ -130,11 +128,10 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
     const isServerStubJS =
       selectType === "Server Stub" && selectTypeLanguage === "JavaScript"
     const workspacePath = !isServerStubJS ? EmitTypespecProjectFolderPath : EmitTypespecProjectFolderPathStubJs;  
-    const { page, app, extensionDir } = await launch({
+    const { page, app } = await launch({
       workspacePath,
     });
     await sleep(3);
-    // await installExtensionForCommand(page, extensionDir);
     if (triggerType === "Command") {
       await startWithCommandPalette(page, "Emit from Typespec");
     } else if (triggerType === "Click") {

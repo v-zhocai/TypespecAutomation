@@ -13,7 +13,6 @@ export const tempDir = path.resolve(projectRoot, "temp");
 interface Context {
   page: Page;
   app: ElectronApplication;
-  extensionDir: string;
 }
 
 type LaunchFixture = (options: {
@@ -88,7 +87,7 @@ export const test = baseTest.extend<{
           await page.context().tracing.stop({ path: tracePath });
         } catch (error) {}
       });
-      return { page, app , extensionDir: extensionDir};
+      return { page, app };
     });
     for (const teardown of teardowns) await teardown();
   },
