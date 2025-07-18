@@ -64,7 +64,6 @@ export const test = baseTest.extend<{
         ].filter((v): v is string => !!v),
       });
       const page = await app.firstWindow();
-      await page.waitForLoadState('load'); // 等待整个页面加载完成  
       const userSettingsPath = path.join(
         tempDir,
         "user-data",
@@ -91,7 +90,6 @@ export const test = baseTest.extend<{
       });
       return { page, app , extensionDir: extensionDir};
     });
-
     for (const teardown of teardowns) await teardown();
   },
 });
