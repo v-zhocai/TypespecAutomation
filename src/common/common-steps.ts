@@ -85,6 +85,7 @@ export async function startWithCommandPalette(page: Page, command: string) {
 export async function startWithRightClick(page: Page, command: string, type?: string) {
   await page.waitForSelector('.explorer-viewlet');
   await page.waitForSelector('.letterpress');
+  await page.waitForSelector('.left-items');
   if (
     command == "Emit from TypeSpec" ||
     command == "Preview API Documentation"
@@ -124,7 +125,6 @@ export async function selectFolder(file: string = "") {
   if (os.platform() !== "win32") {
     await keyboard.releaseKey(Key.Enter)
   }
-  await sleep(3)
 }
 
 /**
