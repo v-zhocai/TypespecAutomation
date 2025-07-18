@@ -131,7 +131,7 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
     const { page, app } = await launch({
       workspacePath,
     });
-    await sleep(3);
+
     if (triggerType === "Command") {
       await startWithCommandPalette(page, "Emit from Typespec");
     } else if (triggerType === "Click") {

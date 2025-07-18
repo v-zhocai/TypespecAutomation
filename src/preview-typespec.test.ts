@@ -61,7 +61,6 @@ describe.each(PreviewCasesConfigList)("PreviewAPIDocument", async (item) => {
     const { page, app } = await launch({
       workspacePath,
     })
-    // await installExtensionForCommand(page, extensionDir)
     if (triggerType === PreviewProjectTriggerType.Command) {
       await page
         .getByRole("treeitem", { name: "main.tsp" })
@@ -72,13 +71,13 @@ describe.each(PreviewCasesConfigList)("PreviewAPIDocument", async (item) => {
       await startWithRightClick(page, "Preview API Documentation")
     }
 
-    await page.waitForSelector('iframe', { timeout: 5000 });
+    await page.waitForSelector('iframe', { timeout: 10000 });
     const iframeElementHandle = await page.$('iframe');
     const iframe = await iframeElementHandle!.contentFrame();  
     if (!iframe) {
       throw new Error('Failed to get iframe content frame');  
     }
-    await iframe.waitForSelector('html', { timeout: 5000 });
+    await iframe.waitForSelector('html', { timeout: 10000 });
 
     app.close();
   })

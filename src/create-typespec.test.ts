@@ -1,4 +1,4 @@
-import { mkdir, rm } from "fs/promises";
+import { mkdir } from "fs/promises";
 import path from "node:path";
 import { beforeEach, describe } from "vitest";
 import {

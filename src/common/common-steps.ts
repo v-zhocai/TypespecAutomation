@@ -88,7 +88,6 @@ export async function startWithRightClick(page: Page, command: string, type?: st
     command == "Emit from TypeSpec" ||
     command == "Preview API Documentation"
   ) {
-    await sleep(3);
     const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a")
     await target.click({ button: "right" })
     await screenShot.screenshot(page, "linux", "click_main")
@@ -104,7 +103,6 @@ export async function startWithRightClick(page: Page, command: string, type?: st
     const target = page.getByRole("treeitem", { name: targetName }).locator("a")
     await target.click({ button: "right" })
     await screenShot.screenshot(page, "linux", "openapi.3.0")
-    await sleep(3)
     await page
       .getByRole("menuitem", { name: "Import TypeSpec from OpenAPI" })
       .click()
@@ -119,12 +117,6 @@ export async function startWithRightClick(page: Page, command: string, type?: st
 export async function selectFolder(file: string = "") {
   await sleep(5)
   await keyboard.type(file)
-  if (os.platform() === "win32" 
-    && file.includes("CreateTypespecProject")
-  ) {
-    await sleep(2)
-    await keyboard.pressKey(Key.Enter)
-  }
   await keyboard.pressKey(Key.Enter)
   if (os.platform() !== "win32") {
     await keyboard.releaseKey(Key.Enter)
@@ -139,7 +131,6 @@ export async function selectFolder(file: string = "") {
  * @param page vscode object
  */
 export async function notEmptyFolderContinue(page: Page) {
-  let yesBtn: Locator;
   try {
     await page.waitForSelector('role=option[name="No"] >> label:has-text("No")', { timeout:5000 });
     await page.waitForSelector('role=option >> label:has-text("Yes")', { timeout:5000 });   
@@ -158,7 +149,7 @@ export async function notEmptyFolderContinue(page: Page) {
 
 export async function closeVscode(page: Page) {
   await page.getByRole("menuitem", { name: "File" }).click();
-  await sleep(1);
+  await page.waitForSelector('role=menuitem[name="Exit"]');
   await page.getByRole("menuitem", { name: "Exit" }).click();
 }
 

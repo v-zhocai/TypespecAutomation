@@ -3,7 +3,6 @@ import { screenShot, test, tempDir, sleep } from "./common/utils"
 import fs from "node:fs"
 import path from "node:path"
 import {
-  closeVscode,
   contrastResult,
   selectFolder,
   notEmptyFolderContinue,
@@ -94,7 +93,6 @@ describe.each(ImportCasesConfigList) ("ImportTypespecFromOpenApi3", async ( item
     const { page, app } = await launch({
       workspacePath,
     })
-    await sleep(3)
     
     if (triggerType === "CommandPalette") {
       await startWithCommandPalette(page, "Import Typespec from Openapi 3");
