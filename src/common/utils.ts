@@ -39,9 +39,7 @@ export const test = baseTest.extend<{
       envOverrides = {
         PATH: `${codePath}${path.delimiter}${process.env.PATH}`,
       };
-      const tempDir = await fs.promises.mkdtemp(
-        path.join(os.tmpdir(), "typespec-automation")
-      )
+      const tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "typespec-automation"));
       const extensionDir = path.resolve(tempDir, "extensions");
       const app = await _electron.launch({
         executablePath,
@@ -63,12 +61,7 @@ export const test = baseTest.extend<{
         ].filter((v): v is string => !!v),
       });
       const page = await app.firstWindow();
-      const userSettingsPath = path.join(
-        tempDir,
-        "user-data",
-        "User",
-        "settings.json"
-      )
+      const userSettingsPath = path.join(tempDir, "user-data", "User", "settings.json");
       fs.writeFileSync(
         userSettingsPath,
         JSON.stringify({
@@ -78,8 +71,8 @@ export const test = baseTest.extend<{
               url: "https://aka.ms/typespec/azure-init",
             },
           ],
-        })
-      )
+        }),
+      );
       const tracePath = join(projectRoot, "test-results", task.name, "trace.zip");
       await page.context().tracing.start({ screenshots: false, snapshots: true, title: task.name });
       teardowns.push(async () => {
@@ -152,10 +145,9 @@ class ScreenshotHelper {
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath, { recursive: true });
     }
-    const filePath = path.join(dirPath, `${this.counter ++}_${name}.png`);
+    const filePath = path.join(dirPath, `${this.counter++}_${name}.png`);
     await page.screenshot({ path: filePath });
   }
 }
 
 export const screenShot = new ScreenshotHelper("default");
-

@@ -1,24 +1,24 @@
+import fs from "node:fs";
+import path from "node:path";
 import { beforeEach, describe } from "vitest";
 import {
   contrastResult,
   preContrastResult,
-  startWithRightClick,
   startWithCommandPalette,
+  startWithRightClick,
 } from "./common/common-steps";
 import {
+  emiChooseEmitter,
   emitSelectLanguage,
   emitSelectLanguageForOpenapi,
   emitSelectType,
-  emiChooseEmitter
 } from "./common/emit-steps";
-import { screenShot, test, tempDir } from "./common/utils";
-import path from "node:path";
-import fs from "node:fs";
+import { screenShot, tempDir, test } from "./common/utils";
 
 enum EmitProjectTriggerType {
   Command = "Command",
   Click = "Click",
-};
+}
 
 type EmitConfigType = {
   caseName: string;
@@ -33,7 +33,7 @@ const EmitTypespecProjectFolderPathStubJs = path.resolve(tempDir, "EmitTypespecP
 
 const EmitcaseName = "EmitTypespecProject";
 const EmitCasesConfigList: EmitConfigType[] = [
-  {   
+  {
     caseName: "EmitTypespecProject-ClientCode-Python-CommandPallette",
     selectType: "Client Code",
     selectTypeLanguage: "Python",
@@ -89,7 +89,7 @@ const EmitCasesConfigList: EmitConfigType[] = [
     triggerType: EmitProjectTriggerType.Click,
     expectedResults: ["http-server-js"],
   },
-]
+];
 
 beforeEach(() => {
   let dir = path.resolve(EmitTypespecProjectFolderPath, "tsp-output");
@@ -116,18 +116,13 @@ beforeEach(() => {
 });
 
 describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
-  const {
-    caseName,
-    selectType,
-    selectTypeLanguage,
-    triggerType,
-    expectedResults,
-  } = item;
+  const { caseName, selectType, selectTypeLanguage, triggerType, expectedResults } = item;
   test(caseName, async ({ launch }) => {
     screenShot.setCaseName(caseName);
-    const isServerStubJS =
-      selectType === "Server Stub" && selectTypeLanguage === "JavaScript"
-    const workspacePath = !isServerStubJS ? EmitTypespecProjectFolderPath : EmitTypespecProjectFolderPathStubJs;  
+    const isServerStubJS = selectType === "Server Stub" && selectTypeLanguage === "JavaScript";
+    const workspacePath = !isServerStubJS
+      ? EmitTypespecProjectFolderPath
+      : EmitTypespecProjectFolderPathStubJs;
     const { page, app } = await launch({
       workspacePath,
     });
@@ -147,17 +142,12 @@ describe.each(EmitCasesConfigList)("EmitTypespecProject", async (item) => {
     }
 
     const contrastMessage = selectTypeLanguage + "...Succeeded";
-    await preContrastResult(
-      page,
-      contrastMessage,
-      "Failed to emit project Successful",
-      150000,
-    );
-    await screenShot.screenshot(page, "linux", "emit_result")
+    await preContrastResult(page, contrastMessage, "Failed to emit project Successful", 150000);
+    await screenShot.screenshot(page, "linux", "emit_result");
 
     app.close();
 
     const resultFilePath = path.resolve(workspacePath, "./tsp-output/@typespec");
     await contrastResult(page, expectedResults, resultFilePath);
-  })
-})
+  });
+});

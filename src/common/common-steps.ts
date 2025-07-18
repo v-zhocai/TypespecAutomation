@@ -1,9 +1,9 @@
+import { Key, keyboard } from "@nut-tree-fork/nut-js";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { Locator, Page } from "playwright";
 import { retry, screenShot, sleep } from "./utils";
-import { keyboard, Key } from "@nut-tree-fork/nut-js"
-import os from "node:os"
 
 /**
  * Waits for the specified text to appear on the page before proceeding.
@@ -48,7 +48,7 @@ export async function contrastResult(page: Page, res: string[], dir: string) {
  * @param command After the top input box pops up, the command to be executed
  */
 export async function startWithCommandPalette(page: Page, command: string) {
-  await page.waitForSelector('.explorer-viewlet');
+  await page.waitForSelector(".explorer-viewlet");
   await page.keyboard.press("ControlOrMeta+Shift+P");
   await page.waitForSelector('input[aria-label="Type the name of a command to run."]', {
     state: "visible",
@@ -83,34 +83,29 @@ export async function startWithCommandPalette(page: Page, command: string) {
  * command: specify which command to execute to the project
  */
 export async function startWithRightClick(page: Page, command: string, type?: string) {
-  await page.waitForSelector('.explorer-viewlet');
-  await page.waitForSelector('.letterpress');
-  await page.waitForSelector('.left-items');
-  if (
-    command == "Emit from TypeSpec" ||
-    command == "Preview API Documentation"
-  ) {
-    await page.getByRole('toolbar', { name: 'Explorer actions' }).click();
-    const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a")
-    await target.click({ button: "right" })
-    await screenShot.screenshot(page, "linux", "click_main")
-    await page.getByRole("menuitem", { name: command }).click()
-    await screenShot.screenshot(page, "linux",
-      `${command == "Emit from TypeSpec" ? "emit" : "preview"}_typespec.png`
-    )
+  await page.waitForSelector(".explorer-viewlet");
+  await page.waitForSelector(".letterpress");
+  await page.waitForSelector(".left-items");
+  if (command == "Emit from TypeSpec" || command == "Preview API Documentation") {
+    await page.getByRole("toolbar", { name: "Explorer actions" }).click();
+    const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a");
+    await target.click({ button: "right" });
+    await screenShot.screenshot(page, "linux", "click_main");
+    await page.getByRole("menuitem", { name: command }).click();
+    await screenShot.screenshot(
+      page,
+      "linux",
+      `${command == "Emit from TypeSpec" ? "emit" : "preview"}_typespec.png`,
+    );
   } else if (command == "Import TypeSpec from Openapi 3") {
     const targetName =
-      type === "emptyfolder"
-        ? "ImportTypespecProjectEmptyFolder"
-        : "openapi.3.0.yaml"
-    await page.getByRole('toolbar', { name: 'Explorer actions' }).click();
-    const target = page.getByRole("treeitem", { name: targetName }).locator("a")
-    await target.click({ button: "right" })
-    await screenShot.screenshot(page, "linux", "openapi.3.0")
-    await page
-      .getByRole("menuitem", { name: "Import TypeSpec from OpenAPI" })
-      .click()
-    await screenShot.screenshot(page, "linux", "import_typespec")
+      type === "emptyfolder" ? "ImportTypespecProjectEmptyFolder" : "openapi.3.0.yaml";
+    await page.getByRole("toolbar", { name: "Explorer actions" }).click();
+    const target = page.getByRole("treeitem", { name: targetName }).locator("a");
+    await target.click({ button: "right" });
+    await screenShot.screenshot(page, "linux", "openapi.3.0");
+    await page.getByRole("menuitem", { name: "Import TypeSpec from OpenAPI" }).click();
+    await screenShot.screenshot(page, "linux", "import_typespec");
   }
 }
 
@@ -119,11 +114,11 @@ export async function startWithRightClick(page: Page, command: string, type?: st
  * @param file When selecting a file, just pass it in. If you need to select a folder, you do not need to pass this parameter in.
  */
 export async function selectFolder(file: string = "") {
-  await sleep(5)
-  await keyboard.type(file)
-  await keyboard.pressKey(Key.Enter)
+  await sleep(5);
+  await keyboard.type(file);
+  await keyboard.pressKey(Key.Enter);
   if (os.platform() !== "win32") {
-    await keyboard.releaseKey(Key.Enter)
+    await keyboard.releaseKey(Key.Enter);
   }
 }
 
@@ -135,19 +130,19 @@ export async function selectFolder(file: string = "") {
  */
 export async function notEmptyFolderContinue(page: Page) {
   try {
-    await page.waitForSelector('role=option[name="No"] >> label:has-text("No")', { timeout:5000 });
-    await page.waitForSelector('role=option >> label:has-text("Yes")', { timeout:5000 });   
-  } catch (e){
+    await page.waitForSelector('role=option[name="No"] >> label:has-text("No")', { timeout: 5000 });
+    await page.waitForSelector('role=option >> label:has-text("Yes")', { timeout: 5000 });
+  } catch (e) {
     throw new Error(e as string);
   }
   try {
-    await page.waitForSelector(`:text("YesSelected folder")`, { timeout:5000 });
+    await page.waitForSelector(`:text("YesSelected folder")`, { timeout: 5000 });
   } catch (e) {
-    throw new Error("Failed to match the description for the non-empty folder cases")
+    throw new Error("Failed to match the description for the non-empty folder cases");
   }
   await screenShot.screenshot(page, "linux", "not_empty_folder_continue");
-  await page.waitForSelector('a:has-text("Yes")');  
-  await page.getByRole('option', { name: /Yes/ }).locator('a').filter({ hasText: /Yes/ }).click();  
+  await page.waitForSelector('a:has-text("Yes")');
+  await page.getByRole("option", { name: /Yes/ }).locator("a").filter({ hasText: /Yes/ }).click();
 }
 
 export async function closeVscode(page: Page) {

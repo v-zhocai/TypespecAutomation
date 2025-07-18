@@ -59,7 +59,7 @@ export function stubMultipleDialogs<T extends keyof Dialog>(
       if (!thisDialog) {
         throw new Error(`can't find ${mock.method} on dialog module.`);
       }
-      if ((mock.method).endsWith("Sync")) {
+      if (mock.method.endsWith("Sync")) {
         dialog[mock.method] = () => {
           return mock.value;
         };
