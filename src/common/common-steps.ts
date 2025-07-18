@@ -104,6 +104,7 @@ export async function startWithRightClick(page: Page, command: string, type?: st
     const target = page.getByRole("treeitem", { name: targetName }).locator("a")
     await target.click({ button: "right" })
     await screenShot.screenshot(page, "linux", "openapi.3.0")
+    await sleep(2);
     await page
       .getByRole("menuitem", { name: "Import TypeSpec from OpenAPI" })
       .click()
