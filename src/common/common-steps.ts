@@ -84,11 +84,12 @@ export async function startWithCommandPalette(page: Page, command: string) {
  */
 export async function startWithRightClick(page: Page, command: string, type?: string) {
   await page.waitForSelector('.explorer-viewlet');
+  await page.waitForSelector('.letterpress');
   if (
     command == "Emit from TypeSpec" ||
     command == "Preview API Documentation"
   ) {
-    await sleep(3);
+    await page.getByRole('toolbar', { name: 'Explorer actions' }).click();
     const target = page.getByRole("treeitem", { name: "main.tsp" }).locator("a")
     await target.click({ button: "right" })
     await screenShot.screenshot(page, "linux", "click_main")
@@ -101,10 +102,10 @@ export async function startWithRightClick(page: Page, command: string, type?: st
       type === "emptyfolder"
         ? "ImportTypespecProjectEmptyFolder"
         : "openapi.3.0.yaml"
+    await page.getByRole('toolbar', { name: 'Explorer actions' }).click();
     const target = page.getByRole("treeitem", { name: targetName }).locator("a")
     await target.click({ button: "right" })
     await screenShot.screenshot(page, "linux", "openapi.3.0")
-    await sleep(2);
     await page
       .getByRole("menuitem", { name: "Import TypeSpec from OpenAPI" })
       .click()
