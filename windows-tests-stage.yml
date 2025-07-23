@@ -5,11 +5,11 @@ jobs:
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: "20.18.3"
+          versionSpec: "22.17.0"
         displayName: "Install Node.js"
 
       - script: |
-          npm install
+          npm install --legacy-peer-deps
         displayName: "Install dependencies"
 
       - script: |
@@ -35,7 +35,7 @@ jobs:
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: "20.18.3"
+          versionSpec: "22.17.0"
         displayName: "Install Node.js"
 
       - task: UseDotNet@2
@@ -52,7 +52,7 @@ jobs:
         displayName: "Install Maven"
 
       - script: |
-          npm install
+          npm install --legacy-peer-deps
         displayName: "Install dependencies"
 
       - script: |
@@ -80,11 +80,11 @@ jobs:
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: "20.18.3"
+          versionSpec: "22.17.0"
         displayName: "Install Node.js"
 
       - script: |
-          npm install
+          npm install --legacy-peer-deps
         displayName: "Install dependencies"
 
       - script: |
@@ -110,11 +110,11 @@ jobs:
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: "20.18.3"
+          versionSpec: "22.17.0"
         displayName: "Install Node.js"
 
       - script: |
-          npm install
+          npm install --legacy-peer-deps
         displayName: "Install dependencies"
 
       - script: |
