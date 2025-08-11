@@ -9,7 +9,7 @@ jobs:
         displayName: "Install Node.js"
 
       - script: |
-          npm install --legacy-peer-deps
+          npm install
         displayName: "Install dependencies"
 
       - script: |
@@ -52,7 +52,7 @@ jobs:
         displayName: "Install Maven"
 
       - script: |
-          npm install --legacy-peer-deps
+          npm install
         displayName: "Install dependencies"
 
       - script: |
@@ -84,7 +84,7 @@ jobs:
         displayName: "Install Node.js"
 
       - script: |
-          npm install --legacy-peer-deps
+          npm install
         displayName: "Install dependencies"
 
       - script: |
@@ -114,7 +114,7 @@ jobs:
         displayName: "Install Node.js"
 
       - script: |
-          npm install --legacy-peer-deps
+          npm install
         displayName: "Install dependencies"
 
       - script: |
