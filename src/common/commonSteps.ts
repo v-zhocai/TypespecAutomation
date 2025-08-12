@@ -161,9 +161,9 @@ async function notEmptyFolderContinue(page: Page) {
   await retry(
     5,
     async () => {
-      let yesdescriptionBox = page.getByRole("option", { name: "Yes" }).locator('label')
-      let yesdescriptionText = await yesdescriptionBox.textContent();
-      return yesdescriptionText !== null && (yesdescriptionText.includes("YesSelected folder"))
+      let yesDescriptionBox = page.getByRole("option", { name: "Yes" }).locator('label')
+      let yesDescriptionText = await yesDescriptionBox.textContent();
+      return yesDescriptionText !== null && (yesDescriptionText.includes("YesSelected folder"))
     },
     "Failed to match the description for the non-empty folder cases",
     1
