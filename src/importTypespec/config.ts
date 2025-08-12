@@ -1,7 +1,7 @@
 enum ImportProjectTriggerType {
   CommandPalette = "CommandPalette",
-  RightClickonFile = "RightClickonFile",
-  RightClickonFolder = "RightClickonFolder",
+  RightClickOnFile = "RightClickOnFile",
+  RightClickOnFolder = "RightClickOnFolder",
 }
 
 type ImportConfigType = {
@@ -27,26 +27,26 @@ ImportCasesConfigList.push(
     expectedResults: ["openapi.3.0.yaml", "ImportTypespecProjectEmptyFolder"],
   },    
   {
-    caseName: "ImportTypespecProject-RightClickonFile-NonEmptyFolder",
-    triggerType: ImportProjectTriggerType.RightClickonFile,
+    caseName: "ImportTypespecProject-RightClickOnFile-NonEmptyFolder",
+    triggerType: ImportProjectTriggerType.RightClickOnFile,
     selectFolderEmptyOrNonEmpty: "non-empty",
     expectedResults: ["openapi.3.0.yaml", "main.tsp","ImportTypespecProjectEmptyFolder"],
   },
   {
-    caseName: "ImportTypespecProject-RightClickonFile-EmptyFolder",
-    triggerType: ImportProjectTriggerType.RightClickonFile,
+    caseName: "ImportTypespecProject-RightClickOnFile-EmptyFolder",
+    triggerType: ImportProjectTriggerType.RightClickOnFile,
     selectFolderEmptyOrNonEmpty: "empty",
     expectedResults: ["openapi.3.0.yaml", "ImportTypespecProjectEmptyFolder"],
   },
   {
-    caseName: "ImportTypespecProject-RightClickonFolder-NonEmptyFolder",
-    triggerType: ImportProjectTriggerType.RightClickonFolder,
+    caseName: "ImportTypespecProject-RightClickOnFolder-NonEmptyFolder",
+    triggerType: ImportProjectTriggerType.RightClickOnFolder,
     selectFolderEmptyOrNonEmpty: "non-empty",
     expectedResults: ["openapi.3.0.yaml", "main.tsp","ImportTypespecProjectEmptyFolder"],
   },
   {
-    caseName: "ImportTypespecProject-RightClickonFolder-EmptyFolder",
-    triggerType: ImportProjectTriggerType.RightClickonFolder,
+    caseName: "ImportTypespecProject-RightClickOnFolder-EmptyFolder",
+    triggerType: ImportProjectTriggerType.RightClickOnFolder,
     selectFolderEmptyOrNonEmpty: "empty",
     expectedResults: ["openapi.3.0.yaml", "ImportTypespecProjectEmptyFolder"],
   },
