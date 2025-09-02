@@ -66,6 +66,7 @@ const test = baseTest.extend<{
         ].filter((v): v is string => !!v),
       })
       const page = await app.firstWindow()
+      await page.getByText('File', { exact: true }).waitFor({ state: 'visible', timeout: 10000 })
       const userSettingsPath = path.join(
         tempDir,
         "user-data",
@@ -83,12 +84,6 @@ const test = baseTest.extend<{
           ],
         })
       )
-      // spawn("code", [
-      //   "--install-extension",
-      //   path.resolve(__dirname, "../../extension.vsix"),
-      //   "--extensions-dir",
-      //   path.resolve(tempDir, "extensions"),
-      // ])
       return { page, extensionDir: path.join(tempDir, "extensions") }
     })
 
