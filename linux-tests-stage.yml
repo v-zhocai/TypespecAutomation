@@ -1,5 +1,5 @@
 jobs:
-- job: RunElectronUITestsOnLinux_1_CreateTypespecProject
+- job: RunElectronUITestsOnLinux_1_CreateTypeSpecProject
   pool:
     vmImage: "ubuntu-latest"
 
@@ -54,7 +54,7 @@ jobs:
         includePatterns: "images-linux/**/*.png"
       displayName: "Publish Screenshots"
 
-- job: RunElectronUITestsOnLinux_2_EmitTypespecProject
+- job: RunElectronUITestsOnLinux_2_EmitTypeSpecProject
   pool:
     vmImage: "ubuntu-latest"
 
@@ -109,7 +109,7 @@ jobs:
         includePatterns: "images-linux/**/*.png"
       displayName: "Publish Screenshots"
 
-- job: RunElectronUITestsOnLinux_3_ImportTypespecProject
+- job: RunElectronUITestsOnLinux_3_ImportTypeSpecProject
   pool:
     vmImage: "ubuntu-latest"
 
@@ -164,7 +164,7 @@ jobs:
         includePatterns: "images-linux/**/*.png"
       displayName: "Publish Screenshots"
 
-- job: RunElectronUITestsOnLinux_4_PreviewTypespecProject
+- job: RunElectronUITestsOnLinux_4_PreviewTypeSpecProject
   pool:
     vmImage: "ubuntu-latest"
 

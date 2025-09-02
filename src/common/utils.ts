@@ -170,11 +170,11 @@ class Screenshot {
           fullPathItem[fullPathItem.length - 1]
         }`
       } else {
-        const lastslashIdx = fullPathItem[fullPathItem.length - 1].lastIndexOf("/")
+        const lastSlashIdx = fullPathItem[fullPathItem.length - 1].lastIndexOf("/")
         const fileName = fullPathItem[fullPathItem.length - 1];
-        if (lastslashIdx !== -1) {
-          const prefix = fileName.substring(0, lastslashIdx + 1);
-          const suffix = fileName.substring(lastslashIdx + 1);
+        if (lastSlashIdx !== -1) {
+          const prefix = fileName.substring(0, lastSlashIdx + 1);
+          const suffix = fileName.substring(lastSlashIdx + 1);
           fullPathItem[fullPathItem.length - 1] = `${prefix}${i}_${suffix}`;
         } else {
           fullPathItem[fullPathItem.length - 1] = `${i}_${fileName}`;

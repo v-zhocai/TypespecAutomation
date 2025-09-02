@@ -49,7 +49,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
     caseName,
     triggerType,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder,
     expectedResults,
   } = item
@@ -89,7 +89,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
       deleteTestFile(workspacePath)
     }
   
-    await selectTemplate(page, templateName, templateNameDesctiption)
+    await selectTemplate(page, templateName, templateNameDescription)
 
     await inputProjectName(page)
 
@@ -105,7 +105,7 @@ describe.each(CreateCasesConfigList)("CreateTypespecProject", async (item) => {
       page,
       "Project created",
       "Failed to create project Successful",
-      [10, 15]
+      [50, 3]
     )
     await closeVscode()
     await contrastResult(expectedResults, workspacePath)

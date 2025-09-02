@@ -124,7 +124,7 @@ async function startWithRightClick(page: Page, command: string, type?: string) {
  * @param file When selecting a file, just pass it in. If you need to select a folder, you do not need to pass this parameter in.
  */
 async function selectFolder(file: string = "") {
-  await sleep(10)
+  await sleep(5)
   await keyboard.type(file)
   if (os.platform() === "win32" 
     && file.includes("CreateTypespecProject")
@@ -161,9 +161,9 @@ async function notEmptyFolderContinue(page: Page) {
   await retry(
     5,
     async () => {
-      let yesdescriptionBox = page.getByRole("option", { name: "Yes" }).locator('label')
-      let yesdescriptionText = await yesdescriptionBox.textContent();
-      return yesdescriptionText !== null && (yesdescriptionText.includes("YesSelected folder"))
+      let yesDescriptionBox = page.getByRole("option", { name: "Yes" }).locator('label')
+      let yesDescriptionText = await yesDescriptionBox.textContent();
+      return yesDescriptionText !== null && (yesDescriptionText.includes("YesSelected folder"))
     },
     "Failed to match the description for the non-empty folder cases",
     1
@@ -254,11 +254,6 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
 async function installExtensionForCommand(page: Page, extensionDir: string) {
   const vsixPath =
     process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix")
-  // await page.getByRole("menuitem", { name: "More" }).locator("div").click()
-  // await screenShot.screenShot("click_more.png")
-  // await page.getByRole("menuitem", { name: "Terminal", exact: true }).click()
-  // await screenShot.screenShot("click_terminal.png")
-  // await page.getByRole("menuitem", { name: /New Terminal/ }).click()
   await sleep(5)
   await page.keyboard.press("Control+Backquote")
   await screenShot.screenShot("open_terminal.png")
@@ -273,13 +268,13 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
   )
   const cmd = page.getByRole("textbox", { name: /Terminal/ }).first()
   await cmd.click()
-  await sleep(5)
+  await sleep(2)
   await cmd.fill(
     `code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`
   )
   await screenShot.screenShot("start_install_extension.png")
   await page.keyboard.press("Enter")
-  await sleep(8)
+  await sleep(2)
   if (os.platform() === "win32"){
     await retry(
       2,
@@ -291,7 +286,6 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
       1
     )
   }
-
   await screenShot.screenShot("start_install_extension_result.png")
 }
 

@@ -7,14 +7,14 @@ type CreateConfigType = {
   caseName: string
   triggerType: CreateProjectTriggerType
   templateName: string
-  templateNameDesctiption: string
+  templateNameDescription: string
   isEmptyFolder: boolean
   expectedResults: string[]
 }
 
 const createCase = "CreateTypespecProject"
 let templateName = "Generic Rest API"
-let templateNameDesctiption = "Create a project representing a generic REST API service."
+let templateNameDescription = "Create a project representing a generic REST API service."
 let expectedResults = [
   ".gitignore",
   "main.tsp",
@@ -29,7 +29,7 @@ const CreateCasesConfigList: CreateConfigType[] = [
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -37,7 +37,7 @@ const CreateCasesConfigList: CreateConfigType[] = [
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   },
@@ -45,7 +45,7 @@ const CreateCasesConfigList: CreateConfigType[] = [
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -53,14 +53,14 @@ const CreateCasesConfigList: CreateConfigType[] = [
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   },
 ]
 
 templateName = "Typespec library"
-templateNameDesctiption = "Build your own TypeSpec library with custom types, decorators or linters."
+templateNameDescription = "Build your own TypeSpec library with custom types, decorators or linters."
 expectedResults = [
   "lib",
   "node_modules",
@@ -79,7 +79,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -87,7 +87,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   },
@@ -95,7 +95,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -103,14 +103,14 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   }
 )
 
 templateName = "Typespec emitter"
-templateNameDesctiption = "Create a new package that emits artifacts from TypeSpec."
+templateNameDescription = "Create a new package that emits artifacts from TypeSpec."
 expectedResults = [
   "node_modules",
   "src",
@@ -128,7 +128,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -136,7 +136,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   },
@@ -144,7 +144,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -152,14 +152,14 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   }
 )
 
 templateName = "(rest-api-spec repo) Azure Data Plane Service Project"
-templateNameDesctiption = "Create a project in rest-api-spec repo, representing an Azure service Data Plane API"
+templateNameDescription = "Create a project in rest-api-spec repo, representing an Azure service Data Plane API"
 expectedResults = [
   "examples",
   ".gitignore",
@@ -173,7 +173,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -181,7 +181,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   },
@@ -189,7 +189,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -197,14 +197,14 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   }
 )
 
 templateName = "(rest-api-spec repo) Azure Resource Manager Service Project"
-templateNameDesctiption = "Create a project in rest-api-spec repo, representing an Azure service ARM API"
+templateNameDescription = "Create a project in rest-api-spec repo, representing an Azure service ARM API"
 expectedResults = [
   "examples",
   ".gitignore",
@@ -218,7 +218,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -226,7 +226,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   },
@@ -234,7 +234,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -242,14 +242,14 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   }
 )
 
 templateName = "(stand alone) Azure Data Plane Service Project"
-templateNameDesctiption = "Create a stand alone project representing an Azure service Data Plane API"
+templateNameDescription = "Create a stand alone project representing an Azure service Data Plane API"
 expectedResults = [
   "examples",
   "node_modules",
@@ -266,7 +266,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -274,7 +274,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   },
@@ -282,7 +282,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -290,14 +290,14 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   }
 )
 
 templateName = "(stand alone) Azure Resource Manager Service Project"
-templateNameDesctiption = "Create a stand alone project representing an Azure service ARM API"
+templateNameDescription = "Create a stand alone project representing an Azure service ARM API"
 expectedResults = [
   "examples",
   "node_modules",
@@ -314,7 +314,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -322,7 +322,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Click,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Click}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   },
@@ -330,7 +330,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-EmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: true,
     expectedResults,
   },
@@ -338,7 +338,7 @@ CreateCasesConfigList.push(
     triggerType: CreateProjectTriggerType.Command,
     caseName: `${createCase}-${templateName.replaceAll(" ", "")}-Trigger_${CreateProjectTriggerType.Command}-NonEmptyFolder`,
     templateName,
-    templateNameDesctiption,
+    templateNameDescription,
     isEmptyFolder: false,
     expectedResults,
   }
