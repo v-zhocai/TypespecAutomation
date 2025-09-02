@@ -66,7 +66,6 @@ const test = baseTest.extend<{
         ].filter((v): v is string => !!v),
       })
       const page = await app.firstWindow()
-      await page.getByText('File', { exact: true }).waitFor({ state: 'visible', timeout: 10000 })
       const userSettingsPath = path.join(
         tempDir,
         "user-data",
