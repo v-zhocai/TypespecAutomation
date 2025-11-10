@@ -119,7 +119,7 @@ async function inputProjectName(page: Page) {
  * @param page vscode project
  */
 async function inputServiceNameSpace(page: Page) {
-  let titleInfoDescription = "Please provide service namespace in Pascal case: (Press 'Enter' to confirm or 'Escape' to cancel)" 
+  let titleInfoDescription = "Please provide service namespace in Pascal case(e.g. Azure.Contoso): (Press 'Enter' to confirm or 'Escape' to cancel)" 
   await retry(
     3,
     async () => {
