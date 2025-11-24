@@ -249,13 +249,30 @@ async function installExtensionForFile(page: Page, fullFilePath: string) {
 }
 
 /**
- * Install plugins using the command
+ * Install extension via command line using VS Code CLI
+ * @param page VSCode page object
+ * @param extensionDir The directory where the extension will be installed
+ * 
+ * This function performs the following steps:
+ * 1. Opens the integrated terminal using Ctrl+`
+ * 2. Waits for the terminal input box to be ready
+ * 3. Executes the `code --install-extension` command with the VSIX file path and custom extensions directory
+ * 4. Captures screenshots at key moments for debugging
+ * 5. On Windows, waits for the installation success indicator to appear
  */
 async function installExtensionForCommand(page: Page, extensionDir: string) {
-  const vsixPath =
-    process.env.VSIX_PATH || path.resolve(__dirname, "../../extension.vsix")
+  const vsixPath = path.resolve(__dirname, "../../extension.vsix")
   await sleep(8)
   await page.keyboard.press("Control+Backquote")
+  await retry(
+    10,
+    async () => {
+      const cmd = page.getByRole('tab', { name: 'Terminal (Ctrl+`)' })
+      return (await cmd.count()) > 0
+    },
+    "Failed to find terminal tab",
+    1
+  )
   await screenShot.screenShot("open_terminal.png")
   await retry(
     10,
@@ -264,22 +281,19 @@ async function installExtensionForCommand(page: Page, extensionDir: string) {
       return (await cmd.count()) > 0
     },
     "Failed to find command palette",
-    3
+    1
   )
   const cmd = page.getByRole("textbox", { name: /Terminal/ }).first()
-  await cmd.click()
-  await sleep(2)
   await cmd.fill(
     `code --install-extension ${vsixPath} --extensions-dir ${extensionDir}`
   )
   await screenShot.screenShot("start_install_extension.png")
   await page.keyboard.press("Enter")
-  await sleep(2)
   if (os.platform() === "win32"){
     await retry(
       2,
       async () => {
-        const installed = page.locator('.codicon-terminal-decoration-success')
+        const installed = page.locator('.xterm-decoration').first()
         return (await installed.count()) > 0
       },
       `Failed to install the extension.`,
